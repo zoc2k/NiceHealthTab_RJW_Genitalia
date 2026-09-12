@@ -334,7 +334,7 @@ so their order does not matter.
 | Other race mods (Ratkin / Kurin / ABF Synstruct …) | Shown automatically when Nice Health Tab provides an index remap for that race and the race has the RJW parts |
 | Combat Extended / Multiplayer | This mod creates no game state, so nothing special is needed |
 
-Use textures by referencing or modifying those from other modes.
+Use textures by referencing or modifying those from other mods.
 
 ---
 
