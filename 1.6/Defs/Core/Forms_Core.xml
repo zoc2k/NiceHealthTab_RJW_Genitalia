@@ -839,6 +839,7 @@
       <y>-16.00</y>
     </glyphMax>
     <texturePrefix>HediffTab/RJW_Menstruation_Fluids/BodyParts/Womb/Cumflated/Cumflated</texturePrefix>
+    <hideWhileFetus>true</hideWhileFetus>
     <sizeSteps>5</sizeSteps>
     <sizeThresholds>
       <li>0.05</li>
@@ -881,6 +882,7 @@
       <y>-31.90</y>
     </glyphMax>
     <texturePrefix>HediffTab/RJW_Menstruation_Fluids/BodyParts/Womb/Cumflated/Cumflated</texturePrefix>
+    <hideWhileFetus>true</hideWhileFetus>
     <sizeSteps>5</sizeSteps>
     <sizeThresholds>
       <li>0.05</li>
@@ -923,6 +925,7 @@
       <y>52.00</y>
     </glyphMax>
     <texturePrefix>HediffTab/RJW_Menstruation_Fluids/BodyParts/Womb/Cumflated/Cumflated</texturePrefix>
+    <hideWhileFetus>true</hideWhileFetus>
     <sizeSteps>5</sizeSteps>
     <sizeThresholds>
       <li>0.05</li>
@@ -965,6 +968,7 @@
       <y>-55.65</y>
     </glyphMax>
     <texturePrefix>HediffTab/RJW_Menstruation_Fluids/BodyParts/Womb/Cumflated/Cumflated</texturePrefix>
+    <hideWhileFetus>true</hideWhileFetus>
     <sizeSteps>5</sizeSteps>
     <sizeThresholds>
       <li>0.05</li>
@@ -1007,6 +1011,7 @@
       <y>-69.25</y>
     </glyphMax>
     <texturePrefix>HediffTab/RJW_Menstruation_Fluids/BodyParts/Womb/Cumflated/Cumflated</texturePrefix>
+    <hideWhileFetus>true</hideWhileFetus>
     <sizeSteps>5</sizeSteps>
     <sizeThresholds>
       <li>0.05</li>
@@ -1047,6 +1052,7 @@
       <y>-18.00</y>
     </glyphMax>
     <texturePrefix>HediffTab/RJW_Menstruation/BodyParts/Womb/Fluid/Fluid</texturePrefix>
+    <hideWhileFetus>true</hideWhileFetus>
     <sizeSteps>6</sizeSteps>
     <sizeThresholds>
       <li>0.00</li>
@@ -1088,6 +1094,7 @@
       <y>-33.70</y>
     </glyphMax>
     <texturePrefix>HediffTab/RJW_Menstruation/BodyParts/Womb/Fluid/Fluid</texturePrefix>
+    <hideWhileFetus>true</hideWhileFetus>
     <sizeSteps>6</sizeSteps>
     <sizeThresholds>
       <li>0.00</li>
@@ -1129,6 +1136,7 @@
       <y>50.00</y>
     </glyphMax>
     <texturePrefix>HediffTab/RJW_Menstruation/BodyParts/Womb/Fluid/Fluid</texturePrefix>
+    <hideWhileFetus>true</hideWhileFetus>
     <sizeSteps>6</sizeSteps>
     <sizeThresholds>
       <li>0.00</li>
@@ -1170,6 +1178,7 @@
       <y>-57.95</y>
     </glyphMax>
     <texturePrefix>HediffTab/RJW_Menstruation/BodyParts/Womb/Fluid/Fluid</texturePrefix>
+    <hideWhileFetus>true</hideWhileFetus>
     <sizeSteps>6</sizeSteps>
     <sizeThresholds>
       <li>0.00</li>
@@ -1211,6 +1220,7 @@
       <y>-70.75</y>
     </glyphMax>
     <texturePrefix>HediffTab/RJW_Menstruation/BodyParts/Womb/Fluid/Fluid</texturePrefix>
+    <hideWhileFetus>true</hideWhileFetus>
     <sizeSteps>6</sizeSteps>
     <sizeThresholds>
       <li>0.00</li>

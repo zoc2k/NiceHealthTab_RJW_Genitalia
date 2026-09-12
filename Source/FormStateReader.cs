@@ -89,6 +89,40 @@ namespace NHTRJWGenitalia
         }
 
         /// <summary>
+        /// Is a fetus showing on this pawn? Forms marked
+        /// <see cref="DollPartFormDef.hideWhileFetus"/> (the womb fluid and inflation layers) are
+        /// skipped while one is.
+        ///
+        /// This is the rule RJW Menstruation's own womb window uses. In
+        /// <c>Dialog_WombStatus</c>, once a pregnancy hediff is there it draws the cum layer only
+        /// while gestation progress is below <see cref="ImplantedUntil"/> (the implantation
+        /// stage) and uses <c>Womb/Empty</c> from there on. The amounts are still tracked by
+        /// those mods; they are simply not drawn over a womb that shows a fetus.
+        ///
+        /// The pregnancy severity is the gestation progress (0.001 -> 1.0), the same value
+        /// <see cref="TryImplanted"/> reads.
+        /// </summary>
+        internal static bool FetusShowing(Pawn pawn)
+        {
+            Resolve();
+            if (pregnancyType == null || pawn == null || pawn.health == null
+                || pawn.health.hediffSet == null)
+            {
+                return false;
+            }
+            System.Collections.Generic.List<Hediff> all = pawn.health.hediffSet.hediffs;
+            for (int i = 0; i < all.Count; i++)
+            {
+                Hediff h = all[i];
+                if (h != null && pregnancyType.IsInstanceOfType(h) && h.Severity >= ImplantedUntil)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
         /// The baby count on a pregnancy hediff. 1 if it is not one, or cannot be read.
         ///
         /// The fetus art uses this to pick the multiplet picture (DESIGN.md 67). RJW

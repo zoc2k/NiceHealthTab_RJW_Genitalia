@@ -266,6 +266,10 @@ namespace NHTRJWGenitalia
                 {
                     continue;
                 }
+                if (f.hideWhileFetus && FormStateReader.FetusShowing(pawn))
+                {
+                    continue;       // Nothing is laid over a womb that shows a fetus.
+                }
 
                 // Forms that read their tier from outside a severity ignore the hediff rules.
                 // We do not know which hediff carries the value, so we walk the list and ask

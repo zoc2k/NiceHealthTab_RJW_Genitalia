@@ -60,6 +60,17 @@ namespace NHTRJWGenitalia
         /// <summary>Only when the hediff defName is exactly one of these.</summary>
         public List<string> hediffs;
 
+        /// <summary>
+        /// Skip this form while a fetus is showing on the pawn.
+        ///
+        /// The womb fluid and inflation layers use it. RJW Menstruation's own womb window does
+        /// the same: once a pregnancy hediff is there it draws the cum layer only while
+        /// gestation progress is below 0.2 (the implantation stage) and leaves the womb clean
+        /// from there on (<c>Dialog_WombStatus</c>). The amount is still tracked by that mod; it
+        /// is simply not drawn over a womb that shows a fetus.
+        /// </summary>
+        public bool hideWhileFetus;
+
         /// <summary>Match by the pawn's gender (Male / Female). Used for the chest.</summary>
         public string gender;
 

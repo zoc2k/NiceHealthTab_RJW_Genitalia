@@ -146,6 +146,14 @@ namespace NHTRJWGenitalia
         private static bool eggResolved;
         private static MethodInfo eggIconMethod;
 
+        // Their ovary branch can throw through no fault of ours (see TryEggIcon), so it is put
+        // to sleep for a while instead of being switched off for good.
+        private const float OvaryRetrySeconds = 10f;
+        private static bool ovaryBroken;
+        private static float ovaryRetryAt;
+        private static bool ovaryWarned;
+        private static bool eggWarned;
+
         /// <summary>
         /// The ovulation / fertilization / implantation picture - **the very picture**
         /// menstruation draws in its own womb window.
@@ -155,6 +163,15 @@ namespace NHTRJWGenitalia
         /// ovulation phases, egg / fertilizing / fertilized in the luteal phase, implantation
         /// in early pregnancy - they decide every stage. When there is nothing to show they
         /// return the transparent <c>Womb/Empty</c>.
+        ///
+        /// Why <c>includeOvary</c> is retried rather than trusted: with it true, their
+        /// <c>GetOvaryIcon</c> reads the pawn's current sex job through
+        /// <c>JobDriver_Sex.Sexprops.sexType</c>. For some interaction defs RJW throws a
+        /// NullReferenceException in <c>SexProps.get_interaction</c> while building
+        /// <c>SexInteraction</c>, which surfaces here as a TargetInvocationException. That is a
+        /// transient state of another mod, not a broken lookup on our side, so we fall back to
+        /// <c>includeOvary: false</c> for the moment (every other stage, implantation included,
+        /// still draws) and try the ovary branch again a few seconds later.
         /// </summary>
         internal static bool TryEggIcon(Pawn pawn, out UnityEngine.Texture2D icon)
         {
@@ -187,19 +204,58 @@ namespace NHTRJWGenitalia
                 {
                     continue;
                 }
-                try
+                bool withOvary = !ovaryBroken || UnityEngine.Time.realtimeSinceStartup >= ovaryRetryAt;
+                if (TryIcon(comp, withOvary, out icon))
                 {
-                    icon = eggIconMethod.Invoke(null, new object[] { comp, true }) as UnityEngine.Texture2D;
+                    ovaryBroken = false;
+                    return icon != null;
                 }
-                catch (Exception ex)
+                if (!withOvary)
                 {
-                    eggIconMethod = null;   // Runs every frame; one failure switches it off.
-                    Log.Warning(Bootstrap.Prefix + "egg icon read failed, disabled: " + ex);
-                    return false;
+                    return false;       // Already the plain branch; nothing left to fall back to.
                 }
-                return icon != null;
+
+                // Their ovary branch threw. Rest it for a while and draw the rest meanwhile.
+                ovaryBroken = true;
+                ovaryRetryAt = UnityEngine.Time.realtimeSinceStartup + OvaryRetrySeconds;
+                return TryIcon(comp, false, out icon) && icon != null;
             }
             return false;
+        }
+
+        /// <summary>
+        /// One call into their GetEggIcon. False when it threw; the icon is then null.
+        /// Each branch logs at most once - this runs every frame.
+        /// </summary>
+        private static bool TryIcon(object comp, bool includeOvary, out UnityEngine.Texture2D icon)
+        {
+            icon = null;
+            try
+            {
+                icon = eggIconMethod.Invoke(null, new object[] { comp, includeOvary })
+                       as UnityEngine.Texture2D;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (includeOvary)
+                {
+                    if (!ovaryWarned)
+                    {
+                        ovaryWarned = true;
+                        Log.Warning(Bootstrap.Prefix + "ovulation picture skipped for now - RJW "
+                                    + "Menstruation threw while reading the pawn's sex job. The "
+                                    + "other stages still draw and the ovary branch is retried "
+                                    + "every " + OvaryRetrySeconds + "s: " + ex);
+                    }
+                }
+                else if (!eggWarned)
+                {
+                    eggWarned = true;
+                    Log.Warning(Bootstrap.Prefix + "egg icon read failed: " + ex);
+                }
+                return false;
+            }
         }
 
         /// <summary>
