@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- Mod settings window -->
+  <NHTRJW_ModTitle>Nice Health Tab - RJW Genitalia</NHTRJW_ModTitle>
+
+  <NHTRJW_KidHeading>Child body type</NHTRJW_KidHeading>
+  <NHTRJW_ShowKidGenitals>Show genitals on the child body type</NHTRJW_ShowKidGenitals>
+  <NHTRJW_ShowKidGenitalsDesc>Draw this patch's markers (genitals, chest, nipples, anus, gonads, womb) on pawns that use the child doll. Turning it off only hides the markers on the doll - the body parts stay, so injuries, treatment and surgery work as usual.\n\nThis goes by doll, not by age. Nice Health Tab decides which pawns get the child doll (under 15 by default). If you turn the child doll off in Nice Health Tab's settings, children are drawn with adult dolls and the markers show regardless of this setting.</NHTRJW_ShowKidGenitalsDesc>
+
+  <NHTRJW_SizeHediffHeading>Size hediffs</NHTRJW_SizeHediffHeading>
+  <NHTRJW_HideSizeHediffLabel>Ignore plain size hediffs on the doll</NHTRJW_HideSizeHediffLabel>
+  <NHTRJW_HideSizeHediffDesc>RimJobWorld stores part size as an always-present hediff, which would otherwise keep these parts permanently lit up on the doll. With this on, they behave like every other organ: the marker appears only for injury, bleeding, disease, missing parts or implants. Sizes are still listed in the panel on the right, and still drive the size-based textures.\n\nChanging this takes effect after you select another pawn and come back.</NHTRJW_HideSizeHediffDesc>
+
+  <!-- Optional mod status -->
+  <NHTRJW_Tab_General>General</NHTRJW_Tab_General>
+  <NHTRJW_Tab_Nipples>Chest &amp; nipples</NHTRJW_Tab_Nipples>
+  <NHTRJW_Tab_Gonads>Gonads</NHTRJW_Tab_Gonads>
+  <NHTRJW_NoPages>No settings to show.</NHTRJW_NoPages>
+  <NHTRJW_DepsDesc>Without the required mods this patch does nothing. Optional mods add features; without them only those features are missing. Options that rely on a mod you do not have are locked, and a tab that only makes sense with a given mod does not appear at all.</NHTRJW_DepsDesc>
+  <NHTRJW_GonadsHeading>Gonads</NHTRJW_GonadsHeading>
+  <NHTRJW_ShowFutaTesticles>Show testicles on futanari</NHTRJW_ShowFutaTesticles>
+  <NHTRJW_ShowFutaTesticlesDesc>Draw testicles on pawns that have both a penis and a vagina. Turn it off to leave only the ovaries (ovaries ignore this setting).\n\nIt goes by the parts the pawn actually has, not by gender, so transgender pawns are handled correctly. Only the marker is hidden - the body part stays, so injuries and surgery work as usual.</NHTRJW_ShowFutaTesticlesDesc>
+
+  <NHTRJW_ChestHeading>Chest</NHTRJW_ChestHeading>
+  <NHTRJW_ShowMaleChest>Show chest on male pawns</NHTRJW_ShowMaleChest>
+  <NHTRJW_ShowMaleChestDesc>Draw the chest on pawns whose gender is male. Nipples sit on top of the chest, so they follow it.\n\nRimJobWorld gives breasts to every pawn, so without this the marker shows up on male pawns too. Only the marker is hidden - the body part stays, so injuries and surgery work as usual.</NHTRJW_ShowMaleChestDesc>
+  <NHTRJW_DepsHeading>Linked mods</NHTRJW_DepsHeading>
+  <NHTRJW_Dep_NHT>Nice Health Tab</NHTRJW_Dep_NHT>
+  <NHTRJW_Dep_RJW>RimJobWorld</NHTRJW_Dep_RJW>
+  <NHTRJW_Dep_Menstruation>RJW Menstruation</NHTRJW_Dep_Menstruation>
+  <NHTRJW_Dep_SizedApparel>Sized Apparel</NHTRJW_Dep_SizedApparel>
+  <NHTRJW_Dep_Balls>RJW Now with balls!</NHTRJW_Dep_Balls>
+  <NHTRJW_Dep_Fluids>RJW Menstruation - Fluids</NHTRJW_Dep_Fluids>
+
+  <!-- Linked mod tooltips - what each mod adds to this patch -->
+  <NHTRJW_DepTip_NHT>Where this patch draws.\n\n- Genital, chest, anus and gonad markers on the body and organ views\n- The surgery menu that opens when you click a doll part\n- The RJW body part panel next to the hand and foot buttons\n\nWithout it this patch does nothing.</NHTRJW_DepTip_NHT>
+  <NHTRJW_DepTip_RJW>Supplies the parts to show and their sizes.\n\n- Penis, vagina, vulva, breast, nipple and anus markers with size-based art\n- The womb and pregnancy stages (implantation, fetus)\n\nWithout it this patch does nothing.</NHTRJW_DepTip_RJW>
+  <NHTRJW_DepTip_Menstruation>Supplies what is inside the womb and per-pawn nipple variation.\n\n- Fluid in the womb (cum, menstrual blood) in 6 stages\n- Fluid colour - turns red when menstrual blood is mixed in\n- Areola pigmentation - nipple shade differs per pawn and darkens with pregnancy and lactation\n\nWithout it no fluid layer is drawn and the womb looks empty.</NHTRJW_DepTip_Menstruation>
+  <NHTRJW_DepTip_Fluids>Supplies womb inflation.\n\n- Vaginal cumflation shown as a swollen womb in 5 stages\n\nWithout it no inflation art is drawn. The amount of fluid in the womb comes from RJW Menstruation separately.</NHTRJW_DepTip_Fluids>
+  <NHTRJW_DepTip_SizedApparel>Supplies nipple shape variants.\n\n- Dedicated art for inverted nipples\n\nWithout it every pawn gets the default nipple.</NHTRJW_DepTip_SizedApparel>
+  <NHTRJW_DepTip_Balls>Supplies actual testicles and ovaries.\n\n- Testicle and ovary markers at the size the pawn really has\n- Translated gonad body part names\n- Gonad removal split into testicle removal and ovary removal\n\nThe doll is not left empty without it - a pawn with a vagina gets a reference ovary picture and a pawn with a penis gets testicles matched to the penis size.</NHTRJW_DepTip_Balls>
+  <NHTRJW_DepFound>active</NHTRJW_DepFound>
+  <NHTRJW_DepMissing>not found</NHTRJW_DepMissing>
+  <NHTRJW_DepRequired>required</NHTRJW_DepRequired>
+  <NHTRJW_DepOptional>optional</NHTRJW_DepOptional>
+  <NHTRJW_NeedsMod>needs {0}</NHTRJW_NeedsMod>
+  <NHTRJW_NeedsModDesc>This option needs {0}. It cannot be selected because that mod is not active.</NHTRJW_NeedsModDesc>
+
+  <!-- Nipples -->
+  <NHTRJW_NippleHeading>Nipples</NHTRJW_NippleHeading>
+  <NHTRJW_NippleDesc>Nipples are drawn as their own layer on top of the breasts, so their colour and shape are decided separately from health status. Each option needs a different mod; options that rely on a mod you do not have cannot be selected. Their saved values are kept, so they come back if you add the mod later.</NHTRJW_NippleDesc>
+
+  <NHTRJW_ShowNipples>Show nipples</NHTRJW_ShowNipples>
+  <NHTRJW_ShowNipplesDesc>Draw nipples on the body view. Turn it off to show breasts only.\nThey never appear in the organ, bone or armour views.</NHTRJW_ShowNipplesDesc>
+
+  <NHTRJW_UseSkinColor>Follow skin colour</NHTRJW_UseSkinColor>
+  <NHTRJW_UseSkinColorDesc>Mix the pawn's skin colour with the reference colour to get the base nipple colour. Turn it off to use the reference colour flat, regardless of skin.\n\nThe reference colour is sampled from Sized Apparel's nipple textures.</NHTRJW_UseSkinColorDesc>
+
+  <NHTRJW_UsePigmentation>Follow areola pigmentation</NHTRJW_UsePigmentation>
+  <NHTRJW_UsePigmentationDesc>Darken the base colour by each pawn's own pigmentation. It differs between pawns and deepens through pregnancy and nursing. Turn it off and every pawn keeps the base colour.\n\nThis per-pawn value comes from RJW Menstruation.</NHTRJW_UsePigmentationDesc>
+
+  <NHTRJW_UseInvertedNipple>Show inverted nipples</NHTRJW_UseInvertedNipple>
+  <NHTRJW_UseInvertedNippleDesc>Use the dedicated art for pawns with inverted nipples. Turn it off and everyone gets the default nipple.\n\nWhether a pawn has them is decided by Sized Apparel.</NHTRJW_UseInvertedNippleDesc>
+
+  <NHTRJW_Monochrome>Draw in black and white</NHTRJW_Monochrome>
+  <NHTRJW_MonochromeDesc>Keep only the brightness of the resolved colour. The doll stays monochrome like the rest of Nice Health Tab while lighter and darker nipples still read.</NHTRJW_MonochromeDesc>
+
+  <!--
+    Source/Bootstrap.cs writes these into the BodyPartDef / BodyPartGroupDef labels only
+    while 'RJW Now with balls! ... and Ovaries I guess' is loaded. Without the balls mod
+    these keys are used nowhere.
+    (DefInjected against a Def that does not exist raises translation warnings, so this is
+    done through Keyed instead.)
+  -->
+  <NHTRJW_GonadsLabel>gonads</NHTRJW_GonadsLabel>
+  <NHTRJW_GonadsGroupLabel>gonads</NHTRJW_GonadsGroupLabel>
+
+  <NHTRJW_PanelTip>RJW body parts</NHTRJW_PanelTip>
+  <NHTRJW_PanelHeading>RJW part panel</NHTRJW_PanelHeading>
+  <NHTRJW_ShowPanel>Show the RJW part panel</NHTRJW_ShowPanel>
+  <NHTRJW_ShowPanelDesc>Adds a button at the lower right of the doll, above the hand and foot buttons. Pressing it opens a panel over the doll, like the hand and foot panels, that shows the genitals enlarged along with the anus and the ovulation / fertilization / implantation state. Press again to close.\n\nOvulation, fertilization and implantation need RJW Menstruation.</NHTRJW_ShowPanelDesc>
+</LanguageData>

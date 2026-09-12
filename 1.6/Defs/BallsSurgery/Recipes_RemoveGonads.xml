@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Gonad harvesting, split into testicles and ovaries.
+
+  The harvesting surgery of 'RJW Now with balls! ... and Ovaries I guess' (HarvestGonads) is
+  a single recipe, so you cannot choose what comes out: with testicles present, the
+  testicles always go first. These two split that choice. See Source/GonadSurgery.cs.
+
+  This folder is the only one that MayRequires the balls packageId. The worker classes are
+  ours, but the surgery itself handles that mod's part, hediffs and organ items, so it means
+  nothing without it.
+
+  Why Human is listed in recipeUsers: RecipeDef.IsSurgery caches its value the first time it
+  is read (isSurgeryCached). Attached to a human race, it is true whenever it is read.
+  For every other race (animals included) the C# attaches these wherever HarvestGonads
+  was.
+
+  The values below match HarvestGonads (work amount, medicine skill 5, 2 medicine,
+  anaesthesia, zero death chance).
+-->
+<Defs>
+
+  <RecipeDef MayRequire="rim.job.world,teheeitsme525.rjwgenderorgansmod">
+    <defName>NHTRJW_RemoveTesticles</defName>
+    <label>neuter</label>
+    <description>Neuter the patient by removing their testicles. Ovaries are left in place.</description>
+    <workerClass>NHTRJWGenitalia.Recipe_RemoveTesticles</workerClass>
+    <jobString>Neutering.</jobString>
+    <workAmount>2500</workAmount>
+    <hideBodyPartNames>true</hideBodyPartNames>
+    <isViolation>false</isViolation>
+    <skillRequirements>
+      <Medicine>5</Medicine>
+    </skillRequirements>
+    <ingredients>
+      <li>
+        <filter>
+          <categories>
+            <li>Medicine</li>
+          </categories>
+        </filter>
+        <count>2</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <categories>
+        <li>Medicine</li>
+      </categories>
+    </fixedIngredientFilter>
+    <surgerySuccessChanceFactor>1.0</surgerySuccessChanceFactor>
+    <deathOnFailedSurgeryChance>0.0</deathOnFailedSurgeryChance>
+    <anesthetize>true</anesthetize>
+    <recipeUsers>
+      <li>Human</li>
+    </recipeUsers>
+  </RecipeDef>
+
+  <RecipeDef MayRequire="rim.job.world,teheeitsme525.rjwgenderorgansmod">
+    <defName>NHTRJW_RemoveOvaries</defName>
+    <label>spay</label>
+    <description>Spay the patient by removing their ovaries. Testicles are left in place.</description>
+    <workerClass>NHTRJWGenitalia.Recipe_RemoveOvaries</workerClass>
+    <jobString>Spaying.</jobString>
+    <workAmount>2500</workAmount>
+    <hideBodyPartNames>true</hideBodyPartNames>
+    <isViolation>false</isViolation>
+    <skillRequirements>
+      <Medicine>5</Medicine>
+    </skillRequirements>
+    <ingredients>
+      <li>
+        <filter>
+          <categories>
+            <li>Medicine</li>
+          </categories>
+        </filter>
+        <count>2</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <categories>
+        <li>Medicine</li>
+      </categories>
+    </fixedIngredientFilter>
+    <surgerySuccessChanceFactor>1.0</surgerySuccessChanceFactor>
+    <deathOnFailedSurgeryChance>0.0</deathOnFailedSurgeryChance>
+    <anesthetize>true</anesthetize>
+    <recipeUsers>
+      <li>Human</li>
+    </recipeUsers>
+  </RecipeDef>
+
+</Defs>

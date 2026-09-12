@@ -1,0 +1,98 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Nice Health Tab - RJW Genitalia  :  bootstrap assembly
+
+    Build:   dotnet build -c Release
+    Output:  ..\1.6\Assemblies\NHT_RJW_Genitalia.dll
+
+    If RimWorld lives somewhere else, edit RimWorldManaged below or pass
+    -p:RimWorldManaged="D:\...\RimWorldWin64_Data\Managed".
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyName>NHT_RJW_Genitalia</AssemblyName>
+    <RootNamespace>NHTRJWGenitalia</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Version>1.2.0</Version>
+
+    <!-- Pinned to UTF-8; the source files carry a BOM as well -->
+    <CodePage>65001</CodePage>
+
+    <!-- Build straight into the mod's Assemblies folder -->
+    <OutputPath>..\1.6\Assemblies\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <Deterministic>true</Deterministic>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
+
+    <RimWorldManaged Condition="'$(RimWorldManaged)' == ''">C:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed</RimWorldManaged>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- .NET Framework 4.7.2 reference assemblies, so this builds without Visual Studio -->
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <!--
+      Harmony is referenced only. ExcludeAssets=runtime keeps 0Harmony.dll out of the
+      output; the real 0Harmony is loaded by the Harmony mod (both NHT and RJW require
+      brrainz.harmony as a hard dependency).
+    -->
+    <PackageReference Include="Lib.Harmony" Version="2.3.3">
+      <ExcludeAssets>runtime</ExcludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+      The game assemblies are referenced only (Private=false, so nothing is copied into
+      the output folder). Patches against NHT and Cumpilation go through reflection.
+      NiceHediffTab.dll and the RJW assemblies are deliberately not referenced - all
+      reflection.
+    -->
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(RimWorldManaged)\Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(RimWorldManaged)\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(RimWorldManaged)\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!--
+      TextRenderingModule / InputLegacyModule
+        These must be referenced even though we never use them directly.
+        Widgets.ButtonText has TextAnchor? in its signature and Verse.Mouse pulls in Input,
+        so without the reference the build succeeds but assembly resolution fails the
+        moment such a method first runs. Thrown inside IMGUI, that aborts the whole draw
+        pass and the window comes up half empty.
+    -->
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(RimWorldManaged)\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(RimWorldManaged)\UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(RimWorldManaged)\UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,9 @@
+# Build output of Source/ (the built DLL is tracked, intermediates are not)
+obj/
+bin/
+*.user
+*.suo
+
+# Windows junk
+Thumbs.db
+desktop.ini

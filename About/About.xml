@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+	<name>Nice Health Tab - RJW Genitalia</name>
+	<author>zoc2k</author>
+	<packageId>zoc2k.nicehealthtab.rjwgenitalia</packageId>
+	<supportedVersions>
+		<li>1.6</li>
+	</supportedVersions>
+
+	<!--
+		The only hard dependencies are Nice Health Tab and RimJobWorld.
+		'RJW Now with balls!' is optional and therefore not listed here - listing it
+		would warn every user who does not have it.
+	-->
+	<modDependencies>
+		<li>
+			<packageId>Andromeda.NiceHealthTab</packageId>
+			<displayName>Nice Health Tab</displayName>
+			<steamWorkshopUrl>steam://url/CommunityFilePage/3328729902</steamWorkshopUrl>
+		</li>
+		<li>
+			<packageId>rim.job.world</packageId>
+			<displayName>RimJobWorld</displayName>
+			<downloadUrl>https://gitgud.io/Ed86/rjw</downloadUrl>
+		</li>
+	</modDependencies>
+
+	<!--
+		loadAfter is harmless for mods that are not installed, so listing the balls mod
+		here guarantees the load order whenever it is present.
+	-->
+	<loadAfter>
+		<li>brrainz.harmony</li>
+		<li>andromeda.milkyway</li>
+		<li>kathanon.FloatSubMenu</li>
+		<li>Andromeda.NiceHealthTab</li>
+		<li>rim.job.world</li>
+		<li>TeheeItsMe525.RJWGenderOrgansMod</li>
+	</loadAfter>
+
+	<description>Shows RimJobWorld's reproductive body parts on the Nice Health Tab doll.
+
+REQUIRED: Nice Health Tab and RimJobWorld. Without either, this mod does nothing.
+
+ON THE DOLL
+  - Breasts, nipples, penis or vulva, and testicles are drawn on the body like
+    any other outer body part.
+  - The womb, ovaries and testicles are also organs. On the normal view they
+    appear only when injured, bleeding, diseased, missing or implanted; in the
+    organ view they are always shown and clickable.
+  - The anus has its own small window at the lower right of the doll, shown on
+    both the normal and organ views, even when the pawn has no anus.
+  - The art changes with part size, and follows the parts a pawn actually has
+    rather than its gender, so futa and transgender pawns look right.
+  - Health colours, implants and missing parts are handled by Nice Health Tab.
+    Click a part to schedule surgery on it, like any other organ.
+
+RJW PART PANEL
+A button at the lower right of the doll shows a close-up of the pawn's crotch.
+Press it to open a panel over the doll, like the hand and foot panels, with the
+genitals enlarged, the anus, and the ovulation / fertilization / implantation
+state. Press it again to close.
+
+SIZE HEDIFFS
+RimJobWorld stores part size as an always-present hediff, which would keep
+these parts permanently lit up on the doll. This mod leaves plain size hediffs
+out of the doll's condition check, so the parts behave like every other organ.
+Sizes are still listed on the right. Bionic parts and harmful hediffs still
+show.
+
+OPTIONAL MODS - each adds features; without it only those features are missing
+  - RJW Menstruation: fluid in the womb (6 stages, turns red with menstrual
+    blood), per-pawn areola pigmentation, and the ovulation / fertilization /
+    implantation state in the panel.
+  - RJW Menstruation - Fluids: womb inflation (5 stages).
+  - Sized Apparel: inverted nipple art.
+  - RJW Now with balls! . . . and Ovaries I guess: real testicle and ovary
+    sizes, translated gonad names, and gonad removal split into testicle
+    removal and ovary removal. Without it, pawns with a vagina get a reference
+    ovary picture and pawns with a penis get testicles matched to penis size.
+  - Cumpilation: stops the red "Tried to add health diff to missing part" log
+    error when a pawn's genitals are missing.
+
+MOD SETTINGS
+  - Show genitals on the child body type (default off). This goes by doll, not
+    age - Nice Health Tab decides which pawns use the child doll.
+  - Show the RJW part panel (default on).
+  - Ignore plain size hediffs on the doll (default on).
+  - Show chest on male pawns (default off).
+  - Nipples: show them, follow skin colour, follow areola pigmentation, show
+    inverted nipples, draw in black and white.
+  - Show testicles on futanari (default off).
+Hiding a marker only hides the picture; injuries, treatment and surgery work
+as usual. The settings page lists which linked mods were found (hover a mod to
+see what it adds), and options that need a missing mod are locked.
+
+No original files of Nice Health Tab, RimJobWorld or the linked mods are
+modified or redistributed. The textures were made for this mod.
+
+Load order: put this below Nice Health Tab, RimJobWorld and the balls mod.</description>
+</ModMetaData>
