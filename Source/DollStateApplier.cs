@@ -166,6 +166,7 @@ namespace NHTRJWGenitalia
                 Bootstrap.BodyPartIdField.SetValue(p.def, (visible || windowOnly) ? p.realIndex : -1);
                 // Keep the chosen form so the RJW panel can read its panel coordinates.
                 p.currentForm = visible ? form : null;
+                p.placementForm = null;     // set below once the picture is chosen
                 if (here && p.slot == Bootstrap.AnusSlot)
                 {
                     AnusWindow.Prepare(visible);
@@ -200,7 +201,22 @@ namespace NHTRJWGenitalia
                     continue;
                 }
 
+                // The kind of penis picks the art set (and, for testicles, the pawn's penis
+                // does), the way Sized Apparel does. It also picks the kind's own hit area.
+                string kind = null;
+                string kindVariation = null;
+                if (form.HasKinds)
+                {
+                    Hediff source = form.VariantFromPenis ? DollPartFormDef.PenisOf(pawn) : match;
+                    if (source != null && source.def != null)
+                    {
+                        kind = source.def.defName;
+                        kindVariation = DollPartFormDef.VariationOf(source);
+                    }
+                }
+
                 Texture2D tex = null;
+                DollPartFormDef placement = form;   // whose position, scale and panel placement
                 if (form.tiers != null && form.tiers.Length > 0)
                 {
                     // Cycle forms take their tier from the value we read, not from a hediff
@@ -212,8 +228,25 @@ namespace NHTRJWGenitalia
                                : (match == null) ? 0 : form.TierFor(match.Severity);
                     // With a multiple pregnancy, the multiplet picture of the same tier - only
                     // when one exists.
+                    // Kind testicle art sits on that kind's penis canvas, so it is drawn where the
+                    // penis is drawn. Its size: with the balls mod the testicles keep their own size;
+                    // without it there is no testicle size at all, so they follow the penis.
+                    if (form.variantOnPenisCanvas && kind != null)
+                    {
+                        Hediff penis = DollPartFormDef.PenisOf(pawn);
+                        DollPartFormDef penisForm = PenisFormFor(p.dollName);
+                        if (penis != null && penisForm != null)
+                        {
+                            int artTier = ModDeps.Balls ? tier : penisForm.TierFor(penis.Severity);
+                            if (form.KindHasOwnArt(kind, kindVariation, artTier))
+                            {
+                                tier = artTier;
+                                placement = penisForm;
+                            }
+                        }
+                    }
                     int babies = (form.multipletTiers == null) ? 1 : FormStateReader.BabyCount(match);
-                    tex = form.TextureFor(tier, babies);
+                    tex = form.TextureFor(tier, babies, kind, kindVariation);
                 }
 
                 if (tex != null && Bootstrap.TexField != null)
@@ -225,20 +258,57 @@ namespace NHTRJWGenitalia
                     RestoreTexture(p);
                 }
 
+                p.placementForm = placement;
                 if (Bootstrap.PositionField != null)
                 {
-                    Bootstrap.PositionField.SetValue(p.def, form.position);
+                    Bootstrap.PositionField.SetValue(p.def, placement.position);
                 }
                 if (Bootstrap.WidthField != null)
                 {
-                    Bootstrap.WidthField.SetValue(p.def, form.scale);
-                    Bootstrap.HeightField.SetValue(p.def, Mathf.Abs(form.scale));
+                    Bootstrap.WidthField.SetValue(p.def, placement.scale);
+                    Bootstrap.HeightField.SetValue(p.def, Mathf.Abs(placement.scale));
                 }
                 if (Bootstrap.HitboxField != null)
                 {
-                    Bootstrap.HitboxField.SetValue(p.def, form.hitboxScale);
+                    Bootstrap.HitboxField.SetValue(p.def, form.HitboxFor(kind));
                 }
             }
+        }
+
+        private static readonly Dictionary<string, DollPartFormDef> penisForms =
+            new Dictionary<string, DollPartFormDef>();
+
+        /// <summary>The penis form of a doll (the outer genitals slot), or null. Cached.</summary>
+        private static DollPartFormDef PenisFormFor(string dollName)
+        {
+            DollPartFormDef found;
+            if (dollName == null)
+            {
+                return null;
+            }
+            if (penisForms.TryGetValue(dollName, out found))
+            {
+                return found;
+            }
+            List<BoundPart> parts = Bootstrap.BoundParts;
+            for (int i = 0; i < parts.Count && found == null; i++)
+            {
+                BoundPart bp = parts[i];
+                if (bp.dollName != dollName || bp.slot != Bootstrap.OuterGenitalsSlot || bp.forms == null)
+                {
+                    continue;
+                }
+                for (int k = 0; k < bp.forms.Count; k++)
+                {
+                    if (bp.forms[k].form == "Penis")
+                    {
+                        found = bp.forms[k];
+                        break;
+                    }
+                }
+            }
+            penisForms[dollName] = found;
+            return found;
         }
 
         /// <summary>
@@ -269,6 +339,10 @@ namespace NHTRJWGenitalia
                 if (f.hideWhileFetus && FormStateReader.FetusShowing(pawn))
                 {
                     continue;       // Nothing is laid over a womb that shows a fetus.
+                }
+                if (!f.hiddenKindsKeepOrgan && f.HidesKindOf(pawn))
+                {
+                    continue;       // This kind of penis comes without this part (no testicles).
                 }
 
                 // Forms that read their tier from outside a severity ignore the hediff rules.

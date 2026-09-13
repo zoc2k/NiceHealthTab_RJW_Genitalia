@@ -272,6 +272,42 @@ its own position on the doll**.
 
 Only the chest goes by gender, because RJW gives every pawn the same `Breasts` hediff.
 
+### Penis and testicle kinds
+
+RJW has many kinds of penis - `HorsePenis`, `DogPenis`, `DragonPenis` and so on - and the art
+follows the kind, the way Sized Apparel does it.
+
+- **Penis** - picked by the pawn's penis hediff (its defName) and its Sized Apparel part
+  variation, if it has one.
+- **Testicles** - picked by the pawn's **penis** kind, exactly as Sized Apparel picks balls art
+  (`Penis/Balls/<penis>_<tier>`). Kind testicle art is drawn together with that kind's penis,
+  so it sits where the penis is drawn. Its size follows the **testicles** when the balls mod is
+  loaded, and the **penis** without it (there is no testicle size then).
+
+The lookup for one tier, first match wins:
+
+1. the kind with its variation - `HorsePenis_3_RNW`
+2. the kind - `HorsePenis_3`
+3. the default name with the variation - `Penis_3_RNW`
+4. the default art - `Penis_3`
+
+Only tiers that are actually drawn count. An empty picture is skipped and the default art is
+used, so unfinished kinds never make the part disappear. A kind nobody has drawn yet (or a
+modded penis this mod does not know) simply uses the default art.
+
+Drawn kinds:
+
+- **Penis** - CatPenis, DemonPenis, DogPenis, DragonPenis, HorsePenis, HydraulicPenis,
+  OrcPenis, OvipositorM, SlimeTentacles.
+- **Testicles** - HorsePenis and OrcPenis. The other kinds above have **no testicles**: their
+  testicles are not drawn on the doll, in the RJW panel or on the crotch button. The organ
+  view keeps the testicle marker, so injuries and surgery on the gonads still show there.
+
+Each kind is measured on its own. Its click area and crotch button frame follow its own art,
+so a long kind (the horse penis, say) does not change them for other pawns. In the RJW panel
+every kind uses the usual placement; art that reaches past the genitals box is cut off at its
+edge.
+
 ### Size tiers
 
 RJW expresses a part's size as a hediff severity. That value is turned into a tier which
@@ -406,6 +442,7 @@ NiceHealthTab_RJW_Genitalia/
       |- RJW/BodyParts/                      RimJobWorld parts
       |  |- <body type>/{Breasts,Nipple,InvertedNipple}/
       |  |- Penis/ Vagina/ Vulva/ Anus/      shared
+      |  |- Penis/<kind>/<kind>_<tier>.png   penis kinds (HorsePenis/, DogPenis/ ...)
       |  `- Womb/ (+ Implanted/, Fetus/)     womb, implantation, fetus
       |                                      (Fetus_<tier>_Multiplet - multiple pregnancy)
       |- RJW_Menstruation/BodyParts/Womb/Fluid/            womb fluid

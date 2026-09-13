@@ -48,6 +48,34 @@
       <y>60.82</y>
     </glyphMax>
     <texturePrefix>HediffTab/RJW_Now_with_balls/BodyParts/Testicles/Testicles</texturePrefix>
+    <textureVariants>
+      <li>
+        <name>HorsePenis</name>
+        <tiers><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></tiers>
+        <hitboxScale><x>0.570</x><y>0.609</y></hitboxScale>
+        <glyphMin><x>-26.75</x><y>-10.50</y></glyphMin>
+        <glyphMax><x>27.25</x><y>67.50</y></glyphMax>
+      </li>
+      <li>
+        <name>OrcPenis</name>
+        <tiers><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></tiers>
+        <hitboxScale><x>0.566</x><y>0.586</y></hitboxScale>
+        <glyphMin><x>-25.25</x><y>-7.50</y></glyphMin>
+        <glyphMax><x>25.75</x><y>55.50</y></glyphMax>
+      </li>
+    </textureVariants>
+    <variantFrom>Penis</variantFrom>
+    <variantOnPenisCanvas>true</variantOnPenisCanvas>
+    <hiddenKinds>
+      <li>CatPenis</li>
+      <li>DemonPenis</li>
+      <li>DogPenis</li>
+      <li>DragonPenis</li>
+      <li>HydraulicPenis</li>
+      <li>OvipositorM</li>
+      <li>SlimeTentacles</li>
+    </hiddenKinds>
+    <hiddenKindsKeepOrgan>true</hiddenKindsKeepOrgan>
     <sizeSteps>6</sizeSteps>
     <sizeThresholds>
       <li>0.01</li>
@@ -90,6 +118,34 @@
       <y>31.83</y>
     </glyphMax>
     <texturePrefix>HediffTab/RJW_Now_with_balls/BodyParts/Testicles/Testicles</texturePrefix>
+    <textureVariants>
+      <li>
+        <name>HorsePenis</name>
+        <tiers><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></tiers>
+        <hitboxScale><x>0.570</x><y>0.609</y></hitboxScale>
+        <glyphMin><x>-24.07</x><y>-29.90</y></glyphMin>
+        <glyphMax><x>24.53</x><y>40.30</y></glyphMax>
+      </li>
+      <li>
+        <name>OrcPenis</name>
+        <tiers><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></tiers>
+        <hitboxScale><x>0.566</x><y>0.586</y></hitboxScale>
+        <glyphMin><x>-22.73</x><y>-27.20</y></glyphMin>
+        <glyphMax><x>23.18</x><y>29.50</y></glyphMax>
+      </li>
+    </textureVariants>
+    <variantFrom>Penis</variantFrom>
+    <variantOnPenisCanvas>true</variantOnPenisCanvas>
+    <hiddenKinds>
+      <li>CatPenis</li>
+      <li>DemonPenis</li>
+      <li>DogPenis</li>
+      <li>DragonPenis</li>
+      <li>HydraulicPenis</li>
+      <li>OvipositorM</li>
+      <li>SlimeTentacles</li>
+    </hiddenKinds>
+    <hiddenKindsKeepOrgan>true</hiddenKindsKeepOrgan>
     <sizeSteps>6</sizeSteps>
     <sizeThresholds>
       <li>0.01</li>
@@ -132,6 +188,34 @@
       <y>127.83</y>
     </glyphMax>
     <texturePrefix>HediffTab/RJW_Now_with_balls/BodyParts/Testicles/Testicles</texturePrefix>
+    <textureVariants>
+      <li>
+        <name>HorsePenis</name>
+        <tiers><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></tiers>
+        <hitboxScale><x>0.570</x><y>0.609</y></hitboxScale>
+        <glyphMin><x>-26.75</x><y>56.50</y></glyphMin>
+        <glyphMax><x>27.25</x><y>134.50</y></glyphMax>
+      </li>
+      <li>
+        <name>OrcPenis</name>
+        <tiers><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></tiers>
+        <hitboxScale><x>0.566</x><y>0.586</y></hitboxScale>
+        <glyphMin><x>-25.25</x><y>59.50</y></glyphMin>
+        <glyphMax><x>25.75</x><y>122.50</y></glyphMax>
+      </li>
+    </textureVariants>
+    <variantFrom>Penis</variantFrom>
+    <variantOnPenisCanvas>true</variantOnPenisCanvas>
+    <hiddenKinds>
+      <li>CatPenis</li>
+      <li>DemonPenis</li>
+      <li>DogPenis</li>
+      <li>DragonPenis</li>
+      <li>HydraulicPenis</li>
+      <li>OvipositorM</li>
+      <li>SlimeTentacles</li>
+    </hiddenKinds>
+    <hiddenKindsKeepOrgan>true</hiddenKindsKeepOrgan>
     <sizeSteps>6</sizeSteps>
     <sizeThresholds>
       <li>0.01</li>
@@ -174,6 +258,34 @@
       <y>35.81</y>
     </glyphMax>
     <texturePrefix>HediffTab/RJW_Now_with_balls/BodyParts/Testicles/Testicles</texturePrefix>
+    <textureVariants>
+      <li>
+        <name>HorsePenis</name>
+        <tiers><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></tiers>
+        <hitboxScale><x>0.570</x><y>0.609</y></hitboxScale>
+        <glyphMin><x>-30.76</x><y>-49.90</y></glyphMin>
+        <glyphMax><x>31.34</x><y>39.80</y></glyphMax>
+      </li>
+      <li>
+        <name>OrcPenis</name>
+        <tiers><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></tiers>
+        <hitboxScale><x>0.566</x><y>0.586</y></hitboxScale>
+        <glyphMin><x>-29.04</x><y>-46.45</y></glyphMin>
+        <glyphMax><x>29.61</x><y>26.00</y></glyphMax>
+      </li>
+    </textureVariants>
+    <variantFrom>Penis</variantFrom>
+    <variantOnPenisCanvas>true</variantOnPenisCanvas>
+    <hiddenKinds>
+      <li>CatPenis</li>
+      <li>DemonPenis</li>
+      <li>DogPenis</li>
+      <li>DragonPenis</li>
+      <li>HydraulicPenis</li>
+      <li>OvipositorM</li>
+      <li>SlimeTentacles</li>
+    </hiddenKinds>
+    <hiddenKindsKeepOrgan>true</hiddenKindsKeepOrgan>
     <sizeSteps>6</sizeSteps>
     <sizeThresholds>
       <li>0.01</li>
@@ -216,6 +328,34 @@
       <y>-12.16</y>
     </glyphMax>
     <texturePrefix>HediffTab/RJW_Now_with_balls/BodyParts/Testicles/Testicles</texturePrefix>
+    <textureVariants>
+      <li>
+        <name>HorsePenis</name>
+        <tiers><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></tiers>
+        <hitboxScale><x>0.570</x><y>0.609</y></hitboxScale>
+        <glyphMin><x>-20.06</x><y>-69.50</y></glyphMin>
+        <glyphMax><x>20.44</x><y>-11.00</y></glyphMax>
+      </li>
+      <li>
+        <name>OrcPenis</name>
+        <tiers><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></tiers>
+        <hitboxScale><x>0.566</x><y>0.586</y></hitboxScale>
+        <glyphMin><x>-18.94</x><y>-67.25</y></glyphMin>
+        <glyphMax><x>19.31</x><y>-20.00</y></glyphMax>
+      </li>
+    </textureVariants>
+    <variantFrom>Penis</variantFrom>
+    <variantOnPenisCanvas>true</variantOnPenisCanvas>
+    <hiddenKinds>
+      <li>CatPenis</li>
+      <li>DemonPenis</li>
+      <li>DogPenis</li>
+      <li>DragonPenis</li>
+      <li>HydraulicPenis</li>
+      <li>OvipositorM</li>
+      <li>SlimeTentacles</li>
+    </hiddenKinds>
+    <hiddenKindsKeepOrgan>true</hiddenKindsKeepOrgan>
     <sizeSteps>6</sizeSteps>
     <sizeThresholds>
       <li>0.01</li>
@@ -473,6 +613,33 @@
       <y>60.82</y>
     </glyphMax>
     <texturePrefix>HediffTab/RJW_Now_with_balls/BodyParts/Testicles/Testicles</texturePrefix>
+    <textureVariants>
+      <li>
+        <name>HorsePenis</name>
+        <tiers><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></tiers>
+        <hitboxScale><x>0.570</x><y>0.609</y></hitboxScale>
+        <glyphMin><x>-26.75</x><y>-10.50</y></glyphMin>
+        <glyphMax><x>27.25</x><y>67.50</y></glyphMax>
+      </li>
+      <li>
+        <name>OrcPenis</name>
+        <tiers><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></tiers>
+        <hitboxScale><x>0.566</x><y>0.586</y></hitboxScale>
+        <glyphMin><x>-25.25</x><y>-7.50</y></glyphMin>
+        <glyphMax><x>25.75</x><y>55.50</y></glyphMax>
+      </li>
+    </textureVariants>
+    <variantFrom>Penis</variantFrom>
+    <variantOnPenisCanvas>true</variantOnPenisCanvas>
+    <hiddenKinds>
+      <li>CatPenis</li>
+      <li>DemonPenis</li>
+      <li>DogPenis</li>
+      <li>DragonPenis</li>
+      <li>HydraulicPenis</li>
+      <li>OvipositorM</li>
+      <li>SlimeTentacles</li>
+    </hiddenKinds>
     <sizeSteps>6</sizeSteps>
     <sizeThresholds>
       <li>0.01</li>
@@ -515,6 +682,33 @@
       <y>31.83</y>
     </glyphMax>
     <texturePrefix>HediffTab/RJW_Now_with_balls/BodyParts/Testicles/Testicles</texturePrefix>
+    <textureVariants>
+      <li>
+        <name>HorsePenis</name>
+        <tiers><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></tiers>
+        <hitboxScale><x>0.570</x><y>0.609</y></hitboxScale>
+        <glyphMin><x>-24.07</x><y>-29.90</y></glyphMin>
+        <glyphMax><x>24.53</x><y>40.30</y></glyphMax>
+      </li>
+      <li>
+        <name>OrcPenis</name>
+        <tiers><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></tiers>
+        <hitboxScale><x>0.566</x><y>0.586</y></hitboxScale>
+        <glyphMin><x>-22.73</x><y>-27.20</y></glyphMin>
+        <glyphMax><x>23.18</x><y>29.50</y></glyphMax>
+      </li>
+    </textureVariants>
+    <variantFrom>Penis</variantFrom>
+    <variantOnPenisCanvas>true</variantOnPenisCanvas>
+    <hiddenKinds>
+      <li>CatPenis</li>
+      <li>DemonPenis</li>
+      <li>DogPenis</li>
+      <li>DragonPenis</li>
+      <li>HydraulicPenis</li>
+      <li>OvipositorM</li>
+      <li>SlimeTentacles</li>
+    </hiddenKinds>
     <sizeSteps>6</sizeSteps>
     <sizeThresholds>
       <li>0.01</li>
@@ -557,6 +751,33 @@
       <y>127.83</y>
     </glyphMax>
     <texturePrefix>HediffTab/RJW_Now_with_balls/BodyParts/Testicles/Testicles</texturePrefix>
+    <textureVariants>
+      <li>
+        <name>HorsePenis</name>
+        <tiers><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></tiers>
+        <hitboxScale><x>0.570</x><y>0.609</y></hitboxScale>
+        <glyphMin><x>-26.75</x><y>56.50</y></glyphMin>
+        <glyphMax><x>27.25</x><y>134.50</y></glyphMax>
+      </li>
+      <li>
+        <name>OrcPenis</name>
+        <tiers><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></tiers>
+        <hitboxScale><x>0.566</x><y>0.586</y></hitboxScale>
+        <glyphMin><x>-25.25</x><y>59.50</y></glyphMin>
+        <glyphMax><x>25.75</x><y>122.50</y></glyphMax>
+      </li>
+    </textureVariants>
+    <variantFrom>Penis</variantFrom>
+    <variantOnPenisCanvas>true</variantOnPenisCanvas>
+    <hiddenKinds>
+      <li>CatPenis</li>
+      <li>DemonPenis</li>
+      <li>DogPenis</li>
+      <li>DragonPenis</li>
+      <li>HydraulicPenis</li>
+      <li>OvipositorM</li>
+      <li>SlimeTentacles</li>
+    </hiddenKinds>
     <sizeSteps>6</sizeSteps>
     <sizeThresholds>
       <li>0.01</li>
@@ -599,6 +820,33 @@
       <y>35.81</y>
     </glyphMax>
     <texturePrefix>HediffTab/RJW_Now_with_balls/BodyParts/Testicles/Testicles</texturePrefix>
+    <textureVariants>
+      <li>
+        <name>HorsePenis</name>
+        <tiers><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></tiers>
+        <hitboxScale><x>0.570</x><y>0.609</y></hitboxScale>
+        <glyphMin><x>-30.76</x><y>-49.90</y></glyphMin>
+        <glyphMax><x>31.34</x><y>39.80</y></glyphMax>
+      </li>
+      <li>
+        <name>OrcPenis</name>
+        <tiers><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></tiers>
+        <hitboxScale><x>0.566</x><y>0.586</y></hitboxScale>
+        <glyphMin><x>-29.04</x><y>-46.45</y></glyphMin>
+        <glyphMax><x>29.61</x><y>26.00</y></glyphMax>
+      </li>
+    </textureVariants>
+    <variantFrom>Penis</variantFrom>
+    <variantOnPenisCanvas>true</variantOnPenisCanvas>
+    <hiddenKinds>
+      <li>CatPenis</li>
+      <li>DemonPenis</li>
+      <li>DogPenis</li>
+      <li>DragonPenis</li>
+      <li>HydraulicPenis</li>
+      <li>OvipositorM</li>
+      <li>SlimeTentacles</li>
+    </hiddenKinds>
     <sizeSteps>6</sizeSteps>
     <sizeThresholds>
       <li>0.01</li>
@@ -641,6 +889,33 @@
       <y>-12.16</y>
     </glyphMax>
     <texturePrefix>HediffTab/RJW_Now_with_balls/BodyParts/Testicles/Testicles</texturePrefix>
+    <textureVariants>
+      <li>
+        <name>HorsePenis</name>
+        <tiers><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></tiers>
+        <hitboxScale><x>0.570</x><y>0.609</y></hitboxScale>
+        <glyphMin><x>-20.06</x><y>-69.50</y></glyphMin>
+        <glyphMax><x>20.44</x><y>-11.00</y></glyphMax>
+      </li>
+      <li>
+        <name>OrcPenis</name>
+        <tiers><li>0</li><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li></tiers>
+        <hitboxScale><x>0.566</x><y>0.586</y></hitboxScale>
+        <glyphMin><x>-18.94</x><y>-67.25</y></glyphMin>
+        <glyphMax><x>19.31</x><y>-20.00</y></glyphMax>
+      </li>
+    </textureVariants>
+    <variantFrom>Penis</variantFrom>
+    <variantOnPenisCanvas>true</variantOnPenisCanvas>
+    <hiddenKinds>
+      <li>CatPenis</li>
+      <li>DemonPenis</li>
+      <li>DogPenis</li>
+      <li>DragonPenis</li>
+      <li>HydraulicPenis</li>
+      <li>OvipositorM</li>
+      <li>SlimeTentacles</li>
+    </hiddenKinds>
     <sizeSteps>6</sizeSteps>
     <sizeThresholds>
       <li>0.01</li>

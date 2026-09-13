@@ -617,8 +617,11 @@ namespace NHTRJWGenitalia
             // The frame: the glyph area of the outer genitals visible on this pawn, or every form
             // of that body type when there is none.
             float x0, y0, x1, y1;
-            if (!ExternalBounds(dollName, true, out x0, out y0, out x1, out y1)
-                && !ExternalBounds(dollName, false, out x0, out y0, out x1, out y1))
+            Pawn pawn = (pawnField == null) ? null : pawnField.GetValue(ctx) as Pawn;
+            Hediff penis = DollPartFormDef.PenisOf(pawn);
+            string kind = (penis == null || penis.def == null) ? null : penis.def.defName;
+            if (!ExternalBounds(dollName, true, kind, out x0, out y0, out x1, out y1)
+                && !ExternalBounds(dollName, false, null, out x0, out y0, out x1, out y1))
             {
                 return;
             }
@@ -671,7 +674,7 @@ namespace NHTRJWGenitalia
         /// With current true, only the forms visible on this pawn right now; with false, every form
         /// of that body type.
         /// </summary>
-        private static bool ExternalBounds(string dollName, bool current,
+        private static bool ExternalBounds(string dollName, bool current, string kind,
                                            out float x0, out float y0, out float x1, out float y1)
         {
             x0 = y0 = float.MaxValue;
@@ -688,29 +691,31 @@ namespace NHTRJWGenitalia
                 }
                 if (current)
                 {
-                    any |= Grow(p.currentForm, ref x0, ref y0, ref x1, ref y1);
+                    any |= Grow(p.currentForm, kind, ref x0, ref y0, ref x1, ref y1);
                 }
                 else if (p.forms != null)
                 {
                     for (int k = 0; k < p.forms.Count; k++)
                     {
-                        any |= Grow(p.forms[k], ref x0, ref y0, ref x1, ref y1);
+                        any |= Grow(p.forms[k], null, ref x0, ref y0, ref x1, ref y1);
                     }
                 }
             }
             return any;
         }
 
-        private static bool Grow(DollPartFormDef f, ref float x0, ref float y0, ref float x1, ref float y1)
+        private static bool Grow(DollPartFormDef f, string kind,
+                                 ref float x0, ref float y0, ref float x1, ref float y1)
         {
-            if (f == null || !f.HasGlyphBounds)
+            Vector2 min, max;
+            if (f == null || !f.GlyphBoundsFor(kind, out min, out max))
             {
                 return false;
             }
-            x0 = Mathf.Min(x0, f.glyphMin.x);
-            y0 = Mathf.Min(y0, f.glyphMin.y);
-            x1 = Mathf.Max(x1, f.glyphMax.x);
-            y1 = Mathf.Max(y1, f.glyphMax.y);
+            x0 = Mathf.Min(x0, min.x);
+            y0 = Mathf.Min(y0, min.y);
+            x1 = Mathf.Max(x1, max.x);
+            y1 = Mathf.Max(y1, max.y);
             return true;
         }
 
@@ -812,11 +817,37 @@ namespace NHTRJWGenitalia
             bool savedDrawing = Drawing;
             Drawing = true;     // The panel already drew the window for its anus, so the main
                                 // doll's window is not drawn again
+            // The pawn's penis kind. A long kind (a horse penis, say) keeps the default placement
+            // of the genitals group and is cut off at the genitals box instead of shrinking and
+            // shifting the whole group.
+            Hediff penis = DollPartFormDef.PenisOf(pawn);
+            string kind = (penis == null || penis.def == null) ? null : penis.def.defName;
+            bool overRepro = Mouse.IsOver(repro);
             try
             {
                 for (int i = 0; i < Slots.Length; i++)
                 {
-                    DrawSlot(ctx, Slots[i], dollName, rect, scale, selectable);
+                    // Every slot but the anus window is clipped to the genitals box. The clip
+                    // keeps the parent's coordinates (scroll offset = -box position), so the rects
+                    // NHT stores for later (hover tooltip, armour cover) stay valid outside it.
+                    // A part cut off at the box is not clickable outside the box either.
+                    bool genitals = Slots[i] != Bootstrap.AnusSlot;
+                    if (genitals)
+                    {
+                        GUI.BeginClip(repro, -repro.position, Vector2.zero, false);
+                    }
+                    try
+                    {
+                        DrawSlot(ctx, Slots[i], dollName, rect, scale,
+                                 selectable && (!genitals || overRepro), pawn, kind, genitals);
+                    }
+                    finally
+                    {
+                        if (genitals)
+                        {
+                            GUI.EndClip();
+                        }
+                    }
                 }
             }
             finally
@@ -834,8 +865,34 @@ namespace NHTRJWGenitalia
             GUI.color = Color.white;
         }
 
+        /// <summary>
+        /// Whether a part's glyph, drawn at this panel placement, reaches outside the genitals box.
+        /// Its art is cut off there, but NHT draws scars and bandages with Graphics.DrawTexture,
+        /// which ignores the clip - so such a part is drawn without them.
+        /// </summary>
+        private static bool GlyphLeavesReproBox(DollPartFormDef form, DollPartFormDef place, string kind,
+                                                Vector2 panelPos, float panelScale)
+        {
+            Vector2 min, max;
+            if (place.scale == 0f || !form.GlyphBoundsFor(kind, out min, out max))
+            {
+                return false;
+            }
+            // Panel = origin + doll x k: the same linear map gen_defs.py uses for the group.
+            float k = panelScale / place.scale;
+            Vector2 origin = panelPos - place.position * k;
+            float x0 = origin.x + Math.Min(min.x * k, max.x * k);
+            float x1 = origin.x + Math.Max(min.x * k, max.x * k);
+            float y0 = origin.y + Math.Min(min.y * k, max.y * k);
+            float y1 = origin.y + Math.Max(min.y * k, max.y * k);
+            const float Slack = 1f;
+            return x0 < ReproBox.xMin - Slack || x1 > ReproBox.xMax + Slack
+                || y0 < ReproBox.yMin - Slack || y1 > ReproBox.yMax + Slack;
+        }
+
         private static void DrawSlot(object ctx, string slot, string dollName,
-                                     Rect rect, float scale, bool selectable)
+                                     Rect rect, float scale, bool selectable,
+                                     Pawn pawn, string kind, bool clipped)
         {
             List<BoundPart> parts = Bootstrap.BoundParts;
             BoundPart p = null;
@@ -856,6 +913,21 @@ namespace NHTRJWGenitalia
             {
                 return;
             }
+            // A penis kind without testicles: the organ view keeps its marker, the panel does not.
+            if (p.currentForm.hiddenKindsKeepOrgan && p.currentForm.HidesKindOf(pawn))
+            {
+                return;
+            }
+
+            // Where it goes: the form's own panel placement, the same for every kind.
+            // Kind testicle art is placed like the penis it was drawn with (placementForm).
+            DollPartFormDef place = p.placementForm ?? p.currentForm;
+            Vector2 panelPos = place.panelPosition;
+            float panelScale = place.panelScale;
+            // Kind testicle glyphs are measured on the penis canvas, so they only apply while the
+            // kind art is what is drawn.
+            string glyphKind = (p.currentForm.variantOnPenisCanvas && p.placementForm == null) ? null : kind;
+            bool leaks = clipped && GlyphLeavesReproBox(p.currentForm, place, glyphKind, panelPos, panelScale);
 
             // Organ-layer parts are drawn regardless of status only in the organ filter, and
             // surface-layer parts the other way round. Both must always show in the panel, so we
@@ -867,11 +939,16 @@ namespace NHTRJWGenitalia
             Vector2 savedPos = (Vector2)Bootstrap.PositionField.GetValue(p.def);
             float savedW = (float)Bootstrap.WidthField.GetValue(p.def);
             float savedH = (float)Bootstrap.HeightField.GetValue(p.def);
+            object hediffs = null, scars = null, frame = null;
             try
             {
-                Bootstrap.PositionField.SetValue(p.def, p.currentForm.panelPosition);
-                Bootstrap.WidthField.SetValue(p.def, p.currentForm.panelScale);
-                Bootstrap.HeightField.SetValue(p.def, p.currentForm.panelScale);
+                if (leaks)
+                {
+                    SuppressOverlays(ctx, ref hediffs, ref scars, ref frame);
+                }
+                Bootstrap.PositionField.SetValue(p.def, panelPos);
+                Bootstrap.WidthField.SetValue(p.def, panelScale);
+                Bootstrap.HeightField.SetValue(p.def, panelScale);
                 drawPartMethod.Invoke(null, new object[]
                 {
                     ctx, p.def, panelDoll, rect, scale, selectable, Vector2.zero,
@@ -879,6 +956,7 @@ namespace NHTRJWGenitalia
             }
             finally
             {
+                RestoreOverlays(ctx, hediffs, scars, frame);
                 Bootstrap.PositionField.SetValue(p.def, savedPos);
                 Bootstrap.WidthField.SetValue(p.def, savedW);
                 Bootstrap.HeightField.SetValue(p.def, savedH);

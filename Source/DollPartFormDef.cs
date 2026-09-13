@@ -191,6 +191,122 @@ namespace NHTRJWGenitalia
         /// </summary>
         public List<float> sizeThresholds = new List<float>();
 
+        // --- Kinds (penis types) -------------------------------------------------
+        /// <summary>
+        /// Art sets for other kinds of this form, such as <c>HorsePenis</c> or the <c>Uncut</c>
+        /// variation of <c>Penis</c>. gen_defs.py fills this in with **only the tiers that have
+        /// art**: an empty PNG cannot be told apart in game (textures are unreadable), and a blank
+        /// tier must fall back to the default art instead of drawing nothing.
+        ///
+        /// Files live next to the default set. With <c>dir</c> the folder of
+        /// <see cref="texturePrefix"/> and <c>own</c> its file stem (e.g. <c>Penis</c>):
+        ///     own name     <c>dir/own_{tier}_{variation}</c>
+        ///     other kinds  <c>dir/{name}/{name}_{tier}[_{variation}]</c>
+        ///
+        /// The lookup follows Sized Apparel
+        /// (<c>SizedApparelUtility.CheckBodyPartGraphicExists</c>): the kind with its variation,
+        /// the kind without it, the default name with the variation, then the default art - all at
+        /// the same tier.
+        /// </summary>
+        public List<TextureVariant> textureVariants;
+
+        /// <summary>
+        /// Where the kind comes from. Empty: the hediff that matched this form (the penis
+        /// itself). <c>Penis</c>: the pawn's penis hediff. Sized Apparel picks balls art the same
+        /// way - by the penis hediff's name and variation (<c>Penis/Balls/{penis}_{tier}</c>).
+        /// </summary>
+        public string variantFrom;
+
+        /// <summary>
+        /// Kinds that have **none of this part**: while the pawn's kind (see
+        /// <see cref="variantFrom"/>) is one of these, the part is not drawn. gen_defs.py lists
+        /// every kind whose folder exists but holds only empty pictures - for testicles that is
+        /// how the artist marks a penis kind without balls.
+        /// </summary>
+        public List<string> hiddenKinds;
+
+        /// <summary>
+        /// With <see cref="hiddenKinds"/>: keep the part in the organ view and hide it only in the
+        /// RJW panel. The organ-layer testicles use it, so injuries and surgery on the gonads stay
+        /// reachable from the doll; the surface testicles are the ones that disappear.
+        /// </summary>
+        public bool hiddenKindsKeepOrgan;
+
+        /// <summary>
+        /// The kind art of this form is drawn **on the kind's penis canvas**, tier for tier with
+        /// the penis (testicles: the artist draws the balls over that kind's penis template). Such
+        /// art is placed with the doll's penis form (position, scale, panel placement) and picked
+        /// by the penis size tier - the way Sized Apparel draws balls with the penis severity
+        /// (<c>SizedApparelComp</c> hands the balls addon the penis hediff's severity).
+        /// </summary>
+        public bool variantOnPenisCanvas;
+
+        /// <summary>Resolved kind art: key -> one texture per tier, null where the tier has none.</summary>
+        [Unsaved(false)]
+        public Dictionary<string, Texture2D[]> variantTiers;
+
+        /// <summary>Per-kind geometry (hitbox, glyph area, panel placement): kind -> its entry.</summary>
+        [Unsaved(false)]
+        private Dictionary<string, TextureVariant> kindInfo;
+
+        /// <summary>The geometry entry of a kind, or null when the kind has no art of its own.</summary>
+        public TextureVariant KindInfo(string kind)
+        {
+            TextureVariant info;
+            return (kind != null && kindInfo != null && kindInfo.TryGetValue(kind, out info)) ? info : null;
+        }
+
+        /// <summary>Whether this form has any kind art at all.</summary>
+        public bool HasKinds
+        {
+            get { return textureVariants != null && textureVariants.Count > 0; }
+        }
+
+        /// <summary>
+        /// Click hit area for a kind. A long kind (a horse penis, say) is measured on its own so it
+        /// does not widen the hit area of every other pawn's penis.
+        /// </summary>
+        public Vector2 HitboxFor(string kind)
+        {
+            TextureVariant info = KindInfo(kind);
+            return (info != null && info.hitboxScale != Vector2.zero) ? info.hitboxScale : hitboxScale;
+        }
+
+        /// <summary>The glyph area on the doll for a kind (the crotch button frames it).</summary>
+        public bool GlyphBoundsFor(string kind, out Vector2 min, out Vector2 max)
+        {
+            TextureVariant info = KindInfo(kind);
+            if (info != null && info.glyphMax.x > info.glyphMin.x && info.glyphMax.y > info.glyphMin.y)
+            {
+                min = info.glyphMin;
+                max = info.glyphMax;
+                return true;
+            }
+            min = glyphMin;
+            max = glyphMax;
+            return HasGlyphBounds;
+        }
+
+        /// <summary>
+        /// Whether this pawn's kind is one of <see cref="hiddenKinds"/>. Only kinds read from the
+        /// pawn's penis are known before a form is picked, so that is the only source checked.
+        /// </summary>
+        public bool HidesKindOf(Pawn pawn)
+        {
+            if (hiddenKinds == null || hiddenKinds.Count == 0 || !VariantFromPenis)
+            {
+                return false;
+            }
+            Hediff penis = PenisOf(pawn);
+            return penis != null && penis.def != null && hiddenKinds.Contains(penis.def.defName);
+        }
+
+        /// <summary>Whether the kind comes from the pawn's penis rather than the matched hediff.</summary>
+        public bool VariantFromPenis
+        {
+            get { return string.Equals(variantFrom, "Penis", StringComparison.OrdinalIgnoreCase); }
+        }
+
         [Unsaved(false)]
         public Texture2D[] tiers;
 
@@ -207,10 +323,12 @@ namespace NHTRJWGenitalia
             }
             tiers = new Texture2D[sizeSteps];
             multipletTiers = null;
+            variantTiers = null;
             if (texturePrefix.NullOrEmpty())
             {
                 return;
             }
+            ResolveVariants();
 
             // Multiplet art does not fill gaps from neighbouring tiers - a gap simply means the
             // single picture of that tier.
@@ -284,17 +402,134 @@ namespace NHTRJWGenitalia
             }
         }
 
+        private void ResolveVariants()
+        {
+            if (textureVariants == null || textureVariants.Count == 0)
+            {
+                return;
+            }
+            int slash = texturePrefix.LastIndexOf('/');
+            string dir = (slash < 0) ? "" : texturePrefix.Substring(0, slash + 1);
+            string own = texturePrefix.Substring(slash + 1);
+
+            variantTiers = new Dictionary<string, Texture2D[]>();
+            kindInfo = new Dictionary<string, TextureVariant>();
+            for (int v = 0; v < textureVariants.Count; v++)
+            {
+                TextureVariant tv = textureVariants[v];
+                if (tv == null || tv.name.NullOrEmpty() || tv.tiers == null)
+                {
+                    continue;
+                }
+                if (!kindInfo.ContainsKey(tv.name))
+                {
+                    kindInfo[tv.name] = tv;     // geometry sits on the kind's first entry
+                }
+                string stem = (tv.name == own ? dir : dir + tv.name + "/") + tv.name;
+                string suffix = tv.variation.NullOrEmpty() ? "" : "_" + tv.variation;
+                Texture2D[] set = new Texture2D[sizeSteps];
+                bool any = false;
+                for (int k = 0; k < tv.tiers.Count; k++)
+                {
+                    int i = tv.tiers[k];
+                    if (i < 0 || i >= sizeSteps)
+                    {
+                        continue;
+                    }
+                    set[i] = ContentFinder<Texture2D>.Get(stem + "_" + i + suffix, false);
+                    any |= set[i] != null;
+                }
+                if (any)
+                {
+                    variantTiers[VariantKey(tv.name, tv.variation)] = set;
+                }
+            }
+            if (variantTiers.Count == 0)
+            {
+                variantTiers = null;
+            }
+        }
+
+        private static string VariantKey(string name, string variation)
+        {
+            return variation.NullOrEmpty() ? name : name + ":" + variation;
+        }
+
+        private bool TryVariant(string name, string variation, int tier, out Texture2D tex)
+        {
+            tex = null;
+            Texture2D[] set;
+            if (variantTiers.TryGetValue(VariantKey(name, variation), out set)
+                && tier < set.Length && set[tier] != null)
+            {
+                tex = set[tier];
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>The kind's own art at this tier (with its variation first), not the fallbacks.</summary>
+        private bool TryKindArt(string kind, string variation, int tier, out Texture2D tex)
+        {
+            tex = null;
+            if (variantTiers == null || kind.NullOrEmpty())
+            {
+                return false;
+            }
+            if (!variation.NullOrEmpty() && TryVariant(kind, variation, tier, out tex))
+            {
+                return true;
+            }
+            return TryVariant(kind, null, tier, out tex);
+        }
+
+        /// <summary>Whether the kind itself has art at this tier (so its canvas rules apply).</summary>
+        public bool KindHasOwnArt(string kind, string variation, int tier)
+        {
+            if (tiers == null || tiers.Length == 0)
+            {
+                return false;
+            }
+            Texture2D unused;
+            return TryKindArt(kind, variation, Mathf.Clamp(tier, 0, tiers.Length - 1), out unused);
+        }
+
         /// <summary>
         /// The picture for this tier. With two or more babies, the multiplet picture of that tier
         /// when one exists.
         /// </summary>
         public Texture2D TextureFor(int tier, int babies)
         {
+            return TextureFor(tier, babies, null, null);
+        }
+
+        /// <summary>
+        /// The picture for this tier and kind. <paramref name="kind"/> is a hediff defName such as
+        /// <c>HorsePenis</c>, <paramref name="variation"/> a Sized Apparel part variation such as
+        /// <c>Uncut</c>; either may be null. Kinds without art at this tier fall back in Sized
+        /// Apparel's order, ending at the default art.
+        /// </summary>
+        public Texture2D TextureFor(int tier, int babies, string kind, string variation)
+        {
             if (tiers == null || tiers.Length == 0)
             {
                 return null;
             }
             tier = Mathf.Clamp(tier, 0, tiers.Length - 1);
+            if (variantTiers != null && !kind.NullOrEmpty())
+            {
+                Texture2D found;
+                if (TryKindArt(kind, variation, tier, out found))
+                {
+                    return found;
+                }
+                int slash = texturePrefix.LastIndexOf('/');
+                string own = texturePrefix.Substring(slash + 1);
+                if (!variation.NullOrEmpty() && kind != own && TryVariant(own, variation, tier, out found))
+                {
+                    return found;
+                }
+            }
             if (babies > 1 && multipletTiers != null && tier < multipletTiers.Length
                 && multipletTiers[tier] != null)
             {
@@ -446,6 +681,29 @@ namespace NHTRJWGenitalia
         private static readonly Dictionary<HediffDef, bool> sexPartCache =
             new Dictionary<HediffDef, bool>();
 
+        /// <summary>
+        /// The pawn's penis hediff: the first sex part whose genital family is Penis, as Sized
+        /// Apparel takes it (<c>penisHediffs[0]</c>). Null when there is none.
+        /// </summary>
+        public static Hediff PenisOf(Pawn pawn)
+        {
+            if (pawn == null || pawn.health == null || pawn.health.hediffSet == null)
+            {
+                return null;
+            }
+            List<Hediff> all = pawn.health.hediffSet.hediffs;
+            for (int i = 0; i < all.Count; i++)
+            {
+                Hediff h = all[i];
+                if (h != null && h.def != null && IsSexPart(h.def)
+                    && string.Equals(GenitalFamilyOf(h.def), "Penis", StringComparison.OrdinalIgnoreCase))
+                {
+                    return h;
+                }
+            }
+            return null;
+        }
+
         /// <summary>Is this HediffDef rjw.HediffDef_SexPart, or derived from it?</summary>
         public static bool IsSexPart(HediffDef def)
         {
@@ -500,5 +758,30 @@ namespace NHTRJWGenitalia
             familyCache[def] = result;
             return result;
         }
+    }
+
+    /// <summary>One kind's art set on a form: see <see cref="DollPartFormDef.textureVariants"/>.</summary>
+    public class TextureVariant
+    {
+        /// <summary>The kind: a hediff defName such as <c>HorsePenis</c>.</summary>
+        public string name;
+
+        /// <summary>An optional Sized Apparel part variation such as <c>Uncut</c>.</summary>
+        public string variation;
+
+        /// <summary>The tiers that have art. The others fall back.</summary>
+        public List<int> tiers;
+
+        // --- Geometry measured from this kind's own art (gen_defs.py) --------------
+        // Only the kind's first entry carries it. Zero means "use the form's value".
+
+        /// <summary>Click hit area for this kind.</summary>
+        public Vector2 hitboxScale;
+
+        /// <summary>Glyph area on the doll for this kind (doll coordinates).</summary>
+        public Vector2 glyphMin;
+
+        /// <summary>The counterpart of <see cref="glyphMin"/>.</summary>
+        public Vector2 glyphMax;
     }
 }

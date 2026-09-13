@@ -33,6 +33,13 @@ namespace NHTRJWGenitalia
         /// coordinates from here.</summary>
         public DollPartFormDef currentForm;
 
+        /// <summary>
+        /// The form whose position, scale and panel placement the part uses this frame. Usually
+        /// <see cref="currentForm"/>; for kind testicle art drawn on the penis canvas it is the
+        /// doll's penis form. Null when the part is hidden.
+        /// </summary>
+        public DollPartFormDef placementForm;
+
         /// <summary>Hide the whole part when no form matches, instead of restoring the default
         /// texture. Used by slots where some pawns simply do not have the part, such as the
         /// vulva.</summary>
