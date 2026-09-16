@@ -109,6 +109,11 @@ namespace NHTRJWGenitalia
             bool chest = show && (cfg.showMaleChest || pawn.gender != Gender.Male);
             // Testicles on futa. The ovaries ignore this switch - off leaves only them.
             bool testicles = show && (cfg.showFutaTesticles || !IsFuta(byPart));
+            // The womb layers only make sense over a vagina. The hediffs they read sit on the
+            // whole body (cum inflation) or the torso (pregnancy), so they outlive the vagina
+            // they came from - RJW only wipes the hediffs **on** a part it removes. A male pawn
+            // carrying such a leftover used to get a womb full of cum in the panel (user report).
+            bool hasVagina = show && HasFamily(byPart, VaginaFamily);
             // Child body type - decided by **which doll is drawn**, not by age. NHT draws one
             // doll at a time, so with this off we hide all of our parts on the Kid doll.
             bool kidDoll = cfg.showKidGenitals;
@@ -131,6 +136,9 @@ namespace NHTRJWGenitalia
                 // only here.
                 bool isTesticles = p.slot == Bootstrap.GonadsSlot
                                    || p.slot == Bootstrap.OuterGonadsSlot;
+                // The womb and the fluid inside it: a display layer over the vagina.
+                bool isWomb = p.slot == Bootstrap.WombSlot
+                              || p.slot == Bootstrap.WombFluidSlot;
 
                 // Pick the form first: whether the part shows at all depends on the result.
                 DollPartFormDef form = null;
@@ -159,6 +167,7 @@ namespace NHTRJWGenitalia
                                && (!isNipple || (nipples && !PartMissing(pawn, p)))
                                && (!isChest || chest)
                                && (!isTesticles || testicles)
+                               && (!isWomb || hasVagina)
                                && form != null;
 
                 // The anus window shows even without an anus, so we keep the part index alive
@@ -450,14 +459,27 @@ namespace NHTRJWGenitalia
         /// </summary>
         private static bool IsFuta(Dictionary<string, List<Hediff>> byPart)
         {
+            return HasFamily(byPart, PenisFamily) && HasFamily(byPart, VaginaFamily);
+        }
+
+        private const string PenisFamily = "Penis";
+        private const string VaginaFamily = "Vagina";
+
+        /// <summary>
+        /// Does the pawn have a sex part of this family on the genitals?
+        ///
+        /// Checked the same way forms are matched: the <c>genitalFamily</c> of the hediffs on the
+        /// genitals part. Hediffs that are not sex parts (wounds and so on) have no such field and
+        /// give "", so they never count.
+        /// </summary>
+        private static bool HasFamily(Dictionary<string, List<Hediff>> byPart, string family)
+        {
             List<Hediff> list;
             if (byPart == null
                 || !byPart.TryGetValue(Bootstrap.GenitalsSlot, out list) || list == null)
             {
                 return false;
             }
-            bool penis = false;
-            bool vagina = false;
             for (int i = 0; i < list.Count; i++)
             {
                 Hediff h = list[i];
@@ -465,18 +487,8 @@ namespace NHTRJWGenitalia
                 {
                     continue;
                 }
-                // Hediffs that are not sex parts (wounds and so on) have no genitalFamily field,
-                // so they give "".
-                string family = DollPartFormDef.GenitalFamilyOf(h.def);
-                if (string.Equals(family, "Penis", StringComparison.OrdinalIgnoreCase))
-                {
-                    penis = true;
-                }
-                else if (string.Equals(family, "Vagina", StringComparison.OrdinalIgnoreCase))
-                {
-                    vagina = true;
-                }
-                if (penis && vagina)
+                if (string.Equals(DollPartFormDef.GenitalFamilyOf(h.def), family,
+                                  StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }

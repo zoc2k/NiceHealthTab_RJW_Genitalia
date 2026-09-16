@@ -94,11 +94,16 @@ namespace NHTRJWGenitalia
 
         /// <summary>
         /// Draw order. Breasts and nipples are left out - they already show large on the doll
-        /// behind. The gonads (womb, ovaries) come first, with the internal and outer genitals on
-        /// top.
+        /// behind. The belly is the backmost layer, then the gonads (womb, ovaries), with the
+        /// internal and outer genitals on top.
         /// </summary>
         private static readonly string[] Slots =
         {
+            // The belly is drawn first, underneath: it is the body wall, and the womb and its
+            // contents belong in front of it. It is laid with the genitals group (same transform),
+            // so it lines up anatomically; what reaches past the top of the genitals box is cut
+            // off there.
+            Bootstrap.BellySlot,
             Bootstrap.OvariesSlot, Bootstrap.GonadsSlot, Bootstrap.GenitalsSlot,
             Bootstrap.OuterGenitalsSlot,
             // The womb and the fluid inside it. The doll's layer order (30 < 31) is kept here

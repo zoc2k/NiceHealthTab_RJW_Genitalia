@@ -108,7 +108,9 @@ outer genitals (penis, vulva, testicles) only, with organs and the anus left out
 
 Pressing it opens a panel over the doll, shaped like the hand and foot panels.
 
-- **Genitals box** - the genitals, drawn large, over a per-body-type background.
+- **Genitals box** - the genitals, drawn large, over a per-body-type background. A swollen
+  belly is laid behind them, placed the same way, so the womb sits inside it; what reaches past
+  the box is cut off at its edge.
 - **Anus window** - at the same place as the main doll's anus window.
 - **Ovulation / fertilization / implantation** - RJW Menstruation's own picture, as it is.
   *Needs RJW Menstruation.*
@@ -319,8 +321,8 @@ with cum. It follows Sized Apparel's belly rule:
 - The list and scales are Sized Apparel's own, in `<bellyHediffs>` of the belly form.
 - A hediff that adds nothing (severity 0) does not count, so no belly is drawn without a reason.
 - It points at the torso: it takes the torso's health colour, and clicking it opens the torso.
-  It is drawn above the torso and below the arms, chest and genitals. It is not in the RJW
-  panel.
+  On the doll it is drawn above the arms and legs and below the chest and genitals. In the RJW
+  panel it goes behind the genitals group, cut off at the edge of the genitals box.
 
 The art is per body type (`RJW/BodyParts/<body type>/Belly/Belly_<tier>.png`, 256 x 256, one
 canvas pixel = one torso pixel). Tiers that are still empty pictures are not drawn, so the
