@@ -45,7 +45,7 @@ namespace NHTRJWGenitalia
 
         /// <summary>
         /// A form whose tier is read from somewhere other than a severity.
-        /// <c>"Bleeding"</c> / <c>"Fluid"</c> / <c>"Implanted"</c>.
+        /// <c>"Fluid"</c> / <c>"Implanted"</c> / <c>"Belly"</c>.
         ///
         /// When this is set, the hediff rules (<see cref="hediffNameContains"/> and friends) are
         /// not consulted; <see cref="FormStateReader"/> is asked instead, and the tier comes from
@@ -59,6 +59,39 @@ namespace NHTRJWGenitalia
 
         /// <summary>Only when the hediff defName is exactly one of these.</summary>
         public List<string> hediffs;
+
+        /// <summary>
+        /// The hediffs that swell the belly, for <c>stateSource</c> <c>"Belly"</c>: pregnancies,
+        /// eggs and cum inflation. The belly value is the sum over the pawn's hediffs, the way
+        /// Sized Apparel sums its Belly hediffs (see <see cref="FormStateReader.TryBelly"/>).
+        /// </summary>
+        public List<BellyHediff> bellyHediffs;
+
+        private Dictionary<string, BellyHediff> bellyByName;
+
+        /// <summary>The <see cref="bellyHediffs"/> entry for a hediff, or null.</summary>
+        internal BellyHediff BellyEntryFor(Hediff hediff)
+        {
+            if (hediff == null || hediff.def == null || bellyHediffs == null)
+            {
+                return null;
+            }
+            if (bellyByName == null)
+            {
+                Dictionary<string, BellyHediff> map = new Dictionary<string, BellyHediff>();
+                for (int i = 0; i < bellyHediffs.Count; i++)
+                {
+                    BellyHediff e = bellyHediffs[i];
+                    if (e != null && !e.hediff.NullOrEmpty())
+                    {
+                        map[e.hediff] = e;
+                    }
+                }
+                bellyByName = map;
+            }
+            BellyHediff found;
+            return bellyByName.TryGetValue(hediff.def.defName, out found) ? found : null;
+        }
 
         /// <summary>
         /// Skip this form while a fetus is showing on the pawn.
@@ -783,5 +816,18 @@ namespace NHTRJWGenitalia
 
         /// <summary>The counterpart of <see cref="glyphMin"/>.</summary>
         public Vector2 glyphMax;
+    }
+
+    /// <summary>One hediff that swells the belly: see <see cref="DollPartFormDef.bellyHediffs"/>.</summary>
+    public class BellyHediff
+    {
+        /// <summary>The hediff defName.</summary>
+        public string hediff;
+
+        /// <summary>Its severity counts this much (Sized Apparel's severityScale).</summary>
+        public float scale = 1f;
+
+        /// <summary>Labour: counts as a full 1 whatever its severity, as in Sized Apparel.</summary>
+        public bool labor;
     }
 }

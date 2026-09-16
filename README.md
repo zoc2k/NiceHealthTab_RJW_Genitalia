@@ -39,8 +39,8 @@ at all. The gonad markers then attach to the genitals part and reference art is 
 
 ### Body layer - the normal doll
 
-Breasts, nipples, the penis, the vulva and surface testicles are surface parts
-(`DollBodyPart`), like the torso, arms and legs.
+Breasts, nipples, the penis, the vulva, surface testicles and the swollen belly are surface
+parts (`DollBodyPart`), like the torso, arms and legs.
 
 - **Always shown on the normal doll**, regardless of Nice Health Tab's "show organs" toggle.
 - **Dropped** in the "organs" and "bones" filter views, like any other body part.
@@ -308,6 +308,24 @@ so a long kind (the horse penis, say) does not change them for other pawns. In t
 every kind uses the usual placement; art that reaches past the genitals box is cut off at its
 edge.
 
+### Belly
+
+A swollen belly is laid over the torso while the pawn is pregnant, carries eggs or is inflated
+with cum. It follows Sized Apparel's belly rule:
+
+- The belly value is the **sum** of `severity x scale` over the belly hediffs the pawn has -
+  RJW and vanilla pregnancies, RJW eggs, Cumpilation stuffing and inflation, and RJW
+  Menstruation Fluids' vaginal / anal inflation and stuffing. Labour counts as a full 1.
+- The list and scales are Sized Apparel's own, in `<bellyHediffs>` of the belly form.
+- A hediff that adds nothing (severity 0) does not count, so no belly is drawn without a reason.
+- It points at the torso: it takes the torso's health colour, and clicking it opens the torso.
+  It is drawn above the torso and below the arms, chest and genitals. It is not in the RJW
+  panel.
+
+The art is per body type (`RJW/BodyParts/<body type>/Belly/Belly_<tier>.png`, 256 x 256, one
+canvas pixel = one torso pixel). Tiers that are still empty pictures are not drawn, so the
+belly stays hidden until it is drawn.
+
 ### Size tiers
 
 RJW expresses a part's size as a hediff severity. That value is turned into a tier which
@@ -323,6 +341,7 @@ selects the art.
 | Fetus | **6** | pregnancy progress (multiplet art with two or more babies) |
 | Womb fluid | **6** | RJW Menstruation's fluid amount (a fraction of womb capacity) |
 | Womb inflation | **5** | Fluids' vaginal cumflation hediff |
+| Belly | **5** (0-4) | the sum of the belly hediffs - the same intervals as Sized Apparel |
 
 The threshold severities live in `<sizeThresholds>` in `1.6/Defs/**/Forms_*.xml` and can be
 changed in XML alone.
@@ -367,7 +386,8 @@ so their order does not matter.
 | No RimJobWorld | The Defs are not even loaded (`MayRequire`). No errors, no warnings |
 | No balls mod | The gonads are drawn from reference art and attach to the genitals part. The surgery split and the translated gonad names are missing |
 | An optional mod missing | Only that mod's features are missing, and the settings that need it are locked |
-| Other race mods (Ratkin / Kurin / ABF Synstruct …) | Shown automatically when Nice Health Tab provides an index remap for that race and the race has the RJW parts |
+| Other race mods (Ratkin / Kurin / ABF Synstruct …) | Shown automatically when the race has the RJW parts: this mod answers Nice Health Tab's body part remap for its own parts, with the index of that part in that race's body |
+| Mods that add body parts to the human body (More Injuries …) | Supported. Those mods shift the indices of the parts after the ones they insert, which is what Nice Health Tab's "auto assign" in Body parts settings repairs - it only maps its own 64 vanilla parts, but the RJW parts are answered by this mod, so they stay on the doll. No restart needed |
 | Combat Extended / Multiplayer | This mod creates no game state, so nothing special is needed |
 
 Use textures by referencing or modifying those from other mods.
@@ -376,11 +396,12 @@ Use textures by referencing or modifying those from other mods.
 
 ## Limitations and known issues
 
-1. **An override made with Nice Health Tab's "body part assignment editor" can make this mod's
-   parts disappear for that BodyDef.**
-   NHT's editor is hard-coded to the 64 vanilla human parts, so a user-made override does not
-   contain the reproductive entries. This mod adds its mappings to the override dictionary at
-   startup as well, but **the game has to be restarted once** after creating an override.
+1. **Nice Health Tab's body part remap knows only its own 64 vanilla parts.**
+   Whatever you build with its "auto assign" button or its assignment editor, the reproductive
+   parts are never in it. This mod therefore answers that remap for its own parts - with the
+   index of the part in the body of the pawn being drawn - so they stay on the doll. It takes
+   effect at once, with no restart. In NHT's own assignment table those parts still show as
+   unassigned; that is only how that table reads its own list.
 
 2. **By default no markers are shown on the child doll.** Turn on "show genitals on the child
    body type" in the mod settings. It applies immediately, with no restart.
@@ -426,7 +447,8 @@ NiceHealthTab_RJW_Genitalia/
 |- 1.6/
 |  |- Defs/
 |  |  |- Core/          Doll_{Chest,Nipples,Genitals,OuterGenitals,Womb,WombFluid,
-|  |  |                       Anus,OuterAnus}.xml + Forms_Core.xml
+|  |  |                       Anus,OuterAnus,Belly}.xml + Forms_Core.xml
+|  |  |                 (a Doll_ file is only written once its part has art)
 |  |  |                 -> MayRequire="rim.job.world"
 |  |  |- Gonads/        Doll_{Gonads,OuterGonads,Ovaries}.xml + Forms_Gonads.xml
 |  |  |                 -> MayRequire="rim.job.world" (reference art without the balls mod)
@@ -440,7 +462,7 @@ NiceHealthTab_RJW_Genitalia/
 `- Textures/
    `- HediffTab/
       |- RJW/BodyParts/                      RimJobWorld parts
-      |  |- <body type>/{Breasts,Nipple,InvertedNipple}/
+      |  |- <body type>/{Breasts,Nipple,InvertedNipple,Belly}/
       |  |- Penis/ Vagina/ Vulva/ Anus/      shared
       |  |- Penis/<kind>/<kind>_<tier>.png   penis kinds (HorsePenis/, DogPenis/ ...)
       |  `- Womb/ (+ Implanted/, Fetus/)     womb, implantation, fetus

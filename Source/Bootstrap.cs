@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -116,6 +115,13 @@ namespace NHTRJWGenitalia
         internal const string WombFluidSlot = "WombFluid";
 
         /// <summary>
+        /// The swollen belly (pregnancy, eggs, inflation), a surface layer over NHT's torso. RJW has
+        /// no belly part, so it points at the Torso: its colour is the torso's health status and
+        /// clicking it opens the torso.
+        /// </summary>
+        internal const string BellySlot = "Belly";
+
+        /// <summary>
         /// Name of the bucket that holds hediffs with no part. It uses a character that cannot
         /// appear in a part name, so it can never clash with a real one.
         /// </summary>
@@ -159,6 +165,7 @@ namespace NHTRJWGenitalia
                 { OuterAnusSlot, "Anus" },
                 { WombSlot, "Genitals" },
                 { WombFluidSlot, "Genitals" },
+                { BellySlot, "Torso" },
                 // The gonads are not here - which part they use is decided at runtime by whether
                 // that part exists. See BodyPartOfSlot.
             };
@@ -393,10 +400,13 @@ namespace NHTRJWGenitalia
                 return;
             }
 
-            // --- 4. Add entries to the remaps of other BodyDefs ---------------------
-            // ModCompat races such as Ratkin / Kurin / ABF Synstruct, and any override the user
-            // built in NHT's settings editor, also get our part mappings.
-            int remapped = PatchRemaps(canonical);
+            // --- 4. Answer NHT's body part remap for our parts ----------------------
+            // ModCompat races (Ratkin / Kurin / ABF Synstruct) and any remap NHT's "auto assign"
+            // builds map NHT's own parts only, so ours would be dropped from the doll. We keep
+            // the mapping on our side instead of writing into NHT's remaps. See DollIndexRemap.
+            DollIndexRemap.Init(canonical);
+            bool remapFallback = DollIndexRemap.Install();
+            int remapped = DollIndexRemap.DropOldEntries();
 
             // --- 5. Inject gonad labels from our Keyed translation, balls mod only ---
             LocalizeGonadsIfNeeded();
@@ -469,7 +479,8 @@ namespace NHTRJWGenitalia
 
             Log.Message(Prefix + "v" + version + " - bound " + bound + " doll part def(s)"
                         + (unbound > 0 ? (", " + unbound + " left unbound (part absent)") : "")
-                        + (remapped > 0 ? (", " + remapped + " cross-body remap entrie(s) added") : "")
+                        + (remapFallback ? ", body part remap answered for our parts" : "")
+                        + (remapped > 0 ? (", " + remapped + " stale remap entrie(s) dropped") : "")
                         + (filtered > 0 ? (", " + filtered + " size-only hediff(s) filtered") : "")
                         + ", " + formCount + " part form(s)"
                         + (cumGuard ? ", Cumpilation guard active" : "")
@@ -555,83 +566,6 @@ namespace NHTRJWGenitalia
                 }
             }
             return -1;
-        }
-
-        /// <summary>
-        /// Walks the static dictionaries of NiceHealthTab.BodyPartIndexesRemap, finds the real
-        /// index of our parts in each BodyDef and adds a "canonical index -> real index" mapping.
-        /// A BodyDef without that part gets no mapping, so Get() returns -1 and nothing shows.
-        /// </summary>
-        private static int PatchRemaps(Dictionary<string, int> canonical)
-        {
-            Type remapType = GenTypes.GetTypeInAnyAssembly("NiceHealthTab.BodyPartIndexesRemap");
-            if (remapType == null)
-            {
-                return 0;
-            }
-
-            MethodInfo setter = remapType.GetMethod(
-                "Set",
-                BindingFlags.Instance | BindingFlags.Public,
-                null,
-                new[] { typeof(int), typeof(int), typeof(bool) },
-                null);
-            if (setter == null)
-            {
-                return 0;
-            }
-
-            string[] dictFields = { "BodyPartsRemaper", "BodyPartsOverride" };
-            int added = 0;
-
-            foreach (string fieldName in dictFields)
-            {
-                FieldInfo field = remapType.GetField(fieldName, BindingFlags.Static | BindingFlags.Public);
-                if (field == null)
-                {
-                    continue;
-                }
-
-                IDictionary dict = field.GetValue(null) as IDictionary;
-                if (dict == null)
-                {
-                    continue;
-                }
-
-                foreach (DictionaryEntry entry in dict)
-                {
-                    string bodyDefName = entry.Key as string;
-                    // "*" is the identity mapping (BodyPartIndexesRemapDefaultHuman): nothing to
-                    // change, and no way to change it.
-                    if (entry.Value == null || string.IsNullOrEmpty(bodyDefName) || bodyDefName == "*")
-                    {
-                        continue;
-                    }
-
-                    BodyDef body = DefDatabase<BodyDef>.GetNamedSilentFail(bodyDefName);
-                    if (body == null)
-                    {
-                        continue;
-                    }
-
-                    foreach (KeyValuePair<string, int> pair in canonical)
-                    {
-                        if (pair.Value < 0)
-                        {
-                            continue;   // A part absent from Human has no canonical index
-                        }
-                        int actual = IndexOfPart(body, pair.Key);
-                        if (actual < 0)
-                        {
-                            continue;   // This race lacks the part -> no mapping
-                        }
-                        setter.Invoke(entry.Value, new object[] { pair.Value, actual, false });
-                        added++;
-                    }
-                }
-            }
-
-            return added;
         }
 
         /// <summary>

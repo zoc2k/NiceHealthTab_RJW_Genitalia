@@ -25,6 +25,7 @@ namespace NHTRJWGenitalia
     {
         internal const string Fluid = "Fluid";
         internal const string Implanted = "Implanted";
+        internal const string Belly = "Belly";
 
         /// <summary>
         /// Upper bound of gestation that still counts as implantation. rjw_menstruation uses
@@ -120,6 +121,51 @@ namespace NHTRJWGenitalia
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// How swollen the belly is: the sum of <c>severity x scale</c> over every hediff of the
+        /// pawn listed in the form's <see cref="DollPartFormDef.bellyHediffs"/>, labour counting
+        /// as 1. This is Sized Apparel's belly value (<c>SizedApparelComp</c>), and the form's
+        /// thresholds are its size intervals.
+        ///
+        /// All of the pawn's hediffs are read, whatever part they sit on: pregnancy is on the
+        /// torso, inflation has no part, eggs go in the genitals or the anus.
+        ///
+        /// One difference: a hediff only counts when it adds something. Cumpilation keeps an
+        /// empty Cumpilation_Cumflation at severity 0 on the genitals (DESIGN.md 53); counting it
+        /// would draw a belly on every pawn that has one.
+        /// </summary>
+        internal static bool TryBelly(Pawn pawn, DollPartFormDef form, out float value, out Hediff match)
+        {
+            value = 0f;
+            match = null;
+            if (pawn == null || form == null || form.bellyHediffs == null || pawn.health == null
+                || pawn.health.hediffSet == null)
+            {
+                return false;
+            }
+            System.Collections.Generic.List<Hediff> all = pawn.health.hediffSet.hediffs;
+            for (int i = 0; i < all.Count; i++)
+            {
+                Hediff h = all[i];
+                BellyHediff entry = form.BellyEntryFor(h);
+                if (entry == null)
+                {
+                    continue;
+                }
+                float add = entry.labor ? 1f : h.Severity * entry.scale;
+                if (add <= 0f)
+                {
+                    continue;
+                }
+                value += add;
+                if (match == null)
+                {
+                    match = h;
+                }
+            }
+            return match != null;
         }
 
         /// <summary>

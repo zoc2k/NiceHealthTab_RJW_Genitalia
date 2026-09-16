@@ -112,6 +112,9 @@ namespace NHTRJWGenitalia
             // Child body type - decided by **which doll is drawn**, not by age. NHT draws one
             // doll at a time, so with this off we hide all of our parts on the Kid doll.
             bool kidDoll = cfg.showKidGenitals;
+            // Whose doll is about to be drawn: our remap fallback only answers for pawns of the
+            // body our part indices were measured in (DollIndexRemap).
+            DollIndexRemap.Note(pawn);
             NippleAppearance.Clear();
             WombFluidAppearance.Clear();
             AnusWindow.Clear();
@@ -345,6 +348,22 @@ namespace NHTRJWGenitalia
                     continue;       // This kind of penis comes without this part (no testicles).
                 }
 
+                // The belly reads every hediff of the pawn and adds them up, so it does not walk
+                // the slot's list.
+                if (f.stateSource == FormStateReader.Belly)
+                {
+                    float belly;
+                    Hediff first;
+                    if (FormStateReader.TryBelly(pawn, f, out belly, out first))
+                    {
+                        form = f;
+                        match = first;
+                        severity = belly;
+                        return;
+                    }
+                    continue;
+                }
+
                 // Forms that read their tier from outside a severity ignore the hediff rules.
                 // We do not know which hediff carries the value, so we walk the list and ask
                 // (menstruation and fluid live on the vagina hediff's comp, the implantation
@@ -474,7 +493,14 @@ namespace NHTRJWGenitalia
             {
                 return false;
             }
-            BodyPartRecord record = pawn.RaceProps.body.GetPartAtIndex(p.realIndex);
+            // Our Defs carry the index in the human body; on another race the same part sits
+            // elsewhere (DollIndexRemap).
+            int index = DollIndexRemap.IndexIn(pawn, p.realIndex);
+            if (index < 0)
+            {
+                return false;
+            }
+            BodyPartRecord record = pawn.RaceProps.body.GetPartAtIndex(index);
             return record != null && pawn.health.hediffSet.PartIsMissing(record);
         }
 
