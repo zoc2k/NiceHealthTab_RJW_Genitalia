@@ -88,6 +88,7 @@ namespace NHTRJWGenitalia
 
         private static int maxNhtKey = DefaultMaxKey;
         private static Dictionary<int, int> current;
+        private static int currentBodyParts;
         private static object currentRemap;
         private static bool currentTransient;
         private static bool patched;
@@ -95,6 +96,7 @@ namespace NHTRJWGenitalia
         private static MethodInfo getMethod;
         private static MethodInfo invertMethod;
         private static MethodInfo setMethod;
+        private static FieldInfo partsRemapField;
         private static bool resolvedMethods;
 
         /// <summary>
@@ -131,21 +133,35 @@ namespace NHTRJWGenitalia
             RaceProperties race = (pawn == null) ? null : pawn.RaceProps;
             BodyDef body = (race == null) ? null : race.body;
             current = (body == null) ? null : MapFor(body);
-            currentRemap = null;
-            currentTransient = false;
-            if (pawn == null || ourParts.Count == 0)
+            currentBodyParts = (body == null || body.AllParts == null) ? 0 : body.AllParts.Count;
+            ResolveMethods();
+        }
+
+        /// <summary>
+        /// The remap the render context has settled on, handed to us rather than looked up.
+        ///
+        /// We used to ask <c>BodyPartIndexesRemap.Solve</c> ourselves, from the health card prefix -
+        /// **before** NHT had begun its own work. Another mod hooks that call (Nice Health Tab -
+        /// Anatomy Editor answers it with a profile of its own) and building that profile loads a
+        /// race's whole set of pictures, so our question dragged all of it into the middle of the
+        /// tab's layout. Taking what the context already holds keeps that work where it belongs.
+        /// </summary>
+        internal static void NoteRemap(object remap)
+        {
+            if (ReferenceEquals(remap, currentRemap))
             {
                 return;
             }
-            ResolveMethods();
-            if (solveMethod == null)
+            currentRemap = remap;
+            currentTransient = false;
+            if (remap == null)
             {
                 return;
             }
             try
             {
-                currentRemap = solveMethod.Invoke(null, new object[] { pawn });
-                currentTransient = currentRemap != null && !KnownToNht(currentRemap);
+                ResolveMethods();
+                currentTransient = !KnownToNht(remap);
             }
             catch (Exception ex)
             {
@@ -175,9 +191,13 @@ namespace NHTRJWGenitalia
             try
             {
                 int at = (int)getMethod.Invoke(currentRemap, new object[] { realIndex });
-                if (at == target || at < 0 || at == realIndex)
+                if (at == target)
                 {
-                    return realIndex;      // Right already, or a key nobody claimed
+                    return realIndex;      // Already leads to our part
+                }
+                if (!Claimed(currentRemap, realIndex))
+                {
+                    return realIndex;      // A key nobody has taken: GetPostfix answers for it
                 }
                 if (invertMethod != null)
                 {
@@ -202,6 +222,35 @@ namespace NHTRJWGenitalia
                 Log.Warning(Bootstrap.Prefix + "picking a doll index failed: " + ex);
             }
             return realIndex;
+        }
+
+        /// <summary>
+        /// Whether this remap has an entry of its own for that key.
+        ///
+        /// Asking <c>Get</c> is not enough: a remap that maps the key **to the same number** would
+        /// look like an unclaimed key, and those are common - a race mod's own parts sit right
+        /// after the vanilla ones, so Nice Health Tab - Anatomy Editor gives a tail the key 64 and
+        /// the body puts that tail at index 64. Answering there would have taken the tail (and the
+        /// ears, and whatever else) away from that doll.
+        ///
+        /// The table itself is read instead. The identity remap - the one a body with no remap of
+        /// its own gets - has an empty table, which is exactly right: it claims nothing.
+        /// </summary>
+        private static bool Claimed(object remap, int index)
+        {
+            if (remap == null || partsRemapField == null)
+            {
+                return false;
+            }
+            try
+            {
+                IDictionary map = partsRemapField.GetValue(remap) as IDictionary;
+                return map != null && map.Contains(index);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         /// <summary>Whether NHT itself keeps this remap (then we never write into it).</summary>
@@ -254,6 +303,8 @@ namespace NHTRJWGenitalia
             setMethod = remapType.GetMethod("Set", BindingFlags.Instance | BindingFlags.Public,
                                             null, new[] { typeof(int), typeof(int), typeof(bool) },
                                             null);
+            partsRemapField = remapType.GetField("PartsRemap",
+                                                 BindingFlags.Instance | BindingFlags.NonPublic);
         }
 
         /// <summary>
@@ -479,18 +530,26 @@ namespace NHTRJWGenitalia
         /// our own table, for the body of the pawn being drawn. A part that body does not have
         /// answers -1, which is how NHT hides a part.
         /// </summary>
-        private static void GetPostfix(int index, ref int __result)
+        private static void GetPostfix(object __instance, int index, ref int __result)
         {
             if (current == null || !ourParts.ContainsKey(index))
             {
                 return;         // Not one of ours, or no pawn to answer for yet
             }
-            if (__result >= 0 && __result != index)
+            if (Claimed(__instance, index))
             {
                 return;         // Somebody's remap really maps this key - leave it alone
             }
             int real;
-            __result = current.TryGetValue(index, out real) ? real : -1;
+            if (!current.TryGetValue(index, out real) || real >= currentBodyParts)
+            {
+                // No such part in that body - or a number that body cannot have. NHT looks the
+                // index up without checking the upper bound, so a stale answer would throw in the
+                // middle of its drawing; -1 simply leaves the part out.
+                __result = -1;
+                return;
+            }
+            __result = real;
         }
     }
 }

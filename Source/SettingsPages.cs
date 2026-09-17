@@ -52,6 +52,13 @@ namespace NHTRJWGenitalia
             SettingsUI.Info(ref y, area, "NHTRJW_ShowPanelDesc".Translate());
             SettingsUI.Gap(ref y);
 
+            // --- Dolls other mods build --------------------------------------------
+            SettingsUI.SectionHeader(ref y, area, "NHTRJW_LendHeading".Translate());
+            SettingsUI.Checkbox(ref y, area, "NHTRJW_LendParts".Translate(),
+                                ref s.lendPartsToOtherDolls, "NHTRJW_LendPartsDesc".Translate());
+            SettingsUI.Info(ref y, area, "NHTRJW_LendPartsDesc".Translate());
+            SettingsUI.Gap(ref y);
+
             // --- Size hediffs ------------------------------------------------------
             SettingsUI.SectionHeader(ref y, area, "NHTRJW_SizeHediffHeading".Translate());
             bool before = s.hideSizeOnlyHediffs;

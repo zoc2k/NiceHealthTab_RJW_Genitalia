@@ -78,6 +78,9 @@
 
   <NHTRJW_PanelTip>RJW body parts</NHTRJW_PanelTip>
   <NHTRJW_PanelHeading>RJW part panel</NHTRJW_PanelHeading>
+  <NHTRJW_LendHeading>Dolls from other mods</NHTRJW_LendHeading>
+  <NHTRJW_LendParts>Draw the RJW parts on dolls other mods build</NHTRJW_LendParts>
+  <NHTRJW_LendPartsDesc>Some mods build their own doll for a race while the game runs - Nice Health Tab - Anatomy Editor does, for its race profiles. When such a doll is built on one of Nice Health Tab's own, this mod lends it the RJW parts so they show there too.\n\nTurn this off to leave those dolls exactly as the mod that built them draws them. A doll already drawn keeps the parts until the game is restarted.</NHTRJW_LendPartsDesc>
   <NHTRJW_ShowPanel>Show the RJW part panel</NHTRJW_ShowPanel>
   <NHTRJW_ShowPanelDesc>Adds a button at the lower right of the doll, above the hand and foot buttons. Pressing it opens a panel over the doll, like the hand and foot panels, that shows the genitals enlarged along with the anus and the ovulation / fertilization / implantation state. Press again to close.\n\nOvulation, fertilization and implantation need RJW Menstruation.</NHTRJW_ShowPanelDesc>
 </LanguageData>

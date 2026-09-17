@@ -572,6 +572,22 @@ namespace NHTRJWGenitalia
         /// <summary>Before the main doll is drawn, tells it to block clicks under the panel.</summary>
         public static void DrawMainDollPrefix(object __instance, Rect dollRect)
         {
+            try
+            {
+                MainDollPrefix(__instance, dollRect);
+            }
+            catch (Exception ex)
+            {
+                // Never let anything of ours escape into NHT's drawing: an exception between its
+                // GUI groups leaves the whole tab broken until the window is reopened.
+                ready = false;
+                GUI.color = Color.white;
+                Log.Warning(Bootstrap.Prefix + "RJW panel hook disabled after an error: " + ex);
+            }
+        }
+
+        private static void MainDollPrefix(object __instance, Rect dollRect)
+        {
             // Recorded even with the panel closed - the main doll's anus window is placed from
             // this rect.
             lastDollRect = dollRect;
@@ -599,6 +615,20 @@ namespace NHTRJWGenitalia
         /// <summary>Draws the button and the panel. Drawn after the hand and foot strip, so it
         /// sits on top.</summary>
         public static void DrawOverlayPostfix(object __instance, Rect dollRect, Rect buttonRect)
+        {
+            try
+            {
+                OverlayPostfix(__instance, dollRect, buttonRect);
+            }
+            catch (Exception ex)
+            {
+                ready = false;
+                GUI.color = Color.white;
+                Log.Warning(Bootstrap.Prefix + "RJW panel disabled after an error: " + ex);
+            }
+        }
+
+        private static void OverlayPostfix(object __instance, Rect dollRect, Rect buttonRect)
         {
             object ctx;
             if (!Enabled(__instance, out ctx))

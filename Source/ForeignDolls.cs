@@ -54,6 +54,7 @@ namespace NHTRJWGenitalia
         private const string DrawOrderFieldName = "drawOrder";
 
         private static FieldInfo mainDollField;
+        private static FieldInfo remapField;
         private static FieldInfo boundingBoxField;
         private static FieldInfo layerField;
         private static Type layeredType;
@@ -133,6 +134,7 @@ namespace NHTRJWGenitalia
                                                   BindingFlags.Instance | BindingFlags.Public);
             }
             mainDollField = contextType.GetField("MainDoll", BindingFlags.Instance | BindingFlags.Public);
+            remapField = contextType.GetField("Remap", BindingFlags.Instance | BindingFlags.Public);
             pawnField = contextType.GetField("Pawn", BindingFlags.Instance | BindingFlags.Public);
             partsField = dollType.GetField("Parts", BindingFlags.Instance | BindingFlags.Public);
             outlinePathField = dollType.GetField("outlinePath", BindingFlags.Instance | BindingFlags.Public);
@@ -321,6 +323,45 @@ namespace NHTRJWGenitalia
             }
         }
 
+        /// <summary>
+        /// Writes down what a doll of another mod ended up with, for a bug report. Dev mode only.
+        /// </summary>
+        private static void Describe(Def doll, IList parts)
+        {
+            try
+            {
+                Rect bb = (boundingBoxField == null)
+                    ? default(Rect)
+                    : (Rect)boundingBoxField.GetValue(doll);
+                System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                sb.Append(Bootstrap.Prefix).Append("doll ").Append(doll.defName)
+                  .Append(": box ").Append(bb.ToString())
+                  .Append(", our parts shifted by ").Append(offsetOf[doll.defName].ToString("0.##"))
+                  .Append(", layers lifted by ").Append(layerShift)
+                  .Append(", parts now ").Append(parts.Count);
+                List<BoundPart> ours = Bootstrap.BoundParts;
+                for (int i = 0; i < ours.Count; i++)
+                {
+                    BoundPart p = ours[i];
+                    if (p.dollName != SourceName(doll.defName) || positionField == null)
+                    {
+                        continue;
+                    }
+                    sb.AppendLine().Append("    ").Append(p.slot).Append(": id ")
+                      .Append((int)Bootstrap.BodyPartIdField.GetValue(p.def)).Append(", at ")
+                      .Append(((Vector2)positionField.GetValue(p.def)).ToString("0.#"))
+                      .Append(", scale ")
+                      .Append(((float)widthField.GetValue(p.def)).ToString("0.###"))
+                      .Append(", layer ").Append(LayerOf(p.def));
+                }
+                Log.Message(sb.ToString());
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(Bootstrap.Prefix + "could not describe the doll: " + ex);
+            }
+        }
+
         /// <summary>A part's picture and which way round it is drawn - what makes two parts the
         /// same piece of body across dolls.</summary>
         private static string KeyOf(Def part)
@@ -350,15 +391,32 @@ namespace NHTRJWGenitalia
         /// </summary>
         internal static Vector2 OffsetFor(Pawn pawn)
         {
-            if (!ready || offsetOf.Count == 0)
+            try
             {
+                if (!ready || offsetOf.Count == 0)
+                {
+                    return Vector2.zero;
+                }
+                Def doll = DollOf(pawn) as Def;
+                Vector2 offset;
+                return (doll != null && offsetOf.TryGetValue(doll.defName, out offset))
+                    ? offset
+                    : Vector2.zero;
+            }
+            catch (Exception ex)
+            {
+                Disable("reading the body offset failed", ex);
                 return Vector2.zero;
             }
-            Def doll = DollOf(pawn) as Def;
-            Vector2 offset;
-            return (doll != null && offsetOf.TryGetValue(doll.defName, out offset))
-                ? offset
-                : Vector2.zero;
+        }
+
+        /// <summary>Switches this whole bridge off after a failure; the mod keeps working on our
+        /// own dolls.</summary>
+        private static void Disable(string what, Exception ex)
+        {
+            ready = false;
+            Log.Warning(Bootstrap.Prefix + what + "; lending parts to other mods' dolls is off "
+                        + "for this session: " + ex);
         }
 
         /// <summary>
@@ -482,6 +540,24 @@ namespace NHTRJWGenitalia
             {
                 return false;
             }
+            try
+            {
+                return AnusPlacement(pawn, form, out position, out scale);
+            }
+            catch (Exception ex)
+            {
+                Disable("working out the anus placement failed", ex);
+                position = Vector2.zero;
+                scale = 0f;
+                return false;
+            }
+        }
+
+        private static bool AnusPlacement(Pawn pawn, DollPartFormDef form,
+                                          out Vector2 position, out float scale)
+        {
+            position = Vector2.zero;
+            scale = 0f;
             object doll = DollOf(pawn);
             Def def = doll as Def;
             if (def == null || !alias.ContainsKey(def.defName))
@@ -537,18 +613,14 @@ namespace NHTRJWGenitalia
         }
 
         /// <summary>The doll this pawn is drawn with, as far as we have seen.</summary>
+        /// <summary>
+        /// The doll this pawn is drawn with, as noted when its context last settled. **Only** the
+        /// noted one: asking the other mod during a draw would run a lot of its code (it builds
+        /// profiles and loads textures on demand) in the middle of ours.
+        /// </summary>
         private static object DollOf(Pawn pawn)
         {
-            if (pawn != null && ReferenceEquals(pawn, lastPawn) && lastDoll != null)
-            {
-                return lastDoll;
-            }
-            if (registryFor == null || profileBodyField == null || pawn == null)
-            {
-                return null;
-            }
-            object profile = registryFor.Invoke(null, new object[] { pawn });
-            return (profile == null) ? null : profileBodyField.GetValue(profile);
+            return (pawn != null && ReferenceEquals(pawn, lastPawn)) ? lastDoll : null;
         }
 
         /// <summary>The doll of ours this doll name borrows from, or the name itself.</summary>
@@ -572,6 +644,14 @@ namespace NHTRJWGenitalia
                     Pawn pawn = pawnField.GetValue(__instance) as Pawn;
                     lastPawn = pawn;
                     lastDoll = doll;
+                    // The body part table follows whichever pawn is about to be drawn, not only
+                    // the one whose health card we prepared, and the remap comes from the context
+                    // rather than from a lookup of our own (DollIndexRemap).
+                    DollIndexRemap.Note(pawn);
+                    if (remapField != null)
+                    {
+                        DollIndexRemap.NoteRemap(remapField.GetValue(__instance));
+                    }
                     Ensure(doll, pawn);
                 }
                 catch (Exception ex)
@@ -591,6 +671,10 @@ namespace NHTRJWGenitalia
             {
                 return;         // Not a doll, dealt with already, or one of ours
             }
+            if (!NHTRJWSettings.Current.lendPartsToOtherDolls)
+            {
+                return;         // Switched off: that doll is left exactly as its mod draws it
+            }
             seen.Add(doll);
 
             string outline = outlinePathField.GetValue(doll) as string;
@@ -608,15 +692,17 @@ namespace NHTRJWGenitalia
             {
                 return;
             }
-            // A framework that keeps its own draw order reads it for **every** part in the list,
-            // so we either extend that table or lend nothing at all.
-            object profile = (registryFor == null || pawn == null)
-                ? null
-                : registryFor.Invoke(null, new object[] { pawn });
+            // A framework that keeps its own draw order reads it for **every** part in the list
+            // and throws on one it has not seen, so we either extend that table or lend nothing at
+            // all. If the framework is here, not being able to reach its table is reason enough to
+            // stand back.
             IDictionary order = null;
-            if (profile != null)
+            if (registryFor != null)
             {
-                order = (drawOrderField == null)
+                object profile = (pawn == null)
+                    ? null
+                    : registryFor.Invoke(null, new object[] { pawn });
+                order = (profile == null || drawOrderField == null)
                     ? null
                     : drawOrderField.GetValue(profile) as IDictionary;
                 if (order == null)
@@ -674,6 +760,10 @@ namespace NHTRJWGenitalia
             alias[def.defName] = source;
             Log.Message(Bootstrap.Prefix + "lent " + added + " part(s) of the " + source
                         + " doll to '" + def.defName + "'.");
+            if (Prefs.DevMode)
+            {
+                Describe(def, parts);
+            }
         }
 
     }

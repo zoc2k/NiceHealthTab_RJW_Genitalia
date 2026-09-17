@@ -57,6 +57,13 @@ namespace NHTRJWGenitalia
         /// </summary>
         public bool showRjwPanel = true;
 
+        /// <summary>
+        /// Whether our parts are lent to dolls other mods build while the game runs (see
+        /// ForeignDolls). On by default; turning it off is the quick way to tell whether an odd
+        /// doll comes from this mod or from the one that built it.
+        /// </summary>
+        public bool lendPartsToOtherDolls = true;
+
         // --- Gonads ---------------------------------------------------------------
         /// <summary>
         /// Whether to draw testicles on a pawn that has **both** a penis and a vagina (futa).
@@ -103,6 +110,7 @@ namespace NHTRJWGenitalia
             Scribe_Values.Look(ref showMaleChest, "showMaleChest", false);
             Scribe_Values.Look(ref showFutaTesticles, "showFutaTesticles", false);
             Scribe_Values.Look(ref showRjwPanel, "showRjwPanel", true);
+            Scribe_Values.Look(ref lendPartsToOtherDolls, "lendPartsToOtherDolls", true);
 
             // One-time migration for users of the old four-preset setting.
             //   0 RJWAdvanced / 1 RJWClassic / 2 NHTMinor / 3 NHTClassic
