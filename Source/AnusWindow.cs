@@ -21,6 +21,7 @@ namespace NHTRJWGenitalia
         private static bool visible;
         private static bool glyph;
         private static int preparedFrame = -1;
+        private static int drawnFrame = -1;
 
         /// <summary>Whether to draw the window this frame.</summary>
         internal static bool Visible
@@ -42,11 +43,28 @@ namespace NHTRJWGenitalia
             preparedFrame = Time.frameCount;
         }
 
+        /// <summary>
+        /// Claims the window for this frame: true the first time it is asked, false afterwards.
+        ///
+        /// Two parts can offer to lay it - the anus organ (whose turn comes in the organ view) and
+        /// its surface copy (whose turn comes in the normal view). Only one of them draws it.
+        /// </summary>
+        internal static bool ClaimDraw()
+        {
+            if (drawnFrame == Time.frameCount)
+            {
+                return false;
+            }
+            drawnFrame = Time.frameCount;
+            return true;
+        }
+
         internal static void Clear()
         {
             visible = false;
             glyph = false;
             preparedFrame = -1;
+            drawnFrame = -1;
         }
     }
 }

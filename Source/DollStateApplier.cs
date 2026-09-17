@@ -175,7 +175,10 @@ namespace NHTRJWGenitalia
                 // the anus glyph. TintedPartRenderer does the hiding (AnusWindow.ShowGlyph).
                 bool windowOnly = here && !visible && p.slot == Bootstrap.AnusSlot;
 
-                Bootstrap.BodyPartIdField.SetValue(p.def, (visible || windowOnly) ? p.realIndex : -1);
+                // The index the doll carries is not always the real one: another mod remap may
+                // use that number as a key of its own (DollIndexRemap.KeyFor).
+                Bootstrap.BodyPartIdField.SetValue(
+                    p.def, (visible || windowOnly) ? DollIndexRemap.KeyFor(p.realIndex) : -1);
                 // Keep the chosen form so the RJW panel can read its panel coordinates.
                 p.currentForm = visible ? form : null;
                 p.placementForm = null;     // set below once the picture is chosen
@@ -271,14 +274,36 @@ namespace NHTRJWGenitalia
                 }
 
                 p.placementForm = placement;
+                // The anus is drawn inside a window at a fixed place in the doll column, so where
+                // it goes depends on the doll's bounding box. On another mod's doll that has to be
+                // worked out again (ForeignDolls); on ours the Def already has it.
+                Vector2 pos = placement.position;
+                float sc = placement.scale;
+                if (p.slot == Bootstrap.AnusSlot || p.slot == Bootstrap.OuterAnusSlot)
+                {
+                    Vector2 fp;
+                    float fs;
+                    if (ForeignDolls.TryAnusPlacement(pawn, placement, out fp, out fs))
+                    {
+                        pos = fp;
+                        sc = fs;
+                    }
+                }
+                else
+                {
+                    // A doll another mod built may lay the body somewhere else than we do; then
+                    // our parts move with it (ForeignDolls). The anus is not in that number - its
+                    // window is at a fixed place in the doll column, not on the body.
+                    pos += ForeignDolls.OffsetFor(pawn);
+                }
                 if (Bootstrap.PositionField != null)
                 {
-                    Bootstrap.PositionField.SetValue(p.def, placement.position);
+                    Bootstrap.PositionField.SetValue(p.def, pos);
                 }
                 if (Bootstrap.WidthField != null)
                 {
-                    Bootstrap.WidthField.SetValue(p.def, placement.scale);
-                    Bootstrap.HeightField.SetValue(p.def, Mathf.Abs(placement.scale));
+                    Bootstrap.WidthField.SetValue(p.def, sc);
+                    Bootstrap.HeightField.SetValue(p.def, Mathf.Abs(sc));
                 }
                 if (Bootstrap.HitboxField != null)
                 {

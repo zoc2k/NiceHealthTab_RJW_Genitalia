@@ -202,6 +202,36 @@ namespace NHTRJWGenitalia
         private const string GonadsGroupLabelKey = "NHTRJW_GonadsGroupLabel";
 
         internal static readonly List<BoundPart> BoundParts = new List<BoundPart>();
+
+        /// <summary>
+        /// Whether any of our parts belongs to that doll **by name**. Parts join a doll by name at
+        /// startup (NHT's DollBodyPart.PrepareBodyPart), so a doll built at runtime by another mod
+        /// holds none of ours until <see cref="ForeignDolls"/> lends them to it.
+        /// </summary>
+        internal static bool HasOwnPartsFor(string dollName)
+        {
+            if (dollName.NullOrEmpty())
+            {
+                return false;
+            }
+            for (int i = 0; i < BoundParts.Count; i++)
+            {
+                if (BoundParts[i].dollName == dollName)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Whether we have anything to draw on that doll - its own parts, or the ones lent to it
+        /// because it was built from one of ours (<see cref="ForeignDolls"/>).
+        /// </summary>
+        internal static bool HasPartsFor(string dollName)
+        {
+            return HasOwnPartsFor(ForeignDolls.SourceName(dollName));
+        }
         internal static FieldInfo BodyPartIdField;
         internal static FieldInfo TexField;
         internal static FieldInfo PositionField;
@@ -460,6 +490,19 @@ namespace NHTRJWGenitalia
                             + ex.GetType().Name + ": " + ex.Message + ").");
             }
 
+            // --- 9-c. Lend our parts to dolls other mods build at runtime ------------
+            // A doll that is not a Def never gets our parts by itself. See ForeignDolls.
+            bool lending = false;
+            try
+            {
+                lending = ForeignDolls.Install();
+            }
+            catch (Exception ex)
+            {
+                Log.Message(Prefix + "doll lending not installed ("
+                            + ex.GetType().Name + ": " + ex.Message + ").");
+            }
+
             // --- 10. The RJW part panel (a third strip, like the hand and foot one) --
             bool panel = false;
             try
@@ -480,6 +523,7 @@ namespace NHTRJWGenitalia
             Log.Message(Prefix + "v" + version + " - bound " + bound + " doll part def(s)"
                         + (unbound > 0 ? (", " + unbound + " left unbound (part absent)") : "")
                         + (remapFallback ? ", body part remap answered for our parts" : "")
+                        + (lending ? ", parts lent to runtime dolls" : "")
                         + (remapped > 0 ? (", " + remapped + " stale remap entrie(s) dropped") : "")
                         + (filtered > 0 ? (", " + filtered + " size-only hediff(s) filtered") : "")
                         + ", " + formCount + " part form(s)"

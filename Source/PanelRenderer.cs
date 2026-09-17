@@ -49,6 +49,13 @@ namespace NHTRJWGenitalia
         /// <summary>One template pixel = 1 / 1.5 UI units.</summary>
         private const float TemplateScale = 1.5f;
 
+        /// <summary>
+        /// The area NHT gives the doll, in UI units (DollWidget.Draw: the column is 213.4 wide and
+        /// the doll takes 90% of the tab's inner height). gen_defs.DOLL_RECT holds the same pair,
+        /// and validate.py cross-checks them - the anus window placement is worked out from it.
+        /// </summary>
+        private static readonly Vector2 DollRectUnits = new Vector2(213.40001f, (430f - 8f) * 0.9f);
+
         /// <summary>The panel, from the doll column's top left. It fills the column's width.</summary>
         private static readonly Rect PanelPx = new Rect(0f, 103f, 320f, 380f);
 
@@ -175,6 +182,8 @@ namespace NHTRJWGenitalia
         private static FieldInfo filterModeField;
         private static FieldInfo blockField;
         private static FieldInfo mainDollField;
+        private static FieldInfo ctxArmorField;
+        private static bool windowNoticeLogged;
         private static MethodInfo fitMethod;
         private static MethodInfo drawPartMethod;
         private static object panelDoll;
@@ -203,6 +212,7 @@ namespace NHTRJWGenitalia
             ctxField = AccessTools.Field(widgetType, "ctx");
             overlayModeField = AccessTools.Field(widgetType, "overlayMode");
             filterModeField = AccessTools.Field(contextType, "FilterMode");
+            ctxArmorField = AccessTools.Field(contextType, "ArmorMode");
             blockField = AccessTools.Field(contextType, "BlockOverlay");
             mainDollField = AccessTools.Field(contextType, "MainDoll");
             pawnField = AccessTools.Field(contextType, "Pawn");
@@ -429,7 +439,14 @@ namespace NHTRJWGenitalia
                 return false;
             }
             ctx = ctxField.GetValue(widget);
-            return ctx != null;
+            if (ctx == null)
+            {
+                return false;
+            }
+            // A doll none of our parts belongs to (another mod built it for this race) would give
+            // an empty panel, so we show neither it nor its button.
+            Def doll = (mainDollField == null) ? null : mainDollField.GetValue(ctx) as Def;
+            return doll != null && Bootstrap.HasPartsFor(doll.defName);     // lent parts count
         }
 
         /// <summary>Works the widget's inner rect back out of the doll rect; dollRect is 90% of
@@ -488,6 +505,40 @@ namespace NHTRJWGenitalia
 
         /// <summary>Where the main doll's anus window goes this frame. False when the main doll has
         /// not been drawn yet.</summary>
+        /// <summary>
+        /// Where the anus sits **in the coordinates of a doll with this bounding box**, so that it
+        /// lands inside the anus window.
+        ///
+        /// The window is at a fixed place in the doll column, while a part is placed in doll
+        /// coordinates, and how those two meet depends on the doll's bounding box (NHT's Doll.Fit
+        /// scales the box into the column). gen_defs.py bakes this for the dolls we ship
+        /// (panel_to_doll), but a doll another mod builds has a bounding box of its own, so the
+        /// baked value would put the anus somewhere else - it has to be worked out again here.
+        /// </summary>
+        internal static bool AnusPlacement(Rect bb, Vector2 panelPos, float panelScale,
+                                           out Vector2 position, out float scale)
+        {
+            position = Vector2.zero;
+            scale = 0f;
+            if (bb.width <= 0f || bb.height <= 0f || panelScale <= 0f)
+            {
+                return false;
+            }
+            float s = Mathf.Min(DollRectUnits.x / bb.width, DollRectUnits.y / bb.height);
+            if (s <= 0f)
+            {
+                return false;
+            }
+            float fx = (DollRectUnits.x - bb.width * s) * 0.5f;
+            float fy = (DollRectUnits.y - bb.height * s) * 0.5f;
+            // Panel coordinates -> doll column pixels -> UI units -> doll coordinates.
+            float ux = (PanelPx.x + PanelPx.width * 0.5f + panelPos.x) / TemplateScale;
+            float uy = (PanelPx.y + PanelPx.height * 0.5f + panelPos.y) / TemplateScale;
+            position = new Vector2(bb.x + (ux - fx) / s, bb.y + (uy - fy) / s);
+            scale = panelScale / (TemplateScale * s);
+            return true;
+        }
+
         internal static bool TryAnusWindowRect(out Rect rect)
         {
             if (lastDollFrame != Time.frameCount)
@@ -505,11 +556,16 @@ namespace NHTRJWGenitalia
         {
             // The window and the background have different aspects (56x71 / 128x128), so the
             // overflowing side is cropped to fill.
+            // The colour is set here rather than inherited: we draw between other parts, and
+            // whatever tint was left behind would be multiplied into the background.
+            Color before = GUI.color;
+            GUI.color = Color.white;
             if (anusBgTex != null)
             {
                 GUI.DrawTexture(rect, anusBgTex, ScaleMode.ScaleAndCrop);
             }
             DrawFrame(rect);
+            GUI.color = before;
         }
 
         // ------------------------------------------------------------------ Hooks
@@ -520,6 +576,13 @@ namespace NHTRJWGenitalia
             // this rect.
             lastDollRect = dollRect;
             lastDollFrame = Time.frameCount;
+
+            // The anus window (buttocks background plus outline) is laid **here**, right before
+            // the doll is drawn, so it sits behind every part and the anus glyph lands on top of
+            // it. It used to be laid during the anus part's own turn, but a part only gets a turn
+            // when its remapped index resolves and the view shows it - a healthy organ in the
+            // normal view gets none, and then the window was missing (user report).
+            LayAnusWindowFor(__instance, dollRect);
 
             object ctx;
             if (!ReferenceEquals(openFor, __instance) || !Enabled(__instance, out ctx))
@@ -572,6 +635,78 @@ namespace NHTRJWGenitalia
             DrawButton(__instance, ctx, ButtonOf(dollRect));
         }
 
+        /// <summary>
+        /// Lays the anus window for the doll about to be drawn, unless the view has no window
+        /// (bones, armour) or we have nothing to put in it.
+        /// </summary>
+        private static void LayAnusWindowFor(object widget, Rect dollRect)
+        {
+            if (!ready || !Bootstrap.Ready)
+            {
+                return;
+            }
+            object ctx = (ctxField == null) ? null : ctxField.GetValue(widget);
+            if (ctx == null)
+            {
+                return;
+            }
+            Def doll = (mainDollField == null) ? null : mainDollField.GetValue(ctx) as Def;
+            if (doll == null || !Bootstrap.HasPartsFor(doll.defName))
+            {
+                return;         // No anus of ours on this doll
+            }
+            if (!AnusPartLive(doll.defName))
+            {
+                if (!windowNoticeLogged)
+                {
+                    windowNoticeLogged = true;
+                    Log.Message(Bootstrap.Prefix + "the anus part of doll '" + doll.defName
+                                + "' is switched off this frame; its window is left out.");
+                }
+                return;
+            }
+            bool armor = ctxArmorField != null && (bool)ctxArmorField.GetValue(ctx);
+            int filterMode = (filterModeField == null)
+                ? 0
+                : Convert.ToInt32(filterModeField.GetValue(ctx));
+            if (armor || filterMode == 1 || !AnusWindow.ClaimDraw())
+            {
+                return;
+            }
+            try
+            {
+                DrawAnusWindow(FromTemplate(dollRect, AnusWindowPx));
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(Bootstrap.Prefix + "anus window failed: " + ex);
+            }
+        }
+
+        /// <summary>
+        /// Whether our anus part is switched on for this doll right now. DollStateApplier keeps the
+        /// part's index alive whenever the window belongs on the doll - even with no anus to draw
+        /// inside it - so this is the honest answer to "does this doll have our window".
+        /// </summary>
+        private static bool AnusPartLive(string dollName)
+        {
+            if (Bootstrap.BodyPartIdField == null)
+            {
+                return false;
+            }
+            string source = ForeignDolls.SourceName(dollName);
+            List<BoundPart> parts = Bootstrap.BoundParts;
+            for (int i = 0; i < parts.Count; i++)
+            {
+                BoundPart p = parts[i];
+                if (p.slot == Bootstrap.AnusSlot && p.dollName == source)
+                {
+                    return (int)Bootstrap.BodyPartIdField.GetValue(p.def) >= 0;
+                }
+            }
+            return false;
+        }
+
         private static void DrawButton(object widget, object ctx, Rect rect)
         {
             bool open = ReferenceEquals(openFor, widget);
@@ -613,7 +748,8 @@ namespace NHTRJWGenitalia
                 return;
             }
             object mainDoll = mainDollField.GetValue(ctx);
-            string dollName = ((mainDoll as Def) == null) ? null : ((Def)mainDoll).defName;
+            string dollName = ForeignDolls.SourceName(
+                ((mainDoll as Def) == null) ? null : ((Def)mainDoll).defName);
             if (dollName.NullOrEmpty())
             {
                 return;
@@ -625,6 +761,9 @@ namespace NHTRJWGenitalia
             Pawn pawn = (pawnField == null) ? null : pawnField.GetValue(ctx) as Pawn;
             Hediff penis = DollPartFormDef.PenisOf(pawn);
             string kind = (penis == null || penis.def == null) ? null : penis.def.defName;
+            // The frame is measured in doll coordinates, so it moves with the body on a doll that
+            // lays it elsewhere (ForeignDolls).
+            Vector2 shift = ForeignDolls.OffsetFor(pawn);
             if (!ExternalBounds(dollName, true, kind, out x0, out y0, out x1, out y1)
                 && !ExternalBounds(dollName, false, null, out x0, out y0, out x1, out y1))
             {
@@ -635,8 +774,8 @@ namespace NHTRJWGenitalia
             float h = Mathf.Max((y1 - y0) * CropPad, (x1 - x0) * CropPad / aspect,
                                 bb.height * CropMinFraction);
             float z = rect.height / h;                  // screen UI units per doll unit
-            float cx = (x0 + x1) * 0.5f;
-            float cy = (y0 + y1) * 0.5f;
+            float cx = (x0 + x1) * 0.5f + shift.x;
+            float cy = (y0 + y1) * 0.5f + shift.y;
             Rect whole = new Rect(rect.width * 0.5f - (cx - bb.x) * z,
                                   rect.height * 0.5f - (cy - bb.y) * z,
                                   bb.width * z, bb.height * z);
@@ -787,7 +926,10 @@ namespace NHTRJWGenitalia
                 return;
             }
             object mainDoll = mainDollField.GetValue(ctx);
-            string dollName = ((mainDoll as Def) == null) ? null : ((Def)mainDoll).defName;
+            // A doll another mod built at runtime borrows our placements from the doll it was
+            // built on (ForeignDolls).
+            string dollName = ForeignDolls.SourceName(
+                ((mainDoll as Def) == null) ? null : ((Def)mainDoll).defName);
             if (dollName.NullOrEmpty())
             {
                 return;

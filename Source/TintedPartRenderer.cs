@@ -284,31 +284,15 @@ namespace NHTRJWGenitalia
         }
 
         /// <summary>
-        /// The anus turn: lay the window first, then hand over to the original if there is an
-        /// anus.
-        ///   The window is drawn in the normal and organ views, not in the bone or armour views.
-        ///   Inside the panel (its anus box and the button close-up) the panel has already drawn
-        ///   the window, so we just hand over.
+        /// The anus organ turn. The window itself is laid before the doll is drawn
+        /// (PanelRenderer.DrawMainDollPrefix), so here we only decide whether the organ glyph is
+        /// handed over to the original.
         /// </summary>
         private static bool AnusWindowPrefix(bool armorMode, int filterMode)
         {
             if (PanelRenderer.Drawing || !AnusWindow.Visible)
             {
                 return true;
-            }
-            Rect rect;
-            if (!armorMode && filterMode != 1 && PanelRenderer.TryAnusWindowRect(out rect))
-            {
-                try
-                {
-                    PanelRenderer.DrawAnusWindow(rect);
-                }
-                catch (Exception ex)
-                {
-                    ready = false;      // Runs every frame; one failure switches it off.
-                    GUI.color = Color.white;
-                    Log.Warning(Bootstrap.Prefix + "anus window disabled after an error: " + ex);
-                }
             }
             // In the normal view the anus is drawn by the surface copy (OuterAnus). Drawing the
             // organ one as well would stack two glyphs in the same spot when it is injured.

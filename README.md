@@ -321,7 +321,8 @@ with cum. It follows Sized Apparel's belly rule:
 - The list and scales are Sized Apparel's own, in `<bellyHediffs>` of the belly form.
 - A hediff that adds nothing (severity 0) does not count, so no belly is drawn without a reason.
 - It points at the torso: it takes the torso's health colour, and clicking it opens the torso.
-  On the doll it is drawn above the arms and legs and below the chest and genitals. In the RJW
+  On the doll it is drawn above the arms and legs and below the chest and genitals - whatever
+  layers the doll's own arms use, so this holds on a doll another mod brings as well. In the RJW
   panel it goes behind the genitals group, cut off at the edge of the genitals box.
 
 The art is per body type (`RJW/BodyParts/<body type>/Belly/Belly_<tier>.png`, 256 x 256, one
@@ -390,6 +391,7 @@ so their order does not matter.
 | An optional mod missing | Only that mod's features are missing, and the settings that need it are locked |
 | Other race mods (Ratkin / Kurin / ABF Synstruct …) | Shown automatically when the race has the RJW parts: this mod answers Nice Health Tab's body part remap for its own parts, with the index of that part in that race's body |
 | Mods that add body parts to the human body (More Injuries …) | Supported. Those mods shift the indices of the parts after the ones they insert, which is what Nice Health Tab's "auto assign" in Body parts settings repairs - it only maps its own 64 vanilla parts, but the RJW parts are answered by this mod, so they stay on the doll. No restart needed |
+| Mods that build a doll while the game runs (Nice Health Tab - Anatomy Editor and its race profiles) | Supported when the doll is built on one of Nice Health Tab's own dolls, which is how those profiles are made: the same body art with the race's tail, ears, wings or hair added. This mod recognises such a doll by its outline texture and lends it the parts of the doll it was built from, so the RJW art and the RJW panel work there too. A doll drawn from scratch gets no RJW parts - the placements would be guesswork - and then the panel button is not shown either |
 | Combat Extended / Multiplayer | This mod creates no game state, so nothing special is needed |
 
 Use textures by referencing or modifying those from other mods.

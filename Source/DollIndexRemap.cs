@@ -44,6 +44,11 @@ namespace NHTRJWGenitalia
     ///     gets, and there our human index would otherwise land on a different part of that
     ///     race's body, or past the end of it. That is why nothing but the nipples (which this
     ///     mod draws itself) showed on Ratkin and Kurin pawns.
+    ///   * **Only a key nobody else has claimed.** An answer that is neither -1 nor the key itself
+    ///     means some remap really does map that key, and it is not ours to take over. Nice Health
+    ///     Tab - Anatomy Editor hands out keys from 64 upwards for the parts a race adds (a tail,
+    ///     wings, a reproduction part), which is the very range our parts live in, and its dolls
+    ///     were drawing our body parts on those slots.
     ///   * Until a pawn has been noted we change nothing.
     ///
     /// **Why nothing is written into the remap.** Earlier this was done by adding
@@ -64,6 +69,11 @@ namespace NHTRJWGenitalia
     {
         private const string RemapTypeName = "NiceHealthTab.BodyPartIndexesRemap";
         private const string IdentityTypeName = "NiceHealthTab.BodyPartIndexesRemapDefaultHuman";
+        /// <summary>
+        /// Where the keys we add to a **transient** remap start. High enough to miss every key NHT
+        /// or another framework hands out, and the same between sessions. See <see cref="KeyFor"/>.
+        /// </summary>
+        private const int LentKeyBase = 9000;
         private const string SettingsTypeName = "NiceHealthTab.NiceHediffTabSettings";
 
         /// <summary>Highest key NHT itself uses when its table cannot be read (0..63 vanilla).</summary>
@@ -78,7 +88,14 @@ namespace NHTRJWGenitalia
 
         private static int maxNhtKey = DefaultMaxKey;
         private static Dictionary<int, int> current;
+        private static object currentRemap;
+        private static bool currentTransient;
         private static bool patched;
+        private static MethodInfo solveMethod;
+        private static MethodInfo getMethod;
+        private static MethodInfo invertMethod;
+        private static MethodInfo setMethod;
+        private static bool resolvedMethods;
 
         /// <summary>
         /// The parts we put on the doll: body part defName by the index our Defs carry (the index
@@ -114,6 +131,129 @@ namespace NHTRJWGenitalia
             RaceProperties race = (pawn == null) ? null : pawn.RaceProps;
             BodyDef body = (race == null) ? null : race.body;
             current = (body == null) ? null : MapFor(body);
+            currentRemap = null;
+            currentTransient = false;
+            if (pawn == null || ourParts.Count == 0)
+            {
+                return;
+            }
+            ResolveMethods();
+            if (solveMethod == null)
+            {
+                return;
+            }
+            try
+            {
+                currentRemap = solveMethod.Invoke(null, new object[] { pawn });
+                currentTransient = currentRemap != null && !KnownToNht(currentRemap);
+            }
+            catch (Exception ex)
+            {
+                currentRemap = null;
+                Log.Warning(Bootstrap.Prefix + "reading the body part remap failed: " + ex);
+            }
+        }
+
+        /// <summary>
+        /// The doll index our part should carry for the pawn being drawn.
+        ///
+        /// Normally that is the real index, which GetPostfix answers for. But another mod remap may
+        /// already use that number as a key of its own - Nice Health Tab - Anatomy Editor hands out
+        /// keys from 64 up for the parts a race adds, and ours live in the same range. Then we look
+        /// for a key that already leads to our part, and failing that add one: only to a
+        /// **transient** remap, one that is not in NHT own tables, so nothing is written into what
+        /// NHT saves and shows in its Body parts screen.
+        /// </summary>
+        internal static int KeyFor(int realIndex)
+        {
+            int target;
+            if (currentRemap == null || current == null || getMethod == null
+                || !current.TryGetValue(realIndex, out target))
+            {
+                return realIndex;
+            }
+            try
+            {
+                int at = (int)getMethod.Invoke(currentRemap, new object[] { realIndex });
+                if (at == target || at < 0 || at == realIndex)
+                {
+                    return realIndex;      // Right already, or a key nobody claimed
+                }
+                if (invertMethod != null)
+                {
+                    int key = (int)invertMethod.Invoke(currentRemap, new object[] { target });
+                    if (key >= 0)
+                    {
+                        return key;        // Some key already leads to our part
+                    }
+                }
+                if (currentTransient && setMethod != null)
+                {
+                    int lent = LentKeyBase + realIndex;
+                    setMethod.Invoke(currentRemap, new object[] { lent, target, false });
+                    if ((int)getMethod.Invoke(currentRemap, new object[] { lent }) == target)
+                    {
+                        return lent;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(Bootstrap.Prefix + "picking a doll index failed: " + ex);
+            }
+            return realIndex;
+        }
+
+        /// <summary>Whether NHT itself keeps this remap (then we never write into it).</summary>
+        private static bool KnownToNht(object remap)
+        {
+            Type remapType = GenTypes.GetTypeInAnyAssembly(RemapTypeName);
+            if (remapType == null)
+            {
+                return true;        // Unknown shape: treat it as NHT and leave it alone
+            }
+            string[] dictFields = { "BodyPartsRemaper", "BodyPartsOverride" };
+            for (int i = 0; i < dictFields.Length; i++)
+            {
+                FieldInfo field = remapType.GetField(dictFields[i],
+                                                     BindingFlags.Static | BindingFlags.Public);
+                IDictionary dict = (field == null) ? null : field.GetValue(null) as IDictionary;
+                if (dict == null)
+                {
+                    continue;
+                }
+                foreach (DictionaryEntry e in dict)
+                {
+                    if (ReferenceEquals(e.Value, remap))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        private static void ResolveMethods()
+        {
+            if (resolvedMethods)
+            {
+                return;
+            }
+            resolvedMethods = true;
+            Type remapType = GenTypes.GetTypeInAnyAssembly(RemapTypeName);
+            if (remapType == null)
+            {
+                return;
+            }
+            solveMethod = remapType.GetMethod("Solve", BindingFlags.Static | BindingFlags.Public);
+            getMethod = remapType.GetMethod("Get", BindingFlags.Instance | BindingFlags.Public,
+                                            null, new[] { typeof(int) }, null);
+            invertMethod = remapType.GetMethod("GetInverted",
+                                               BindingFlags.Instance | BindingFlags.Public,
+                                               null, new[] { typeof(int) }, null);
+            setMethod = remapType.GetMethod("Set", BindingFlags.Instance | BindingFlags.Public,
+                                            null, new[] { typeof(int), typeof(int), typeof(bool) },
+                                            null);
         }
 
         /// <summary>
@@ -344,6 +484,10 @@ namespace NHTRJWGenitalia
             if (current == null || !ourParts.ContainsKey(index))
             {
                 return;         // Not one of ours, or no pawn to answer for yet
+            }
+            if (__result >= 0 && __result != index)
+            {
+                return;         // Somebody's remap really maps this key - leave it alone
             }
             int real;
             __result = current.TryGetValue(index, out real) ? real : -1;
