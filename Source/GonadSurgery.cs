@@ -56,9 +56,15 @@ namespace NHTRJWGenitalia
     /// </summary>
     internal static class GonadSurgery
     {
-        private const string SpeciesTypeName = "Ballz.GonadSpeciesDef";
-        private const string AdderTypeName = "Ballz.AutoOrganAdder";
-        private const string OwnerCompTypeName = "Ballz.CompGonadOriginalOwner";
+        // Both gonad mods are looked up under their own namespace: 'RJW Gonadz Reloaded' kept
+        // every type, member and def name of 'RJW Now with balls!' and moved them from the
+        // Ballz namespace to Gonadz. Whichever is installed answers.
+        private static readonly string[] SpeciesTypeNames =
+            { "Gonadz.GonadSpeciesDef", "Ballz.GonadSpeciesDef" };
+        private static readonly string[] AdderTypeNames =
+            { "Gonadz.AutoOrganAdder", "Ballz.AutoOrganAdder" };
+        private static readonly string[] OwnerCompTypeNames =
+            { "Gonadz.CompGonadOriginalOwner", "Ballz.CompGonadOriginalOwner" };
         private const string HarvestRecipeName = "HarvestGonads";
         private const string NeuteredHediffName = "Neutered";
         private const string GonadsGroupName = "GonadsBPG";
@@ -117,17 +123,17 @@ namespace NHTRJWGenitalia
             }
 
             // --- Their species definitions: what counts as natural testicles / ovaries
-            speciesType = GenTypes.GetTypeInAnyAssembly(SpeciesTypeName);
+            speciesType = FirstType(SpeciesTypeNames);
             fExcluded = Field(speciesType, "excluded", typeof(bool));
             fTesticles = Field(speciesType, "testiclesDefName", typeof(string));
             fOvaries = Field(speciesType, "ovariesDefName", typeof(string));
             if (speciesType == null || fExcluded == null || fTesticles == null || fOvaries == null)
             {
-                return Refuse(SpeciesTypeName + " no longer matches");
+                return Refuse(SpeciesTypeNames[0] + " no longer matches");
             }
 
             // --- Optional pieces: if one is missing, only that part is skipped -------
-            Type adder = GenTypes.GetTypeInAnyAssembly(AdderTypeName);
+            Type adder = FirstType(AdderTypeNames);
             FieldInfo fSizes = (adder == null)
                 ? null
                 : adder.GetField("SizeNames", BindingFlags.Static | BindingFlags.Public);
@@ -140,7 +146,7 @@ namespace NHTRJWGenitalia
                 ? null
                 : AccessTools.Method(adder, "RemoveTesticleGear", new[] { typeof(Pawn) });
 
-            ownerCompType = GenTypes.GetTypeInAnyAssembly(OwnerCompTypeName);
+            ownerCompType = FirstType(OwnerCompTypeNames);
             fOwnerName = Field(ownerCompType, "originalPawnName", typeof(string));
             fOwnerGender = Field(ownerCompType, "originalGender", typeof(Gender));
             fOwnerRace = Field(ownerCompType, "originalRace", typeof(string));
@@ -181,6 +187,20 @@ namespace NHTRJWGenitalia
         {
             Log.Message(Bootstrap.Prefix + "gonad surgery split not installed - " + why + ".");
             return false;
+        }
+
+        /// <summary>The first of these type names that is loaded, or null.</summary>
+        private static Type FirstType(string[] names)
+        {
+            for (int i = 0; i < names.Length; i++)
+            {
+                Type t = GenTypes.GetTypeInAnyAssembly(names[i]);
+                if (t != null)
+                {
+                    return t;
+                }
+            }
+            return null;
         }
 
         private static FieldInfo Field(Type t, string name, Type fieldType)

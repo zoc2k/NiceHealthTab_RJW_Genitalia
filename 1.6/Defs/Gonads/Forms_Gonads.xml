@@ -23,6 +23,7 @@
     <bodyPart>Gonads</bodyPart>
     <form>Testicles</form>
     <priority>20</priority>
+    <gonadKind>Testicles</gonadKind>
     <hediffNameContains>Testicles</hediffNameContains>
     <noBallsGenitalFamily>Penis</noBallsGenitalFamily>
     <position>
@@ -93,6 +94,7 @@
     <bodyPart>Gonads</bodyPart>
     <form>Testicles</form>
     <priority>20</priority>
+    <gonadKind>Testicles</gonadKind>
     <hediffNameContains>Testicles</hediffNameContains>
     <noBallsGenitalFamily>Penis</noBallsGenitalFamily>
     <position>
@@ -163,6 +165,7 @@
     <bodyPart>Gonads</bodyPart>
     <form>Testicles</form>
     <priority>20</priority>
+    <gonadKind>Testicles</gonadKind>
     <hediffNameContains>Testicles</hediffNameContains>
     <noBallsGenitalFamily>Penis</noBallsGenitalFamily>
     <position>
@@ -233,6 +236,7 @@
     <bodyPart>Gonads</bodyPart>
     <form>Testicles</form>
     <priority>20</priority>
+    <gonadKind>Testicles</gonadKind>
     <hediffNameContains>Testicles</hediffNameContains>
     <noBallsGenitalFamily>Penis</noBallsGenitalFamily>
     <position>
@@ -303,6 +307,7 @@
     <bodyPart>Gonads</bodyPart>
     <form>Testicles</form>
     <priority>20</priority>
+    <gonadKind>Testicles</gonadKind>
     <hediffNameContains>Testicles</hediffNameContains>
     <noBallsGenitalFamily>Penis</noBallsGenitalFamily>
     <position>
@@ -373,6 +378,7 @@
     <bodyPart>Ovaries</bodyPart>
     <form>Ovaries</form>
     <priority>20</priority>
+    <gonadKind>Ovaries</gonadKind>
     <hediffNameContains>Ovaries</hediffNameContains>
     <noBallsFixedTier>5</noBallsFixedTier>
     <noBallsGenitalFamily>Vagina</noBallsGenitalFamily>
@@ -416,6 +422,7 @@
     <bodyPart>Ovaries</bodyPart>
     <form>Ovaries</form>
     <priority>20</priority>
+    <gonadKind>Ovaries</gonadKind>
     <hediffNameContains>Ovaries</hediffNameContains>
     <noBallsFixedTier>5</noBallsFixedTier>
     <noBallsGenitalFamily>Vagina</noBallsGenitalFamily>
@@ -459,6 +466,7 @@
     <bodyPart>Ovaries</bodyPart>
     <form>Ovaries</form>
     <priority>20</priority>
+    <gonadKind>Ovaries</gonadKind>
     <hediffNameContains>Ovaries</hediffNameContains>
     <noBallsFixedTier>5</noBallsFixedTier>
     <noBallsGenitalFamily>Vagina</noBallsGenitalFamily>
@@ -502,6 +510,7 @@
     <bodyPart>Ovaries</bodyPart>
     <form>Ovaries</form>
     <priority>20</priority>
+    <gonadKind>Ovaries</gonadKind>
     <hediffNameContains>Ovaries</hediffNameContains>
     <noBallsFixedTier>5</noBallsFixedTier>
     <noBallsGenitalFamily>Vagina</noBallsGenitalFamily>
@@ -545,6 +554,7 @@
     <bodyPart>Ovaries</bodyPart>
     <form>Ovaries</form>
     <priority>20</priority>
+    <gonadKind>Ovaries</gonadKind>
     <hediffNameContains>Ovaries</hediffNameContains>
     <noBallsFixedTier>5</noBallsFixedTier>
     <noBallsGenitalFamily>Vagina</noBallsGenitalFamily>
@@ -588,6 +598,8 @@
     <bodyPart>OuterGonads</bodyPart>
     <form>Testicles</form>
     <priority>20</priority>
+    <externalOnly>true</externalOnly>
+    <gonadKind>Testicles</gonadKind>
     <hediffNameContains>Testicles</hediffNameContains>
     <noBallsGenitalFamily>Penis</noBallsGenitalFamily>
     <position>
@@ -657,6 +669,8 @@
     <bodyPart>OuterGonads</bodyPart>
     <form>Testicles</form>
     <priority>20</priority>
+    <externalOnly>true</externalOnly>
+    <gonadKind>Testicles</gonadKind>
     <hediffNameContains>Testicles</hediffNameContains>
     <noBallsGenitalFamily>Penis</noBallsGenitalFamily>
     <position>
@@ -726,6 +740,8 @@
     <bodyPart>OuterGonads</bodyPart>
     <form>Testicles</form>
     <priority>20</priority>
+    <externalOnly>true</externalOnly>
+    <gonadKind>Testicles</gonadKind>
     <hediffNameContains>Testicles</hediffNameContains>
     <noBallsGenitalFamily>Penis</noBallsGenitalFamily>
     <position>
@@ -795,6 +811,8 @@
     <bodyPart>OuterGonads</bodyPart>
     <form>Testicles</form>
     <priority>20</priority>
+    <externalOnly>true</externalOnly>
+    <gonadKind>Testicles</gonadKind>
     <hediffNameContains>Testicles</hediffNameContains>
     <noBallsGenitalFamily>Penis</noBallsGenitalFamily>
     <position>
@@ -864,6 +882,8 @@
     <bodyPart>OuterGonads</bodyPart>
     <form>Testicles</form>
     <priority>20</priority>
+    <externalOnly>true</externalOnly>
+    <gonadKind>Testicles</gonadKind>
     <hediffNameContains>Testicles</hediffNameContains>
     <noBallsGenitalFamily>Penis</noBallsGenitalFamily>
     <position>

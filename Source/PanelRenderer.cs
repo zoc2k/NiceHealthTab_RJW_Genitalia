@@ -50,11 +50,27 @@ namespace NHTRJWGenitalia
         private const float TemplateScale = 1.5f;
 
         /// <summary>
-        /// The area NHT gives the doll, in UI units (DollWidget.Draw: the column is 213.4 wide and
-        /// the doll takes 90% of the tab's inner height). gen_defs.DOLL_RECT holds the same pair,
-        /// and validate.py cross-checks them - the anus window placement is worked out from it.
+        /// The area NHT gives the doll, in UI units, **as the art was laid out**: the column is
+        /// 213.4 wide and the doll takes 90% of the tab's inner height, the tab being 430 tall.
+        /// gen_defs.DOLL_RECT holds the same pair and validate.py cross-checks them.
+        ///
+        /// It is only the fallback. The tab is not always 430 tall - Nice Health Tab makes it 440
+        /// when 'Auto Extract Genes' is installed (ITab_Pawn_Health_Patch) - and a taller tab
+        /// means a taller doll column, a larger fit scale and a different letterbox, which moves
+        /// every part while the anus window, placed from the column's top left, stays put. The
+        /// anus would then sit below its window (user report). <see cref="ColumnUnits"/> uses the
+        /// column the doll is really being drawn in whenever we know it.
         /// </summary>
         private static readonly Vector2 DollRectUnits = new Vector2(213.40001f, (430f - 8f) * 0.9f);
+
+        /// <summary>The doll column of this frame, or the design value before the first draw.</summary>
+        private static Vector2 ColumnUnits()
+        {
+            return (lastDollFrame == Time.frameCount && lastDollRect.width > 0f
+                    && lastDollRect.height > 0f)
+                ? new Vector2(lastDollRect.width, lastDollRect.height)
+                : DollRectUnits;
+        }
 
         /// <summary>The panel, from the doll column's top left. It fills the column's width.</summary>
         private static readonly Rect PanelPx = new Rect(0f, 103f, 320f, 380f);
@@ -524,13 +540,15 @@ namespace NHTRJWGenitalia
             {
                 return false;
             }
-            float s = Mathf.Min(DollRectUnits.x / bb.width, DollRectUnits.y / bb.height);
+            Vector2 col = ColumnUnits();
+            float s = Mathf.Min(col.x / bb.width, col.y / bb.height);
             if (s <= 0f)
             {
                 return false;
             }
-            float fx = (DollRectUnits.x - bb.width * s) * 0.5f;
-            float fy = (DollRectUnits.y - bb.height * s) * 0.5f;
+            // NHT centres the fitted doll in the column (Doll.Fit), so the leftover is halved.
+            float fx = (col.x - bb.width * s) * 0.5f;
+            float fy = (col.y - bb.height * s) * 0.5f;
             // Panel coordinates -> doll column pixels -> UI units -> doll coordinates.
             float ux = (PanelPx.x + PanelPx.width * 0.5f + panelPos.x) / TemplateScale;
             float uy = (PanelPx.y + PanelPx.height * 0.5f + panelPos.y) / TemplateScale;
@@ -592,6 +610,11 @@ namespace NHTRJWGenitalia
             // this rect.
             lastDollRect = dollRect;
             lastDollFrame = Time.frameCount;
+
+            // The anus has to land inside that window, and where it lands depends on the column
+            // the doll is fitted into - which is only known here. Done before the window is laid
+            // so a failure leaves neither.
+            PlaceAnusParts(__instance, dollRect);
 
             // The anus window (buttocks background plus outline) is laid **here**, right before
             // the doll is drawn, so it sits behind every part and the anus glyph lands on top of
@@ -663,6 +686,66 @@ namespace NHTRJWGenitalia
                 DrawPanel(ctx, PanelOf(dollRect), ButtonOf(dollRect));
             }
             DrawButton(__instance, ctx, ButtonOf(dollRect));
+        }
+
+        /// <summary>
+        /// Puts this frame's anus parts where the window really is.
+        ///
+        /// The position baked into the Defs (gen_defs.panel_to_doll) is right for a 430-tall tab.
+        /// Nice Health Tab makes the tab 440 tall when 'Auto Extract Genes' is installed, and
+        /// other mods can change the health tab too; the doll then sits in a taller column, is
+        /// fitted at a larger scale, and every part moves with it - but the window is placed from
+        /// the column's top left and does not move, so the anus slides out of its window.
+        ///
+        /// Here the placement is worked out again from the column the doll is about to be drawn
+        /// in, for our dolls and for another mod's alike. With the design column it gives the
+        /// baked value back, so nothing changes where nothing changed.
+        /// </summary>
+        private static void PlaceAnusParts(object widget, Rect dollRect)
+        {
+            if (!ready || !Bootstrap.Ready || ctxField == null || mainDollField == null
+                || dollBoundsField == null || Bootstrap.PositionField == null)
+            {
+                return;
+            }
+            object ctx = ctxField.GetValue(widget);
+            object doll = (ctx == null) ? null : mainDollField.GetValue(ctx);
+            Def def = doll as Def;
+            if (def == null)
+            {
+                return;
+            }
+            string source = ForeignDolls.SourceName(def.defName);
+            if (source.NullOrEmpty())
+            {
+                return;
+            }
+            Rect bb = (Rect)dollBoundsField.GetValue(doll);
+            List<BoundPart> parts = Bootstrap.BoundParts;
+            for (int i = 0; i < parts.Count; i++)
+            {
+                BoundPart p = parts[i];
+                if (p.dollName != source || p.placementForm == null
+                    || (p.slot != Bootstrap.AnusSlot && p.slot != Bootstrap.OuterAnusSlot))
+                {
+                    continue;
+                }
+                DollPartFormDef panelForm = ForeignDolls.PanelSource(p.placementForm);
+                Vector2 pos;
+                float sc;
+                if (panelForm == null
+                    || !AnusPlacement(bb, panelForm.panelPosition, panelForm.panelScale,
+                                      out pos, out sc))
+                {
+                    continue;       // Keep the baked position.
+                }
+                Bootstrap.PositionField.SetValue(p.def, pos);
+                if (Bootstrap.WidthField != null && Bootstrap.HeightField != null)
+                {
+                    Bootstrap.WidthField.SetValue(p.def, sc);
+                    Bootstrap.HeightField.SetValue(p.def, Mathf.Abs(sc));
+                }
+            }
         }
 
         /// <summary>

@@ -31,7 +31,10 @@ namespace NHTRJWGenitalia
                                  "NHTRJW_DepTip_Fluids".Translate());
             SettingsUI.StatusRow(ref y, area, "Sized Apparel", ModDeps.SizedApparel, false,
                                  "NHTRJW_DepTip_SizedApparel".Translate());
-            SettingsUI.StatusRow(ref y, area, "RJW Now with balls!", ModDeps.Balls, false,
+            SettingsUI.StatusRow(ref y, area,
+                                 ModDeps.NowWithBalls ? "RJW Now with balls!"
+                                                      : "RJW Gonadz Reloaded",
+                                 ModDeps.Balls, false,
                                  "NHTRJW_DepTip_Balls".Translate());
             SettingsUI.Gap(ref y, 8f);
             SettingsUI.Info(ref y, area, "NHTRJW_DepsDesc".Translate());

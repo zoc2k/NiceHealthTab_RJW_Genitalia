@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  One set of files for both game versions.
+
+  RimWorld 1.7 dropped Unity, but nothing this mod does depends on that: the assembly is
+  built against 1.6 reference assemblies and runs on both, and the Defs and textures are the
+  same. Rather than keeping two copies of the same folder, both versions are pointed at the
+  1.6 folder from here. Without this file 1.7 would load only the mod root and no Defs or
+  assembly at all.
+-->
+<loadFolders>
+  <v1.6>
+    <li>/</li>
+    <li>1.6</li>
+  </v1.6>
+  <v1.7>
+    <li>/</li>
+    <li>1.6</li>
+  </v1.7>
+</loadFolders>

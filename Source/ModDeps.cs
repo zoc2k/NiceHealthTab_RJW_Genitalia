@@ -26,6 +26,7 @@ namespace NHTRJWGenitalia
         private const string FluidsId = "eltoro.rjw.menstruation.fluids";
         private const string SizedApparelId = "OTYOTY.SizedApparel";
         private const string BallsId = "TeheeItsMe525.RJWGenderOrgansMod";
+        private const string GonadzId = "RJW.GonadzReloaded";
         private const string LicentiaId = "LustLicentiaSerums.RJWLabs";
 
         /// <summary>Nice Health Tab - without it this patch has nothing to do.</summary>
@@ -44,8 +45,19 @@ namespace NHTRJWGenitalia
         /// <summary>Sized Apparel - source of body part variations such as inverted nipples.</summary>
         internal static readonly bool SizedApparel = Active(SizedApparelId);
 
-        /// <summary>RJW Now with balls! - source of the gonad body part.</summary>
-        internal static readonly bool Balls = Active(BallsId);
+        /// <summary>RJW Now with balls! - the original gonad mod, no longer updated.</summary>
+        internal static readonly bool NowWithBalls = Active(BallsId);
+
+        /// <summary>RJW Gonadz Reloaded - its continuation. Same body part, same hediff names,
+        /// and it marks every gonad with a mod extension we can read (GonadzParts).</summary>
+        internal static readonly bool GonadzReloaded = Active(GonadzId);
+
+        /// <summary>
+        /// A gonad mod is here - the source of the Gonads body part and of the testicle and
+        /// ovary hediffs. Either mod will do: they share the part, the hediff names and the
+        /// organ item names, so everything built on them works with both.
+        /// </summary>
+        internal static readonly bool Balls = NowWithBalls || GonadzReloaded;
 
         /// <summary>Licentia Serums - serums that swap the breast hediff, which indirectly
         /// changes the nipple colour.</summary>

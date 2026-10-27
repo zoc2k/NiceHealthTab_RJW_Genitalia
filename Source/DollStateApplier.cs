@@ -381,6 +381,10 @@ namespace NHTRJWGenitalia
                 {
                     continue;       // This kind of penis comes without this part (no testicles).
                 }
+                if (f.HiddenBy(hediffs))
+                {
+                    continue;       // Not even as the fallback: no nipples on a featureless chest.
+                }
 
                 // The belly reads every hediff of the pawn and adds them up, so it does not walk
                 // the slot's list.
@@ -424,14 +428,33 @@ namespace NHTRJWGenitalia
 
                 if (hediffs != null)
                 {
+                    Hediff sizeless = null;
                     for (int h = 0; h < hediffs.Count; h++)
                     {
                         if (f.MatchesHediff(hediffs[h]))
                         {
+                            if (f.IsSizeless(hediffs[h]))
+                            {
+                                // Kept in reserve: a part with a real size in the same slot wins.
+                                if (sizeless == null)
+                                {
+                                    sizeless = hediffs[h];
+                                }
+                                continue;
+                            }
                             form = f;
                             match = hediffs[h];
                             return;
                         }
+                    }
+                    if (sizeless != null)
+                    {
+                        // A part with no size of its own reads as size 0 - the flat tier. Its
+                        // severity is a random roll that means nothing (DollPartFormDef.sizelessHediffs).
+                        form = f;
+                        match = sizeless;
+                        severity = 0f;
+                        return;
                     }
                 }
 

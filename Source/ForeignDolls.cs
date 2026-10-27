@@ -80,9 +80,6 @@ namespace NHTRJWGenitalia
         /// <summary>How far our layers are currently shifted up. See <see cref="LiftAbove"/>.</summary>
         private static int layerShift;
 
-        /// <summary>The anus placement worked out for a doll of another mod, by doll.</summary>
-        private static readonly Dictionary<object, KeyValuePair<Vector2, float>> anusPlace =
-            new Dictionary<object, KeyValuePair<Vector2, float>>();
         private static FieldInfo pawnField;
         private static FieldInfo partsField;
         private static FieldInfo outlinePathField;
@@ -564,20 +561,13 @@ namespace NHTRJWGenitalia
             {
                 return false;
             }
-            KeyValuePair<Vector2, float> found;
-            if (anusPlace.TryGetValue(doll, out found))
-            {
-                position = found.Key;
-                scale = found.Value;
-                return scale > 0f;
-            }
+            // Not cached: the placement depends on the column the doll is drawn in, and the
+            // health tab can change size while the game runs (PanelRenderer.PlaceAnusParts).
             DollPartFormDef source = PanelSource(form);
             Rect bb = (Rect)boundingBoxField.GetValue(doll);
-            bool ok = source != null
-                      && PanelRenderer.AnusPlacement(bb, source.panelPosition, source.panelScale,
-                                                     out position, out scale);
-            anusPlace[doll] = new KeyValuePair<Vector2, float>(position, scale);
-            return ok;
+            return source != null
+                   && PanelRenderer.AnusPlacement(bb, source.panelPosition, source.panelScale,
+                                                  out position, out scale);
         }
 
         /// <summary>
@@ -587,7 +577,7 @@ namespace NHTRJWGenitalia
         /// no panel placement (gen_defs gives a panel box to the organ slot only). Both are drawn
         /// in the same window, so the organ slot's form answers for both.
         /// </summary>
-        private static DollPartFormDef PanelSource(DollPartFormDef form)
+        internal static DollPartFormDef PanelSource(DollPartFormDef form)
         {
             if (form.panelScale > 0f)
             {

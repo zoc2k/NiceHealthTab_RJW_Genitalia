@@ -30,7 +30,7 @@
   <NHTRJW_Dep_RJW>RimJobWorld</NHTRJW_Dep_RJW>
   <NHTRJW_Dep_Menstruation>RJW Menstruation</NHTRJW_Dep_Menstruation>
   <NHTRJW_Dep_SizedApparel>Sized Apparel</NHTRJW_Dep_SizedApparel>
-  <NHTRJW_Dep_Balls>RJW Now with balls!</NHTRJW_Dep_Balls>
+  <NHTRJW_Dep_Balls>RJW Gonadz Reloaded</NHTRJW_Dep_Balls>
   <NHTRJW_Dep_Fluids>RJW Menstruation - Fluids</NHTRJW_Dep_Fluids>
 
   <!-- Linked mod tooltips - what each mod adds to this patch -->
@@ -39,7 +39,7 @@
   <NHTRJW_DepTip_Menstruation>Supplies what is inside the womb and per-pawn nipple variation.\n\n- Fluid in the womb (cum, menstrual blood) in 6 stages\n- Fluid colour - turns red when menstrual blood is mixed in\n- Areola pigmentation - nipple shade differs per pawn and darkens with pregnancy and lactation\n\nWithout it no fluid layer is drawn and the womb looks empty.</NHTRJW_DepTip_Menstruation>
   <NHTRJW_DepTip_Fluids>Supplies womb inflation.\n\n- Vaginal cumflation shown as a swollen womb in 5 stages\n\nWithout it no inflation art is drawn. The amount of fluid in the womb comes from RJW Menstruation separately.</NHTRJW_DepTip_Fluids>
   <NHTRJW_DepTip_SizedApparel>Supplies nipple shape variants.\n\n- Dedicated art for inverted nipples\n\nWithout it every pawn gets the default nipple.</NHTRJW_DepTip_SizedApparel>
-  <NHTRJW_DepTip_Balls>Supplies actual testicles and ovaries.\n\n- Testicle and ovary markers at the size the pawn really has\n- Translated gonad body part names\n- Gonad removal split into testicle removal and ovary removal\n\nThe doll is not left empty without it - a pawn with a vagina gets a reference ovary picture and a pawn with a penis gets testicles matched to the penis size.</NHTRJW_DepTip_Balls>
+  <NHTRJW_DepTip_Balls>Supplies actual testicles and ovaries. Either RJW Gonadz Reloaded or the older RJW Now with balls! will do.\n\n- Testicle and ovary markers at the size the pawn really has\n- Translated gonad body part names\n- Gonad removal split into testicle removal and ovary removal\n- With Gonadz Reloaded: gonads are read from the mark it puts on them, so gonads other mods add are drawn too, and testicles that sit inside the body are kept off the skin\n\nThe doll is not left empty without it - a pawn with a vagina gets a reference ovary picture and a pawn with a penis gets testicles matched to the penis size.</NHTRJW_DepTip_Balls>
   <NHTRJW_DepFound>active</NHTRJW_DepFound>
   <NHTRJW_DepMissing>not found</NHTRJW_DepMissing>
   <NHTRJW_DepRequired>required</NHTRJW_DepRequired>

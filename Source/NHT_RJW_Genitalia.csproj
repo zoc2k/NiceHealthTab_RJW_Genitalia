@@ -4,10 +4,15 @@
     Nice Health Tab - RJW Genitalia  :  bootstrap assembly
 
     Build:   dotnet build -c Release
-    Output:  ..\1.6\Assemblies\NHT_RJW_Genitalia.dll
+    Output:  ..\1.6\Assemblies\NHT_RJW_Genitalia.dll  (1.7 loads it through LoadFolders.xml)
 
-    If RimWorld lives somewhere else, edit RimWorldManaged below or pass
-    -p:RimWorldManaged="D:\...\RimWorldWin64_Data\Managed".
+    The game assemblies come from the Krafs.Rimworld.Ref NuGet package rather than from the
+    installed game. RimWorld 1.7 dropped Unity: the managed folder is gone, the engine
+    assemblies sit in the game root and the runtime is .NET 10 with UnityEngine redirected to
+    UnityStubs (RimWorld.runtimeconfig.json), so no HintPath into the game folder survives.
+    Building against 1.6 reference assemblies keeps one net472 dll that both versions load -
+    the way RJW Gonadz Reloaded, a 1.7 mod, builds itself
+    (refs/gonadz-reloaded-master/Source/Gonadz.csproj).
   -->
 
   <PropertyGroup>
@@ -33,7 +38,6 @@
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <EnableDefaultNoneItems>false</EnableDefaultNoneItems>
 
-    <RimWorldManaged Condition="'$(RimWorldManaged)' == ''">C:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed</RimWorldManaged>
   </PropertyGroup>
 
   <ItemGroup>
@@ -56,43 +60,13 @@
 
   <ItemGroup>
     <!--
-      The game assemblies are referenced only (Private=false, so nothing is copied into
-      the output folder). Patches against NHT and Cumpilation go through reflection.
-      NiceHediffTab.dll and the RJW assemblies are deliberately not referenced - all
-      reflection.
+      RimWorld and Unity reference assemblies. Reference only - nothing is copied into the
+      output. NiceHediffTab.dll, the RJW assemblies and Cumpilation are deliberately not
+      referenced at all: every patch against them goes through reflection.
     -->
-    <Reference Include="Assembly-CSharp">
-      <HintPath>$(RimWorldManaged)\Assembly-CSharp.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>$(RimWorldManaged)\UnityEngine.CoreModule.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>$(RimWorldManaged)\UnityEngine.IMGUIModule.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <!--
-      TextRenderingModule / InputLegacyModule
-        These must be referenced even though we never use them directly.
-        Widgets.ButtonText has TextAnchor? in its signature and Verse.Mouse pulls in Input,
-        so without the reference the build succeeds but assembly resolution fails the
-        moment such a method first runs. Thrown inside IMGUI, that aborts the whole draw
-        pass and the window comes up half empty.
-    -->
-    <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>$(RimWorldManaged)\UnityEngine.TextRenderingModule.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>$(RimWorldManaged)\UnityEngine.InputLegacyModule.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>$(RimWorldManaged)\UnityEngine.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
+    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.6.4871">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

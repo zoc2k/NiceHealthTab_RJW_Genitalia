@@ -2855,6 +2855,9 @@
     <priority>20</priority>
     <fallback>true</fallback>
     <sexPartOnly>true</sexPartOnly>
+    <sizelessHediffs>
+      <li>FeaturelessChest</li>
+    </sizelessHediffs>
     <position>
       <x>0.00</x>
       <y>-184.00</y>
@@ -2898,6 +2901,9 @@
     <priority>20</priority>
     <fallback>true</fallback>
     <sexPartOnly>true</sexPartOnly>
+    <sizelessHediffs>
+      <li>FeaturelessChest</li>
+    </sizelessHediffs>
     <position>
       <x>0.00</x>
       <y>-197.00</y>
@@ -2941,6 +2947,9 @@
     <priority>20</priority>
     <fallback>true</fallback>
     <sexPartOnly>true</sexPartOnly>
+    <sizelessHediffs>
+      <li>FeaturelessChest</li>
+    </sizelessHediffs>
     <position>
       <x>0.00</x>
       <y>-148.00</y>
@@ -2984,6 +2993,9 @@
     <priority>20</priority>
     <fallback>true</fallback>
     <sexPartOnly>true</sexPartOnly>
+    <sizelessHediffs>
+      <li>FeaturelessChest</li>
+    </sizelessHediffs>
     <position>
       <x>0.00</x>
       <y>-200.00</y>
@@ -3027,6 +3039,9 @@
     <priority>20</priority>
     <fallback>true</fallback>
     <sexPartOnly>true</sexPartOnly>
+    <sizelessHediffs>
+      <li>FeaturelessChest</li>
+    </sizelessHediffs>
     <position>
       <x>0.00</x>
       <y>-217.00</y>
@@ -3068,6 +3083,9 @@
     <bodyPart>Nipples</bodyPart>
     <form>InvertedNipple</form>
     <priority>30</priority>
+    <hiddenByParts>
+      <li>FeaturelessChest</li>
+    </hiddenByParts>
     <sexPartOnly>true</sexPartOnly>
     <variation>InvertedNipple</variation>
     <position>
@@ -3111,6 +3129,9 @@
     <bodyPart>Nipples</bodyPart>
     <form>InvertedNipple</form>
     <priority>30</priority>
+    <hiddenByParts>
+      <li>FeaturelessChest</li>
+    </hiddenByParts>
     <sexPartOnly>true</sexPartOnly>
     <variation>InvertedNipple</variation>
     <position>
@@ -3154,6 +3175,9 @@
     <bodyPart>Nipples</bodyPart>
     <form>InvertedNipple</form>
     <priority>30</priority>
+    <hiddenByParts>
+      <li>FeaturelessChest</li>
+    </hiddenByParts>
     <sexPartOnly>true</sexPartOnly>
     <variation>InvertedNipple</variation>
     <position>
@@ -3197,6 +3221,9 @@
     <bodyPart>Nipples</bodyPart>
     <form>InvertedNipple</form>
     <priority>30</priority>
+    <hiddenByParts>
+      <li>FeaturelessChest</li>
+    </hiddenByParts>
     <sexPartOnly>true</sexPartOnly>
     <variation>InvertedNipple</variation>
     <position>
@@ -3240,6 +3267,9 @@
     <bodyPart>Nipples</bodyPart>
     <form>InvertedNipple</form>
     <priority>30</priority>
+    <hiddenByParts>
+      <li>FeaturelessChest</li>
+    </hiddenByParts>
     <sexPartOnly>true</sexPartOnly>
     <variation>InvertedNipple</variation>
     <position>
@@ -3284,6 +3314,9 @@
     <form>Nipple</form>
     <priority>20</priority>
     <fallback>true</fallback>
+    <hiddenByParts>
+      <li>FeaturelessChest</li>
+    </hiddenByParts>
     <sexPartOnly>true</sexPartOnly>
     <position>
       <x>0.00</x>
@@ -3327,6 +3360,9 @@
     <form>Nipple</form>
     <priority>20</priority>
     <fallback>true</fallback>
+    <hiddenByParts>
+      <li>FeaturelessChest</li>
+    </hiddenByParts>
     <sexPartOnly>true</sexPartOnly>
     <position>
       <x>0.00</x>
@@ -3370,6 +3406,9 @@
     <form>Nipple</form>
     <priority>20</priority>
     <fallback>true</fallback>
+    <hiddenByParts>
+      <li>FeaturelessChest</li>
+    </hiddenByParts>
     <sexPartOnly>true</sexPartOnly>
     <position>
       <x>0.00</x>
@@ -3413,6 +3452,9 @@
     <form>Nipple</form>
     <priority>20</priority>
     <fallback>true</fallback>
+    <hiddenByParts>
+      <li>FeaturelessChest</li>
+    </hiddenByParts>
     <sexPartOnly>true</sexPartOnly>
     <position>
       <x>0.00</x>
@@ -3456,6 +3498,9 @@
     <form>Nipple</form>
     <priority>20</priority>
     <fallback>true</fallback>
+    <hiddenByParts>
+      <li>FeaturelessChest</li>
+    </hiddenByParts>
     <sexPartOnly>true</sexPartOnly>
     <position>
       <x>0.00</x>

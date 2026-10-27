@@ -40,8 +40,26 @@ namespace NHTRJWGenitalia
         public string genitalFamily;
 
         /// <summary>Matches when the hediff defName contains this string. Used to tell testicles
-        /// from ovaries.</summary>
+        /// from ovaries. Not consulted for a hediff a gonad mod has marked - see
+        /// <see cref="gonadKind"/>.</summary>
         public string hediffNameContains;
+
+        /// <summary>
+        /// The gonad kind this form draws: <c>Testicles</c> or <c>Ovaries</c>.
+        ///
+        /// 'RJW Gonadz Reloaded' marks every gonad hediff with what it is instead of leaving it
+        /// to the name, and invites other mods to add gonads of their own that way (API.md).
+        /// When a hediff carries that mark we trust it and the name rule above is skipped, so a
+        /// third mod's testicles are drawn as testicles whatever they are called. A hediff with
+        /// no mark - the older mod, or a plain RJW part - still goes by the name.
+        /// </summary>
+        public string gonadKind;
+
+        /// <summary>
+        /// Skip gonads that sit inside the body. The skin copy of the testicles uses it:
+        /// internal testicles show in the organ layer and nothing shows on the skin.
+        /// </summary>
+        public bool externalOnly;
 
         /// <summary>
         /// A form whose tier is read from somewhere other than a severity.
@@ -112,6 +130,58 @@ namespace NHTRJWGenitalia
         /// wound or a scar for a size tier.</summary>
         public bool sexPartOnly;
 
+        /// <summary>
+        /// Hediffs this form matches that have no size of their own; they are drawn at tier 0.
+        ///
+        /// RJW's featureless chest has no size stages and no size profile, yet every sex part is
+        /// given a random size when it is made (<c>HediffComp_SexPart.CalculateSize</c>, around
+        /// 0.5), so its severity alone would pick an average pair of breasts. Tier 0 is the flat
+        /// chest. When the slot also holds a part with a real size, that part is used instead -
+        /// RJW itself counts a pawn as having breasts as soon as any chest part is not featureless
+        /// (<c>Genital_Helper.has_breasts</c>).
+        /// </summary>
+        public List<string> sizelessHediffs;
+
+        /// <summary>
+        /// This form is not used - not even as the fallback - while every RJW sex part in the slot
+        /// is one of these. A featureless chest has no nipples to draw.
+        /// </summary>
+        public List<string> hiddenByParts;
+
+        /// <summary>Is this one of the <see cref="sizelessHediffs"/>?</summary>
+        public bool IsSizeless(Hediff hediff)
+        {
+            return hediff != null && hediff.def != null && sizelessHediffs != null
+                   && sizelessHediffs.Contains(hediff.def.defName);
+        }
+
+        /// <summary>
+        /// True when the slot holds at least one RJW sex part and all of them are in
+        /// <see cref="hiddenByParts"/>.
+        /// </summary>
+        public bool HiddenBy(List<Hediff> hediffs)
+        {
+            if (hiddenByParts == null || hiddenByParts.Count == 0 || hediffs == null)
+            {
+                return false;
+            }
+            bool any = false;
+            for (int i = 0; i < hediffs.Count; i++)
+            {
+                Hediff h = hediffs[i];
+                if (h == null || h.def == null || !IsSexPart(h.def))
+                {
+                    continue;
+                }
+                if (!hiddenByParts.Contains(h.def.defName))
+                {
+                    return false;       // A real part is here as well
+                }
+                any = true;
+            }
+            return any;
+        }
+
         /// <summary>A Sized Apparel (SAR) part variation name, e.g. InvertedNipple. Compared
         /// against <c>SizedApparel.SizedApparelBodyPartDetail.variation</c>, which SAR attaches to
         /// the hediff. Without SAR this condition never matches, so the default form is used.</summary>
@@ -152,6 +222,7 @@ namespace NHTRJWGenitalia
                 return;
             }
             hediffNameContains = null;      // Stop looking for a hediff that cannot exist
+            gonadKind = null;               // and for a mark only a gonad mod puts there
             genitalFamily = noBallsGenitalFamily;
             fixedTier = noBallsFixedTier;
         }
@@ -619,11 +690,24 @@ namespace NHTRJWGenitalia
             {
                 return false;
             }
-            if (!hediffNameContains.NullOrEmpty()
-                && hediff.def.defName.IndexOf(hediffNameContains,
-                                              StringComparison.OrdinalIgnoreCase) < 0)
+            // A marked gonad answers for itself; only an unmarked one falls back to its name.
+            string kind = gonadKind.NullOrEmpty() ? "" : GonadzParts.KindOf(hediff.def);
+            if (!kind.NullOrEmpty())
+            {
+                if (!string.Equals(kind, gonadKind, StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+            }
+            else if (!hediffNameContains.NullOrEmpty()
+                     && hediff.def.defName.IndexOf(hediffNameContains,
+                                                   StringComparison.OrdinalIgnoreCase) < 0)
             {
                 return false;
+            }
+            if (externalOnly && GonadzParts.IsInternal(hediff.def))
+            {
+                return false;       // Inside the body - nothing to see on the skin.
             }
             if (!genitalFamily.NullOrEmpty()
                 && !string.Equals(GenitalFamilyOf(hediff.def), genitalFamily,

@@ -4,7 +4,8 @@ A compatibility patch that shows the reproductive body parts RimJobWorld adds on
 **Nice Health Tab** doll.
 
 - packageId: `zoc2k.nicehealthtab.rjwgenitalia`
-- Supported version: RimWorld **1.6**
+- Supported versions: RimWorld **1.6** and **1.7** (one assembly, pointed at both through
+  `LoadFolders.xml`)
 - Required mods: **Nice Health Tab** and **RimJobWorld**. Without either, this patch does
   nothing at all.
 
@@ -29,7 +30,8 @@ Slots that point at the same body part all open the same part menu, whichever yo
 | Gonads | `Gonads` | **Testicles** | organ |
 | Ovaries | `Gonads` | **Ovaries**, beside the womb | organ |
 
-Without `RJW Now with balls! . . . and Ovaries I guess` the `Gonads` body part does not exist
+Without a gonad mod - `RJW Gonadz Reloaded` or the older `RJW Now with balls! . . . and
+Ovaries I guess` - the `Gonads` body part does not exist
 at all. The gonad markers then attach to the genitals part and reference art is drawn (see
 "Linked mods" below).
 
@@ -177,7 +179,7 @@ patch and what is missing without it.
 | RJW Menstruation | optional | Fluid in the womb and its colour, areola pigmentation, the panel's ovulation / fertilization / implantation |
 | RJW Menstruation - Fluids | optional | Womb inflation, 5 tiers |
 | Sized Apparel | optional | Inverted nipples |
-| RJW Now with balls! | optional | Real testicle and ovary sizes, translated gonad names, separate testicle and ovary removal surgery |
+| RJW Gonadz Reloaded *(or RJW Now with balls!)* | optional | Real testicle and ovary sizes, translated gonad names, separate testicle and ovary removal surgery. Gonadz Reloaded continues the older mod and keeps its body part, hediff and item names, so either one works. With Gonadz Reloaded the gonads are read from the mark it puts on each def, so gonads other mods add are drawn too and testicles that sit inside the body stay off the skin |
 
 Two more mods are handled without appearing in that list:
 
@@ -266,7 +268,7 @@ its own position on the doll**.
 | Part | Forms | How it is told apart |
 |---|---|---|
 | Outer genitals | penis / vulva | the RJW hediff's `genitalFamily` (with both, the penis wins) |
-| Gonads | testicles / ovaries | `Testicles` / `Ovaries` in the hediff defName (the genital family instead, without the balls mod) |
+| Gonads | testicles / ovaries | the gonad mark on the def (`Gonadz.GonadExtension`), else `Testicles` / `Ovaries` in the hediff defName, else the genital family with no gonad mod |
 | Chest | breasts (only one form) | not told apart |
 | Nipples | nipple / inverted nipple | Sized Apparel's part variation |
 | Womb | womb / implantation / fetus | whether a vagina is present, and the pregnancy hediff |
