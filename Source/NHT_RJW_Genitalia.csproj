@@ -20,7 +20,7 @@
     <AssemblyName>NHT_RJW_Genitalia</AssemblyName>
     <RootNamespace>NHTRJWGenitalia</RootNamespace>
     <LangVersion>latest</LangVersion>
-    <Version>1.2.0</Version>
+    <Version>1.3.0</Version>
 
     <!-- Pinned to UTF-8; the source files carry a BOM as well -->
     <CodePage>65001</CodePage>
