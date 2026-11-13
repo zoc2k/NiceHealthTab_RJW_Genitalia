@@ -72,6 +72,20 @@ namespace NHTRJWGenitalia
         private const string BallsPackageId = "teheeitsme525.rjwgenderorgansmod";
         private const string GonadsPartDefName = "Gonads";
 
+        /// <summary>
+        /// The part the gonads that sit **inside** the body hang on.
+        ///
+        /// RJW Gonadz Reloaded 1.4.3 split its one gonad part in two: the external gonads
+        /// (testicles) stay at groin level, and a new part on the pelvis - the reproductive
+        /// organs - holds the ovaries, the wombs and the internal testicles. 1.4.4 then moved
+        /// every ovary there for good, old saves included ("Ovaries on the external gonads",
+        /// migration 7), and that is when the ovaries disappeared from the doll: we only ever
+        /// looked for hediffs on the external part (user report).
+        ///
+        /// Absent with the older 'RJW Now with balls!', where everything is on one part.
+        /// </summary>
+        private const string InternalGonadsPartDefName = "ReproductiveOrgans";
+
         /// <summary>The nipple slot. Same body part as the chest, but its own layer.</summary>
         internal const string NippleSlot = "Nipples";
 
@@ -184,11 +198,28 @@ namespace NHTRJWGenitalia
         /// </summary>
         private static string gonadsBodyPart = GonadsPartDefName;
 
+        /// <summary>Where the ovaries are. The reproductive organs when that part exists,
+        /// otherwise whatever the external gonads use.</summary>
+        private static string internalGonadsBodyPart = GonadsPartDefName;
+
         private static string BodyPartOfSlot(string slot)
         {
-            if (slot == GonadsSlot || slot == OuterGonadsSlot || slot == OvariesSlot)
+            if (slot == OvariesSlot)
+            {
+                // The ovaries are inside the body; their marker takes that part's health colour
+                // and opens its entry when clicked.
+                return internalGonadsBodyPart;
+            }
+            if (slot == GonadsSlot || slot == OuterGonadsSlot)
             {
                 return gonadsBodyPart;
+            }
+            if (slot == WombSlot || slot == WombFluidSlot)
+            {
+                // The womb is a part of its own where the gonad mod makes one; otherwise it is
+                // drawn over the genitals, which is where RJW keeps everything about it.
+                return internalGonadsBodyPart == GonadsPartDefName
+                    ? GenitalsSlot : internalGonadsBodyPart;
             }
             string mapped;
             return SlotToBodyPart.TryGetValue(slot, out mapped) ? mapped : slot;
@@ -297,6 +328,28 @@ namespace NHTRJWGenitalia
             if (DefDatabase<BodyPartDef>.GetNamedSilentFail(GonadsPartDefName) == null)
             {
                 gonadsBodyPart = GenitalsSlot;
+            }
+            internalGonadsBodyPart =
+                (DefDatabase<BodyPartDef>.GetNamedSilentFail(InternalGonadsPartDefName) != null)
+                    ? InternalGonadsPartDefName
+                    : gonadsBodyPart;
+            if (internalGonadsBodyPart != gonadsBodyPart)
+            {
+                // Each gonad slot looks at the other part as well: a save that has not been
+                // migrated yet can still have ovaries outside, and the testicles inside the body
+                // (InternalTesticles) belong to the organ layer. A form only matches what it is
+                // meant for - the ovary form takes no testicle - so the wider list is safe.
+                SlotExtraHediffParts[OvariesSlot] = new[] { gonadsBodyPart };
+                SlotExtraHediffParts[GonadsSlot] = new[] { internalGonadsBodyPart };
+
+                // The womb became a part of its own in that mod (one organ per vagina, on the
+                // reproductive organs). Our womb layers point at it now, so the marker takes
+                // that part's health and opens its entry - but they keep reading the state from
+                // where it really lives: the vagina's comps, the pregnancy on the torso, and the
+                // inflation that hangs off no part at all.
+                string[] wombLook = { GenitalsSlot, "Torso", WholeBodyKey };
+                SlotExtraHediffParts[WombSlot] = wombLook;
+                SlotExtraHediffParts[WombFluidSlot] = wombLook;
             }
 
             // --- 2. Prepare the form Defs -------------------------------------------

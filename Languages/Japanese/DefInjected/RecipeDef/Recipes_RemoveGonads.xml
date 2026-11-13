@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- 1.6/Defs/BallsSurgery/Recipes_RemoveGonads.xml -->
+
+  <NHTRJW_RemoveTesticles.label>睾丸摘出</NHTRJW_RemoveTesticles.label>
+  <NHTRJW_RemoveTesticles.description>睾丸を摘出して去勢します。卵巣はそのまま残します。</NHTRJW_RemoveTesticles.description>
+  <NHTRJW_RemoveTesticles.jobString>睾丸を摘出中。</NHTRJW_RemoveTesticles.jobString>
+
+  <NHTRJW_RemoveOvaries.label>卵巣摘出</NHTRJW_RemoveOvaries.label>
+  <NHTRJW_RemoveOvaries.description>卵巣を摘出して不妊化します。睾丸はそのまま残します。</NHTRJW_RemoveOvaries.description>
+  <NHTRJW_RemoveOvaries.jobString>卵巣を摘出中。</NHTRJW_RemoveOvaries.jobString>
+
+</LanguageData>

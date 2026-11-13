@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- 1.6/Defs/BallsSurgery/Recipes_RemoveGonads.xml -->
+
+  <NHTRJW_RemoveTesticles.label>摘除睾丸</NHTRJW_RemoveTesticles.label>
+  <NHTRJW_RemoveTesticles.description>摘除睾丸以绝育。卵巢保持原样。</NHTRJW_RemoveTesticles.description>
+  <NHTRJW_RemoveTesticles.jobString>正在摘除睾丸。</NHTRJW_RemoveTesticles.jobString>
+
+  <NHTRJW_RemoveOvaries.label>摘除卵巢</NHTRJW_RemoveOvaries.label>
+  <NHTRJW_RemoveOvaries.description>摘除卵巢以绝育。睾丸保持原样。</NHTRJW_RemoveOvaries.description>
+  <NHTRJW_RemoveOvaries.jobString>正在摘除卵巢。</NHTRJW_RemoveOvaries.jobString>
+
+</LanguageData>

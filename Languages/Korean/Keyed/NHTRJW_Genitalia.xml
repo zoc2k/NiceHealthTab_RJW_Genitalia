@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- 모드 설정 창 -->
+  <NHTRJW_ModTitle>Nice Health Tab - RJW 생식기</NHTRJW_ModTitle>
+
+  <NHTRJW_KidHeading>아동 체형</NHTRJW_KidHeading>
+  <NHTRJW_ShowKidGenitals>아동 체형에 생식기 표시</NHTRJW_ShowKidGenitals>
+  <NHTRJW_ShowKidGenitalsDesc>아동 체형 인형을 쓰는 폰에게 이 패치의 마커(성기·가슴·유두·항문·생식선·자궁)를 그립니다. 끄면 인형의 마커만 숨겨지고, 부위 자체는 그대로 있어 부상·치료·수술은 평소대로 동작합니다.\n\n나이가 아니라 인형으로 가릅니다. 어느 폰에게 아동 체형 인형을 쓸지는 Nice Health Tab 이 정합니다(기본은 15세 미만). Nice Health Tab 설정에서 아동 인형을 끄면 아동도 성인 인형으로 그려지고, 이때는 이 설정과 상관없이 마커가 나옵니다.</NHTRJW_ShowKidGenitalsDesc>
+
+  <NHTRJW_SizeHediffHeading>크기 Hediff</NHTRJW_SizeHediffHeading>
+  <NHTRJW_HideSizeHediffLabel>단순 크기 Hediff를 인형 상태 판정에서 제외</NHTRJW_HideSizeHediffLabel>
+  <NHTRJW_HideSizeHediffDesc>RimJobWorld는 부위 크기를 항상 존재하는 Hediff로 표현합니다. 그대로 두면 멀쩡한 폰의 생식기 계열 부위가 인형에 계속 켜진 채로 남습니다. 이 옵션을 켜면 다른 장기와 똑같이, 외상·출혈·질병·결손·이식이 있을 때만 마커가 나타납니다. 크기는 오른쪽 목록에 그대로 표시되고, 크기별 텍스처 교체에도 계속 쓰입니다.\n\n변경 사항은 다른 폰을 선택했다 돌아오면 적용됩니다.</NHTRJW_HideSizeHediffDesc>
+
+  <!-- 연동 모드 현황 -->
+  <NHTRJW_Tab_General>일반</NHTRJW_Tab_General>
+  <NHTRJW_Tab_Nipples>가슴·유두</NHTRJW_Tab_Nipples>
+  <NHTRJW_Tab_Gonads>생식선</NHTRJW_Tab_Gonads>
+  <NHTRJW_NoPages>표시할 설정이 없습니다.</NHTRJW_NoPages>
+  <NHTRJW_DepsDesc>필수 모드가 없으면 이 패치는 아무것도 하지 않습니다. 선택 모드는 있으면 기능이 늘고, 없으면 그 기능만 빠집니다. 필요한 모드가 없는 항목은 선택할 수 없게 잠기며, 그 모드에서만 의미가 있는 탭은 아예 나타나지 않습니다.</NHTRJW_DepsDesc>
+  <NHTRJW_GonadsHeading>생식선</NHTRJW_GonadsHeading>
+  <NHTRJW_ShowFutaTesticles>후타나리에게 고환 표시</NHTRJW_ShowFutaTesticles>
+  <NHTRJW_ShowFutaTesticlesDesc>음경과 질을 둘 다 가진 폰에게 고환을 그립니다. 끄면 난소만 남습니다(난소는 이 설정과 무관합니다).\n\n성별이 아니라 실제로 달려 있는 부위로 판별하므로 트랜스젠더 폰도 올바르게 갈립니다. 표시만 끄는 것이라 부위 자체는 그대로 있어 부상·수술은 평소대로 동작합니다.</NHTRJW_ShowFutaTesticlesDesc>
+
+  <NHTRJW_ChestHeading>가슴</NHTRJW_ChestHeading>
+  <NHTRJW_ShowMaleChest>남자 폰에게 가슴 표시</NHTRJW_ShowMaleChest>
+  <NHTRJW_ShowMaleChestDesc>성별이 남자인 폰에게도 가슴을 그립니다. 유두는 가슴 위에 얹히는 층이라 함께 따라갑니다.\n\nRimJobWorld 는 남녀 모두에게 젖가슴 부위를 주므로, 끄지 않으면 남자 폰의 인형에도 가슴 마커가 나옵니다. 표시만 끄는 것이라 부위 자체는 그대로 있어 부상·수술은 평소대로 동작합니다.</NHTRJW_ShowMaleChestDesc>
+  <NHTRJW_DepsHeading>연동 모드</NHTRJW_DepsHeading>
+  <NHTRJW_Dep_NHT>Nice Health Tab</NHTRJW_Dep_NHT>
+  <NHTRJW_Dep_RJW>RimJobWorld</NHTRJW_Dep_RJW>
+  <NHTRJW_Dep_Menstruation>RJW Menstruation</NHTRJW_Dep_Menstruation>
+  <NHTRJW_Dep_SizedApparel>Sized Apparel</NHTRJW_Dep_SizedApparel>
+  <NHTRJW_Dep_Balls>RJW Gonadz Reloaded</NHTRJW_Dep_Balls>
+  <NHTRJW_Dep_Fluids>RJW Menstruation - Fluids</NHTRJW_Dep_Fluids>
+
+  <!-- 연동 모드 툴팁 — 그 모드가 이 패치에 무엇을 더하는가 -->
+  <NHTRJW_DepTip_NHT>이 패치가 그림을 얹는 곳입니다.\n\n· 신체 인형과 장기 보기에 성기·가슴·항문·생식선 마커\n· 인형 부위를 누르면 뜨는 수술 메뉴\n· 손·발 버튼 옆의 RJW 부위 패널\n\n없으면 이 패치는 아무것도 하지 않습니다.</NHTRJW_DepTip_NHT>
+  <NHTRJW_DepTip_RJW>표시할 부위와 그 크기를 줍니다.\n\n· 음경·질·외음부·가슴·유두·항문 마커와 크기별 그림\n· 자궁 그림과 임신 단계(착상 · 태아)\n\n없으면 이 패치는 아무것도 하지 않습니다.</NHTRJW_DepTip_RJW>
+  <NHTRJW_DepTip_Menstruation>자궁 안의 상태와 유두의 개체차를 줍니다.\n\n· 자궁 안 액체량(정액·월경혈)을 6단계로 표시\n· 액체 색 — 월경혈이 섞이면 붉어집니다\n· 유륜 색소 침착 — 폰마다 다른 유두 짙기, 임신·수유로 짙어짐\n\n없으면 액체 층이 나오지 않고 자궁은 빈 모습으로 그려집니다.</NHTRJW_DepTip_Menstruation>
+  <NHTRJW_DepTip_Fluids>자궁 팽창을 줍니다.\n\n· 질 팽창 상태를 부푼 자궁 그림 5단계로 표시\n\n없으면 팽창 그림이 나오지 않습니다. 자궁 안 액체량은 RJW Menstruation 이 따로 담당합니다.</NHTRJW_DepTip_Fluids>
+  <NHTRJW_DepTip_SizedApparel>유두 모양의 변형을 줍니다.\n\n· 함몰 유두인 폰에게 전용 그림\n\n없으면 모두 기본 유두로 그려집니다.</NHTRJW_DepTip_SizedApparel>
+  <NHTRJW_DepTip_Balls>실제 고환·난소를 줍니다. RJW Gonadz Reloaded 와 구형 RJW Now with balls! 중 아무거나 있으면 됩니다.\n\n· 고환·난소 마커를 폰이 가진 크기대로 표시\n· 생식샘 부위 이름 번역\n· 적출 수술을 고환 적출 / 난소 적출로 나눠 제공\n· Gonadz Reloaded 와 함께라면 — 생식선을 그 모드가 Def 에 적어 둔 표식으로 가리므로, 다른 모드가 더한 생식선도 그려지고 몸 안에 있는 고환은 살갗에 그려지지 않습니다\n\n없어도 인형은 비지 않습니다 — 질이 있으면 기준 난소 그림을, 음경이 있으면 음경 크기에 맞춘 고환 그림을 그립니다.</NHTRJW_DepTip_Balls>
+  <NHTRJW_DepFound>사용 중</NHTRJW_DepFound>
+  <NHTRJW_DepMissing>없음</NHTRJW_DepMissing>
+  <NHTRJW_DepRequired>필수</NHTRJW_DepRequired>
+  <NHTRJW_DepOptional>선택</NHTRJW_DepOptional>
+  <NHTRJW_NeedsMod>{0} 필요</NHTRJW_NeedsMod>
+  <NHTRJW_NeedsModDesc>이 항목은 {0} 이(가) 있어야 동작합니다. 해당 모드가 없어 선택할 수 없습니다.</NHTRJW_NeedsModDesc>
+
+  <!-- 유두 -->
+  <NHTRJW_NippleHeading>유두</NHTRJW_NippleHeading>
+  <NHTRJW_NippleDesc>유두는 젖가슴 위에 얹히는 별도 레이어라, 색과 모양을 건강 상태와 따로 정할 수 있습니다. 항목마다 필요한 모드가 다르며, 없는 모드에 기대는 항목은 선택할 수 없습니다. 끈 항목의 설정값은 그대로 남으므로 해당 모드를 다시 넣으면 살아납니다.</NHTRJW_NippleDesc>
+
+  <NHTRJW_ShowNipples>유두 표시</NHTRJW_ShowNipples>
+  <NHTRJW_ShowNipplesDesc>신체 UI 에 유두를 그립니다. 끄면 젖가슴만 보입니다.\n장기·골격 보기와 방어구 보기에는 원래 표시되지 않습니다.</NHTRJW_ShowNipplesDesc>
+
+  <NHTRJW_UseSkinColor>피부색 반영</NHTRJW_UseSkinColor>
+  <NHTRJW_UseSkinColorDesc>폰의 피부색과 기준색을 섞어 유두의 바탕색을 정합니다. 끄면 피부색과 무관하게 기준색 하나로 그립니다.\n\n기준색은 Sized Apparel 계열 유두 텍스처에서 실측한 값입니다.</NHTRJW_UseSkinColorDesc>
+
+  <NHTRJW_UsePigmentation>유륜 색소 침착 반영</NHTRJW_UsePigmentation>
+  <NHTRJW_UsePigmentationDesc>바탕색에서 폰마다 다른 짙기만큼 유두를 짙게 합니다. 개체차가 있고 임신·수유로 더 짙어집니다. 끄면 모든 폰이 바탕색 그대로입니다.\n\n이 값은 RJW Menstruation 이 폰별로 들고 있는 것입니다.</NHTRJW_UsePigmentationDesc>
+
+  <NHTRJW_UseInvertedNipple>함몰 유두 표시</NHTRJW_UseInvertedNipple>
+  <NHTRJW_UseInvertedNippleDesc>함몰 유두인 폰에게 전용 그림을 씁니다. 끄면 모두 기본 유두로 그립니다.\n\n함몰 여부는 Sized Apparel 이 부위마다 정해 두는 값입니다.</NHTRJW_UseInvertedNippleDesc>
+
+  <NHTRJW_Monochrome>흑백으로 표시</NHTRJW_Monochrome>
+  <NHTRJW_MonochromeDesc>정해진 색을 명도만 남겨 흑백으로 그립니다. 인형이 Nice Health Tab 특유의 무채색을 유지하면서도 밝고 어두운 차이는 남습니다.</NHTRJW_MonochromeDesc>
+
+  <!--
+    생식선 모드(RJW Gonadz Reloaded 또는 구형 RJW Now with balls!)가 로드되어 있을 때만
+    Source/Bootstrap.cs 가 이 값을 BodyPartDef / BodyPartGroupDef 라벨로 넣는다.
+    그 모드가 없으면 이 키는 아무 데도 쓰이지 않는다.
+
+    RJW 본체의 Genitals/Chest/Anus 는 RJW 가 이미 한국어를 제공하므로 건드리지 않는다.
+      Genitals -> 성기 / Chest -> 가슴 / Anus -> 항문
+  -->
+  <NHTRJW_GonadsLabel>생식샘</NHTRJW_GonadsLabel>
+  <NHTRJW_GonadsGroupLabel>생식샘</NHTRJW_GonadsGroupLabel>
+
+  <NHTRJW_WombWindowTip>RJW Menstruation 의 자궁 창을 엽니다.\n\n그 모드가 건강 탭에 달려고 하는 버튼인데 Nice Health Tab 에서는 자리가 없어 나오지 않습니다. 그 모드 설정의 "건강탭에 버튼 추가" 가 켜져 있을 때 여기에 대신 나옵니다.</NHTRJW_WombWindowTip>
+  <NHTRJW_PanelTip>RJW 신체 부위</NHTRJW_PanelTip>
+  <NHTRJW_PanelHeading>RJW 부위 패널</NHTRJW_PanelHeading>
+  <NHTRJW_LendHeading>다른 모드가 만든 인형</NHTRJW_LendHeading>
+  <NHTRJW_LendParts>다른 모드가 만든 인형에 RJW 부위를 그린다</NHTRJW_LendParts>
+  <NHTRJW_LendPartsDesc>어떤 모드는 게임이 도는 중에 그 종족만의 인형을 따로 만듭니다 — Nice Health Tab - Anatomy Editor 가 종족 프로필로 그렇게 합니다. 그런 인형이 Nice Health Tab 자신의 인형을 바탕으로 만들어졌으면, 이 모드가 RJW 부위를 빌려주어 거기에도 함께 나오게 합니다.\n\n끄면 그 인형은 만든 모드가 그리는 그대로 둡니다. 이미 한 번 빌려준 인형은 게임을 다시 켤 때까지 그대로입니다.</NHTRJW_LendPartsDesc>
+  <NHTRJW_ShowPanel>RJW 부위 패널 표시</NHTRJW_ShowPanel>
+  <NHTRJW_ShowPanelDesc>인형 칸 오른쪽 아래, 손·발 버튼 위에 버튼을 하나 놓습니다. 누르면 손·발 판처럼 인형 위에 판이 열려 생식기를 크게 보여 주고, 항문과 배란·수정·착상 상태를 따로 보여 줍니다. 다시 누르면 닫힙니다.\n\n배란·수정·착상은 RJW Menstruation 이 있어야 나옵니다.</NHTRJW_ShowPanelDesc>
+</LanguageData>

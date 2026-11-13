@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- Окно настроек мода -->
+  <NHTRJW_ModTitle>Nice Health Tab - RJW Гениталии</NHTRJW_ModTitle>
+
+  <NHTRJW_KidHeading>Детское телосложение</NHTRJW_KidHeading>
+  <NHTRJW_ShowKidGenitals>Показывать гениталии на детском телосложении</NHTRJW_ShowKidGenitals>
+  <NHTRJW_ShowKidGenitalsDesc>Рисовать метки этого мода (гениталии, грудь, соски, анус, половые железы, матка) у пешек, которым достаётся детская кукла. Если выключить, скрываются только метки на кукле — сами части тела остаются, поэтому ранения, лечение и операции работают как обычно.\n\nРешает кукла, а не возраст. Кому достанется детская кукла, определяет Nice Health Tab (по умолчанию — младше 15 лет). Если отключить детскую куклу в настройках Nice Health Tab, дети рисуются взрослыми куклами, и тогда метки показываются независимо от этой настройки.</NHTRJW_ShowKidGenitalsDesc>
+
+  <NHTRJW_SizeHediffHeading>Хедиффы размера</NHTRJW_SizeHediffHeading>
+  <NHTRJW_HideSizeHediffLabel>Не учитывать на кукле хедиффы, задающие только размер</NHTRJW_HideSizeHediffLabel>
+  <NHTRJW_HideSizeHediffDesc>RimJobWorld хранит размер части тела как постоянно присутствующий хедифф, из-за чего эти части навсегда остаются подсвеченными на кукле. С этой настройкой они ведут себя как любой другой орган: метка появляется только при ранении, кровотечении, болезни, утрате части или импланте. Размеры по-прежнему видны в списке справа и по-прежнему определяют выбор текстур по размеру.\n\nИзменение вступает в силу после того, как вы выберете другую пешку и вернётесь обратно.</NHTRJW_HideSizeHediffDesc>
+
+  <!-- Состояние связанных модов -->
+  <NHTRJW_Tab_General>Общее</NHTRJW_Tab_General>
+  <NHTRJW_Tab_Nipples>Грудь и соски</NHTRJW_Tab_Nipples>
+  <NHTRJW_Tab_Gonads>Половые железы</NHTRJW_Tab_Gonads>
+  <NHTRJW_NoPages>Нет настроек для показа.</NHTRJW_NoPages>
+  <NHTRJW_DepsDesc>Без обязательных модов этот мод ничего не делает. Необязательные моды добавляют возможности; без них отсутствуют только эти возможности. Опции, которым нужен отсутствующий мод, заблокированы, а вкладка, имеющая смысл лишь с определённым модом, вовсе не появляется.</NHTRJW_DepsDesc>
+  <NHTRJW_GonadsHeading>Половые железы</NHTRJW_GonadsHeading>
+  <NHTRJW_ShowFutaTesticles>Показывать яички у футанари</NHTRJW_ShowFutaTesticles>
+  <NHTRJW_ShowFutaTesticlesDesc>Рисовать яички у пешек, у которых есть и пенис, и влагалище. Выключите, чтобы остались только яичники (на яичники эта настройка не влияет).\n\nУчитываются части тела, которые у пешки есть на самом деле, а не пол, поэтому трансгендерные пешки обрабатываются правильно. Скрывается только метка — часть тела остаётся, ранения и операции работают как обычно.</NHTRJW_ShowFutaTesticlesDesc>
+
+  <NHTRJW_ChestHeading>Грудь</NHTRJW_ChestHeading>
+  <NHTRJW_ShowMaleChest>Показывать грудь у мужских пешек</NHTRJW_ShowMaleChest>
+  <NHTRJW_ShowMaleChestDesc>Рисовать грудь у пешек мужского пола. Соски лежат поверх груди и следуют за ней.\n\nRimJobWorld выдаёт грудь каждой пешке, поэтому без этой настройки метка появляется и у мужских пешек. Скрывается только метка — часть тела остаётся, ранения и операции работают как обычно.</NHTRJW_ShowMaleChestDesc>
+  <NHTRJW_DepsHeading>Связанные моды</NHTRJW_DepsHeading>
+  <NHTRJW_Dep_NHT>Nice Health Tab</NHTRJW_Dep_NHT>
+  <NHTRJW_Dep_RJW>RimJobWorld</NHTRJW_Dep_RJW>
+  <NHTRJW_Dep_Menstruation>RJW Menstruation</NHTRJW_Dep_Menstruation>
+  <NHTRJW_Dep_SizedApparel>Sized Apparel</NHTRJW_Dep_SizedApparel>
+  <NHTRJW_Dep_Balls>RJW Gonadz Reloaded</NHTRJW_Dep_Balls>
+  <NHTRJW_Dep_Fluids>RJW Menstruation - Fluids</NHTRJW_Dep_Fluids>
+
+  <!-- Подсказки о связанных модах — что каждый из них даёт этому моду -->
+  <NHTRJW_DepTip_NHT>То, поверх чего этот мод рисует.\n\n· Метки гениталий, груди, ануса и половых желёз в видах тела и органов\n· Меню операций, открывающееся по щелчку на части куклы\n· Панель частей RJW рядом с кнопками рук и ног\n\nБез него этот мод ничего не делает.</NHTRJW_DepTip_NHT>
+  <NHTRJW_DepTip_RJW>Даёт сами части тела и их размеры.\n\n· Метки пениса, влагалища, вульвы, груди, сосков и ануса с рисунками по размеру\n· Матка и стадии беременности (имплантация, плод)\n\nБез него этот мод ничего не делает.</NHTRJW_DepTip_RJW>
+  <NHTRJW_DepTip_Menstruation>Даёт содержимое матки и различия сосков между пешками.\n\n· Количество жидкости в матке (сперма, менструальная кровь) в 6 стадиях\n· Цвет жидкости — краснеет, когда примешивается менструальная кровь\n· Пигментация ареол — оттенок сосков у каждой пешки свой и темнеет при беременности и кормлении\n\nБез него слой жидкости не рисуется и матка выглядит пустой.</NHTRJW_DepTip_Menstruation>
+  <NHTRJW_DepTip_Fluids>Даёт раздувание матки.\n\n· Вагинальное переполнение спермой показывается раздутой маткой в 5 стадиях\n\nБез него рисунок раздувания не появляется. Количество жидкости в матке даёт отдельно RJW Menstruation.</NHTRJW_DepTip_Fluids>
+  <NHTRJW_DepTip_SizedApparel>Даёт варианты формы сосков.\n\n· Отдельный рисунок для втянутых сосков\n\nБез него все пешки получают обычный сосок.</NHTRJW_DepTip_SizedApparel>
+  <NHTRJW_DepTip_Balls>Даёт настоящие яички и яичники. Подойдёт либо RJW Gonadz Reloaded, либо более старый RJW Now with balls!\n\n· Метки яичек и яичников того размера, какой у пешки есть на самом деле\n· Перевод названия части тела «половые железы»\n· Удаление половых желёз разделено на удаление яичек и удаление яичников\n· С Gonadz Reloaded — половые железы определяются по пометке, которую он ставит в своих Def, поэтому рисуются и железы, добавленные другими модами, а яички внутри тела не рисуются на коже\n\nБез него кукла не остаётся пустой: при наличии влагалища рисуется эталонный рисунок яичников, при наличии пениса — яички под размер пениса.</NHTRJW_DepTip_Balls>
+  <NHTRJW_DepFound>активен</NHTRJW_DepFound>
+  <NHTRJW_DepMissing>не найден</NHTRJW_DepMissing>
+  <NHTRJW_DepRequired>обязательный</NHTRJW_DepRequired>
+  <NHTRJW_DepOptional>необязательный</NHTRJW_DepOptional>
+  <NHTRJW_NeedsMod>нужен {0}</NHTRJW_NeedsMod>
+  <NHTRJW_NeedsModDesc>Для этой опции нужен {0}. Выбрать её нельзя, потому что этот мод не активен.</NHTRJW_NeedsModDesc>
+
+  <!-- Соски -->
+  <NHTRJW_NippleHeading>Соски</NHTRJW_NippleHeading>
+  <NHTRJW_NippleDesc>Соски рисуются отдельным слоем поверх груди, поэтому их цвет и форма задаются независимо от состояния здоровья. Каждой опции нужен свой мод; опции, зависящие от отсутствующего мода, выбрать нельзя. Сохранённые значения остаются, так что при установке мода позже они вернутся.</NHTRJW_NippleDesc>
+
+  <NHTRJW_ShowNipples>Показывать соски</NHTRJW_ShowNipples>
+  <NHTRJW_ShowNipplesDesc>Рисовать соски в виде тела. Выключите, чтобы показывалась только грудь.\nВ видах органов, костей и брони они не появляются вовсе.</NHTRJW_ShowNipplesDesc>
+
+  <NHTRJW_UseSkinColor>Учитывать цвет кожи</NHTRJW_UseSkinColor>
+  <NHTRJW_UseSkinColorDesc>Смешивать цвет кожи пешки с эталонным цветом, чтобы получить основной цвет соска. Выключите, чтобы использовать эталонный цвет как есть, независимо от кожи.\n\nЭталонный цвет снят с текстур сосков Sized Apparel.</NHTRJW_UseSkinColorDesc>
+
+  <NHTRJW_UsePigmentation>Учитывать пигментацию ареол</NHTRJW_UsePigmentation>
+  <NHTRJW_UsePigmentationDesc>Затемнять основной цвет на величину собственной пигментации пешки. Она различается у разных пешек и усиливается при беременности и кормлении. Если выключить, все пешки сохраняют основной цвет.\n\nЭто значение для каждой пешки хранит RJW Menstruation.</NHTRJW_UsePigmentationDesc>
+
+  <NHTRJW_UseInvertedNipple>Показывать втянутые соски</NHTRJW_UseInvertedNipple>
+  <NHTRJW_UseInvertedNippleDesc>Использовать отдельный рисунок для пешек с втянутыми сосками. Если выключить, все получают обычный сосок.\n\nЕсть ли они у пешки, решает Sized Apparel.</NHTRJW_UseInvertedNippleDesc>
+
+  <NHTRJW_Monochrome>Рисовать чёрно-белым</NHTRJW_Monochrome>
+  <NHTRJW_MonochromeDesc>Оставлять от выбранного цвета только яркость. Кукла остаётся монохромной, как и весь Nice Health Tab, но более светлые и более тёмные соски по-прежнему различимы.</NHTRJW_MonochromeDesc>
+
+  <!--
+    Source/Bootstrap.cs записывает эти значения в метки BodyPartDef / BodyPartGroupDef
+    только тогда, когда загружен мод половых желёз (RJW Gonadz Reloaded или более старый
+    RJW Now with balls!). Без него эти ключи нигде не используются.
+  -->
+  <NHTRJW_GonadsLabel>половые железы</NHTRJW_GonadsLabel>
+  <NHTRJW_GonadsGroupLabel>половые железы</NHTRJW_GonadsGroupLabel>
+
+  <NHTRJW_WombWindowTip>Открыть окно матки из RJW Menstruation.\n\nЭто его собственная кнопка для вкладки здоровья, которой Nice Health Tab не оставляет места; она показывается здесь, пока в настройках того мода включено «Добавить кнопку на вкладку здоровья».</NHTRJW_WombWindowTip>
+  <NHTRJW_PanelTip>Части тела RJW</NHTRJW_PanelTip>
+  <NHTRJW_PanelHeading>Панель частей RJW</NHTRJW_PanelHeading>
+  <NHTRJW_LendHeading>Куклы из других модов</NHTRJW_LendHeading>
+  <NHTRJW_LendParts>Рисовать части RJW на куклах, собранных другими модами</NHTRJW_LendParts>
+  <NHTRJW_LendPartsDesc>Некоторые моды собирают собственную куклу для расы прямо во время игры — так делает Nice Health Tab - Anatomy Editor для своих расовых профилей. Если такая кукла собрана на основе одной из кукол Nice Health Tab, этот мод одалживает ей части RJW, чтобы они показывались и там.\n\nВыключите, чтобы такие куклы остались ровно такими, какими их рисует собравший их мод. Уже отрисованная кукла сохраняет части до перезапуска игры.</NHTRJW_LendPartsDesc>
+  <NHTRJW_ShowPanel>Показывать панель частей RJW</NHTRJW_ShowPanel>
+  <NHTRJW_ShowPanelDesc>Добавляет кнопку в правом нижнем углу куклы, над кнопками рук и ног. Нажатие открывает поверх куклы панель — как панели рук и ног — которая показывает гениталии крупно, а также анус и состояние овуляции / оплодотворения / имплантации. Нажмите ещё раз, чтобы закрыть.\n\nДля овуляции, оплодотворения и имплантации нужен RJW Menstruation.</NHTRJW_ShowPanelDesc>
+</LanguageData>

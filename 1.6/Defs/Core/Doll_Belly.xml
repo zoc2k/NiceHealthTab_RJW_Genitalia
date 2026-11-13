@@ -28,6 +28,7 @@
     </notifyPosition>
     <showArmorCover>false</showArmorCover>
     <visibleByDefault>true</visibleByDefault>
+    <onlyBadHediffs>false</onlyBadHediffs>
     <bondageScale>1.00</bondageScale>
     <width>1.00</width>
     <height>1.00</height>
@@ -53,6 +54,7 @@
     </notifyPosition>
     <showArmorCover>false</showArmorCover>
     <visibleByDefault>true</visibleByDefault>
+    <onlyBadHediffs>false</onlyBadHediffs>
     <bondageScale>1.00</bondageScale>
     <width>1.00</width>
     <height>1.00</height>
@@ -78,6 +80,7 @@
     </notifyPosition>
     <showArmorCover>false</showArmorCover>
     <visibleByDefault>true</visibleByDefault>
+    <onlyBadHediffs>false</onlyBadHediffs>
     <bondageScale>1.00</bondageScale>
     <width>1.00</width>
     <height>1.00</height>
@@ -103,6 +106,7 @@
     </notifyPosition>
     <showArmorCover>false</showArmorCover>
     <visibleByDefault>true</visibleByDefault>
+    <onlyBadHediffs>false</onlyBadHediffs>
     <bondageScale>1.00</bondageScale>
     <width>1.00</width>
     <height>1.00</height>
@@ -128,6 +132,7 @@
     </notifyPosition>
     <showArmorCover>false</showArmorCover>
     <visibleByDefault>true</visibleByDefault>
+    <onlyBadHediffs>false</onlyBadHediffs>
     <bondageScale>1.00</bondageScale>
     <width>1.00</width>
     <height>1.00</height>

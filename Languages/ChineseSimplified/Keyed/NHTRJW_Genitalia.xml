@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- 模组设置窗口 -->
+  <NHTRJW_ModTitle>Nice Health Tab - RJW 生殖器官</NHTRJW_ModTitle>
+
+  <NHTRJW_KidHeading>儿童体型</NHTRJW_KidHeading>
+  <NHTRJW_ShowKidGenitals>在儿童体型上显示生殖器官</NHTRJW_ShowKidGenitals>
+  <NHTRJW_ShowKidGenitalsDesc>为使用儿童人偶的小人绘制本模组的标记（生殖器、乳房、乳头、肛门、性腺、子宫）。关闭后只隐藏人偶上的标记，部位本身仍然存在，受伤、治疗和手术一切照旧。\n\n判断依据是人偶而不是年龄。哪些小人使用儿童人偶由 Nice Health Tab 决定（默认为 15 岁以下）。若在 Nice Health Tab 的设置中关闭儿童人偶，儿童也会用成人人偶绘制，此时无论本选项如何，标记都会显示。</NHTRJW_ShowKidGenitalsDesc>
+
+  <NHTRJW_SizeHediffHeading>尺寸类 Hediff</NHTRJW_SizeHediffHeading>
+  <NHTRJW_HideSizeHediffLabel>人偶状态判定忽略单纯的尺寸 Hediff</NHTRJW_HideSizeHediffLabel>
+  <NHTRJW_HideSizeHediffDesc>RimJobWorld 用一直存在的 Hediff 来记录部位尺寸，若不处理，这些部位就会在人偶上一直亮着。开启后它们与其他器官一样：只有受伤、出血、疾病、缺失或植入时才出现标记。尺寸仍会显示在右侧列表中，也仍然决定按尺寸切换的贴图。\n\n改动在切换到别的小人再切回来之后生效。</NHTRJW_HideSizeHediffDesc>
+
+  <!-- 关联模组状态 -->
+  <NHTRJW_Tab_General>常规</NHTRJW_Tab_General>
+  <NHTRJW_Tab_Nipples>乳房与乳头</NHTRJW_Tab_Nipples>
+  <NHTRJW_Tab_Gonads>性腺</NHTRJW_Tab_Gonads>
+  <NHTRJW_NoPages>没有可显示的设置。</NHTRJW_NoPages>
+  <NHTRJW_DepsDesc>缺少必需模组时，本模组不做任何事。可选模组有则增加功能，没有也只是少了那部分功能。依赖于未安装模组的选项会被锁定，只在特定模组下才有意义的标签页则根本不会出现。</NHTRJW_DepsDesc>
+  <NHTRJW_GonadsHeading>性腺</NHTRJW_GonadsHeading>
+  <NHTRJW_ShowFutaTesticles>为扶他显示睾丸</NHTRJW_ShowFutaTesticles>
+  <NHTRJW_ShowFutaTesticlesDesc>为同时拥有阴茎和阴道的小人绘制睾丸。关闭后只保留卵巢（卵巢不受本选项影响）。\n\n判断依据是小人实际拥有的部位而非性别，因此跨性别小人也能正确处理。隐藏的只是标记，部位本身仍在，受伤与手术一切照旧。</NHTRJW_ShowFutaTesticlesDesc>
+
+  <NHTRJW_ChestHeading>乳房</NHTRJW_ChestHeading>
+  <NHTRJW_ShowMaleChest>为男性小人显示乳房</NHTRJW_ShowMaleChest>
+  <NHTRJW_ShowMaleChestDesc>也为性别为男性的小人绘制乳房。乳头是叠在乳房之上的图层，会随之一起显示或隐藏。\n\nRimJobWorld 会给每个小人都加上乳房部位，因此不关闭时男性小人的人偶上也会出现乳房标记。隐藏的只是标记，部位本身仍在，受伤与手术一切照旧。</NHTRJW_ShowMaleChestDesc>
+  <NHTRJW_DepsHeading>关联模组</NHTRJW_DepsHeading>
+  <NHTRJW_Dep_NHT>Nice Health Tab</NHTRJW_Dep_NHT>
+  <NHTRJW_Dep_RJW>RimJobWorld</NHTRJW_Dep_RJW>
+  <NHTRJW_Dep_Menstruation>RJW Menstruation</NHTRJW_Dep_Menstruation>
+  <NHTRJW_Dep_SizedApparel>Sized Apparel</NHTRJW_Dep_SizedApparel>
+  <NHTRJW_Dep_Balls>RJW Gonadz Reloaded</NHTRJW_Dep_Balls>
+  <NHTRJW_Dep_Fluids>RJW Menstruation - Fluids</NHTRJW_Dep_Fluids>
+
+  <!-- 关联模组提示 — 该模组为本模组带来什么 -->
+  <NHTRJW_DepTip_NHT>本模组作画的地方。\n\n· 在身体视图和器官视图上绘制生殖器、乳房、肛门与性腺的标记\n· 点击人偶部位时弹出的手术菜单\n· 手脚按钮旁的 RJW 部位面板\n\n没有它，本模组不做任何事。</NHTRJW_DepTip_NHT>
+  <NHTRJW_DepTip_RJW>提供要显示的部位及其尺寸。\n\n· 阴茎、阴道、外阴、乳房、乳头与肛门的标记，以及按尺寸区分的图像\n· 子宫图像与妊娠阶段（着床、胎儿）\n\n没有它，本模组不做任何事。</NHTRJW_DepTip_RJW>
+  <NHTRJW_DepTip_Menstruation>提供子宫内部的状态和乳头的个体差异。\n\n· 以 6 个阶段显示子宫内的液体量（精液、经血）\n· 液体颜色 — 混入经血时会变红\n· 乳晕色素沉着 — 每个小人深浅不同，并随妊娠与哺乳加深\n\n没有它则不绘制液体图层，子宫看起来是空的。</NHTRJW_DepTip_Menstruation>
+  <NHTRJW_DepTip_Fluids>提供子宫膨胀。\n\n· 以 5 个阶段的鼓胀子宫图像显示阴道灌注膨胀\n\n没有它则不绘制膨胀图像。子宫内的液体量由 RJW Menstruation 另行提供。</NHTRJW_DepTip_Fluids>
+  <NHTRJW_DepTip_SizedApparel>提供乳头形状的变体。\n\n· 为凹陷乳头的小人提供专用图像\n\n没有它则所有小人都使用默认乳头。</NHTRJW_DepTip_SizedApparel>
+  <NHTRJW_DepTip_Balls>提供真正的睾丸与卵巢。RJW Gonadz Reloaded 或较旧的 RJW Now with balls! 任选其一即可。\n\n· 按小人实际拥有的尺寸显示睾丸与卵巢标记\n· 性腺部位名称的翻译\n· 把摘除手术拆分为摘除睾丸与摘除卵巢\n· 搭配 Gonadz Reloaded 时 — 性腺依该模组写在 Def 上的标记来识别，因此其他模组添加的性腺也会被绘制，而位于体内的睾丸不会画在皮肤上\n\n即使没有它，人偶也不会是空的 — 有阴道就画一张基准卵巢图，有阴茎则画一张与阴茎尺寸相配的睾丸图。</NHTRJW_DepTip_Balls>
+  <NHTRJW_DepFound>已启用</NHTRJW_DepFound>
+  <NHTRJW_DepMissing>未找到</NHTRJW_DepMissing>
+  <NHTRJW_DepRequired>必需</NHTRJW_DepRequired>
+  <NHTRJW_DepOptional>可选</NHTRJW_DepOptional>
+  <NHTRJW_NeedsMod>需要 {0}</NHTRJW_NeedsMod>
+  <NHTRJW_NeedsModDesc>此选项需要 {0}。该模组未启用，因此无法选择。</NHTRJW_NeedsModDesc>
+
+  <!-- 乳头 -->
+  <NHTRJW_NippleHeading>乳头</NHTRJW_NippleHeading>
+  <NHTRJW_NippleDesc>乳头是叠在乳房之上的独立图层，因此颜色和形状可以与健康状态分开决定。各选项所需的模组不同，依赖于未安装模组的选项无法选择。已保存的设定值会保留，之后补装该模组即可恢复。</NHTRJW_NippleDesc>
+
+  <NHTRJW_ShowNipples>显示乳头</NHTRJW_ShowNipples>
+  <NHTRJW_ShowNipplesDesc>在身体视图中绘制乳头。关闭后只显示乳房。\n器官视图、骨骼视图和护甲视图本来就不会显示。</NHTRJW_ShowNipplesDesc>
+
+  <NHTRJW_UseSkinColor>跟随肤色</NHTRJW_UseSkinColor>
+  <NHTRJW_UseSkinColorDesc>把小人的肤色与基准色混合，作为乳头的底色。关闭后不论肤色如何，都直接使用基准色。\n\n基准色取自 Sized Apparel 的乳头贴图实测值。</NHTRJW_UseSkinColorDesc>
+
+  <NHTRJW_UsePigmentation>跟随乳晕色素沉着</NHTRJW_UsePigmentation>
+  <NHTRJW_UsePigmentationDesc>按每个小人各自的深浅加深底色。各小人之间有差异，并随妊娠与哺乳进一步加深。关闭后所有小人都保持底色。\n\n这一按小人记录的数值来自 RJW Menstruation。</NHTRJW_UsePigmentationDesc>
+
+  <NHTRJW_UseInvertedNipple>显示凹陷乳头</NHTRJW_UseInvertedNipple>
+  <NHTRJW_UseInvertedNippleDesc>为凹陷乳头的小人使用专用图像。关闭后所有小人都使用默认乳头。\n\n是否凹陷由 Sized Apparel 决定。</NHTRJW_UseInvertedNippleDesc>
+
+  <NHTRJW_Monochrome>以黑白绘制</NHTRJW_Monochrome>
+  <NHTRJW_MonochromeDesc>只保留既定颜色的明度。人偶保持 Nice Health Tab 一贯的无彩色，同时仍能分辨出较亮与较暗的乳头。</NHTRJW_MonochromeDesc>
+
+  <!--
+    只有在性腺模组（RJW Gonadz Reloaded 或较旧的 RJW Now with balls!）被加载时，
+    Source/Bootstrap.cs 才会把这两个值写入 BodyPartDef / BodyPartGroupDef 的标签。
+    没有该模组时，这两个键不会被使用。
+  -->
+  <NHTRJW_GonadsLabel>性腺</NHTRJW_GonadsLabel>
+  <NHTRJW_GonadsGroupLabel>性腺</NHTRJW_GonadsGroupLabel>
+
+  <NHTRJW_WombWindowTip>打开 RJW Menstruation 的子宫窗口。\n\n这原本是该模组想加在健康标签页上的按钮，但 Nice Health Tab 没有给它留位置。当该模组设置中的「在健康标签页添加按钮」开启时，就改为显示在这里。</NHTRJW_WombWindowTip>
+  <NHTRJW_PanelTip>RJW 身体部位</NHTRJW_PanelTip>
+  <NHTRJW_PanelHeading>RJW 部位面板</NHTRJW_PanelHeading>
+  <NHTRJW_LendHeading>其他模组制作的人偶</NHTRJW_LendHeading>
+  <NHTRJW_LendParts>在其他模组制作的人偶上也绘制 RJW 部位</NHTRJW_LendParts>
+  <NHTRJW_LendPartsDesc>有些模组会在游戏运行时为某个种族自行搭建人偶 — Nice Health Tab - Anatomy Editor 的种族配置就是如此。当这样的人偶以 Nice Health Tab 自带的人偶为基础时，本模组会把 RJW 部位借给它，让这些部位也显示出来。\n\n关闭后，那些人偶将完全按制作它们的模组所绘制的样子显示。已经借出过部位的人偶会保持原样，直到重启游戏。</NHTRJW_LendPartsDesc>
+  <NHTRJW_ShowPanel>显示 RJW 部位面板</NHTRJW_ShowPanel>
+  <NHTRJW_ShowPanelDesc>在人偶右下方、手脚按钮的上面放置一个按钮。按下后会像手脚面板那样在人偶上方打开一个面板，放大显示生殖器，并一并显示肛门与排卵／受精／着床的状态。再按一次关闭。\n\n排卵、受精与着床的显示需要 RJW Menstruation。</NHTRJW_ShowPanelDesc>
+</LanguageData>

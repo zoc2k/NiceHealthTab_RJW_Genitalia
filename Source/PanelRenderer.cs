@@ -86,6 +86,14 @@ namespace NHTRJWGenitalia
         /// </summary>
         private static readonly Rect AnusWindowPx = new Rect(256f, 404f, 56f, 71f);
 
+        /// <summary>
+        /// RJW Menstruation's womb window button, one slot above the anus window - the three
+        /// slots on that edge are evenly spaced (317 / 404 / 491, user's layout). Drawn whether
+        /// the panel is open or not, while that mod's own "Enable button in health tab" is on
+        /// (MenstruationReader.TryWombButton).
+        /// </summary>
+        private static readonly Rect WombIconPx = new Rect(256f, 317f, 56f, 71f);
+
         /// <summary>Whether the panel is drawing parts. While it is, the main doll's anus window
         /// is not drawn separately.</summary>
         internal static bool Drawing;
@@ -204,6 +212,16 @@ namespace NHTRJWGenitalia
         private static MethodInfo drawPartMethod;
         private static object panelDoll;
         private static Color bgColor = new Color(0.118f, 0.129f, 0.141f);
+
+        /// <summary>The panel's own window frame - a white line at low opacity.</summary>
+        private static readonly Color FrameFaint = new Color(1f, 1f, 1f, 0.28f);
+
+        /// <summary>
+        /// The womb button's frame. Black, as asked for: that button carries another mod's
+        /// picture rather than our own art, and a black edge sets it apart from the panel's own
+        /// windows and reads like the doll's outline.
+        /// </summary>
+        private static readonly Color FrameBlack = new Color(0f, 0f, 0f, 1f);
 
         /// <summary>The widget the panel is currently open on. There can be several widgets, so we
         /// hold the instance.</summary>
@@ -666,7 +684,20 @@ namespace NHTRJWGenitalia
             if (handsOpen)
             {
                 openFor = null;
+            }
 
+            if (ReferenceEquals(openFor, __instance))
+            {
+                DrawPanel(ctx, PanelOf(dollRect), ButtonOf(dollRect));
+            }
+
+            // The womb window button stands on its own, like the anus window: it is there whether
+            // the panel is open or not. Drawn after the panel so an open panel cannot cover it,
+            // and above the hand and foot band, which only reaches the bottom quarter.
+            DrawWombButton(ctx, FromTemplate(dollRect, WombIconPx));
+
+            if (handsOpen)
+            {
                 // NHT's hand and foot panel (DollWidget.DrawOverlay) is an opaque band covering
                 // the bottom 25% of the doll column. We draw **after** it (a postfix), so left
                 // alone our button would sit on top of that panel. When the panel covers the
@@ -679,11 +710,6 @@ namespace NHTRJWGenitalia
                 {
                     return;
                 }
-            }
-
-            if (ReferenceEquals(openFor, __instance))
-            {
-                DrawPanel(ctx, PanelOf(dollRect), ButtonOf(dollRect));
             }
             DrawButton(__instance, ctx, ButtonOf(dollRect));
         }
@@ -845,6 +871,53 @@ namespace NHTRJWGenitalia
                 // When the hand and foot strip is open, NHT closes it itself once the mouse
                 // leaves. All we have to do is stand back while theirs is open.
                 openFor = open ? null : widget;
+            }
+        }
+
+        /// <summary>
+        /// RJW Menstruation's womb window button, in the panel.
+        ///
+        /// That mod can put a button on the health card that opens its womb window, but with Nice
+        /// Health Tab the vanilla card it hangs on is never drawn, so the option does nothing.
+        /// While the option is on we show their womb picture here instead and open the same
+        /// window on a click. It does not belong to our panel - like the anus window it is there
+        /// whenever the doll is. Nothing is drawn when the option is off, the mod is missing or
+        /// the pawn has no cycle (MenstruationReader.TryWombButton).
+        /// </summary>
+        private static void DrawWombButton(object ctx, Rect rect)
+        {
+            Pawn pawn = (pawnField == null) ? null : pawnField.GetValue(ctx) as Pawn;
+            Texture2D icon;
+            object comp;
+            if (!MenstruationReader.TryWombButton(pawn, out icon, out comp))
+            {
+                return;
+            }
+            // A window of its own, like the anus one: the panel's own background colour and the
+            // same thin frame, so the slot reads as part of the column rather than a loose icon.
+            Color before = GUI.color;
+            GUI.color = Color.white;
+            Widgets.DrawBoxSolid(rect, bgColor);
+            if (Mouse.IsOver(rect) && vGradient != null)
+            {
+                GUI.color = new Color(1f, 1f, 1f, 0.15f);
+                GUI.DrawTextureWithTexCoords(
+                    new Rect(rect.x - 4f, rect.y + 3f, rect.width + 8f, rect.height),
+                    vGradient, new Rect(0f, 0.5f, 1f, -0.5f));
+                GUI.color = Color.white;
+            }
+            // Their picture is square; the slot is taller than it is wide, so it is fitted
+            // rather than stretched.
+            float side = Mathf.Min(rect.width, rect.height);
+            Rect icoRect = new Rect(rect.x + (rect.width - side) * 0.5f,
+                                    rect.y + (rect.height - side) * 0.5f, side, side);
+            GUI.DrawTexture(icoRect, icon);
+            DrawFrame(rect, FrameBlack);
+            GUI.color = before;
+            TooltipHandler.TipRegion(rect, "NHTRJW_WombWindowTip".Translate());
+            if (Widgets.ButtonInvisible(rect, true))
+            {
+                MenstruationReader.ToggleWombWindow(pawn, comp);
             }
         }
 
@@ -1118,9 +1191,15 @@ namespace NHTRJWGenitalia
             }
         }
 
+        /// <summary>The window frame of the panel: a thin, barely-there white line.</summary>
         private static void DrawFrame(Rect r)
         {
-            GUI.color = new Color(1f, 1f, 1f, 0.28f);
+            DrawFrame(r, FrameFaint);
+        }
+
+        private static void DrawFrame(Rect r, Color color)
+        {
+            GUI.color = color;
             Widgets.DrawBox(r);
             GUI.color = Color.white;
         }

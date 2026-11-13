@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- MOD設定ウィンドウ -->
+  <NHTRJW_ModTitle>Nice Health Tab - RJW 生殖器</NHTRJW_ModTitle>
+
+  <NHTRJW_KidHeading>子供の体型</NHTRJW_KidHeading>
+  <NHTRJW_ShowKidGenitals>子供の体型にも生殖器を表示</NHTRJW_ShowKidGenitals>
+  <NHTRJW_ShowKidGenitalsDesc>子供用の人形が使われるポーンに、このMODのマーカー（性器・胸・乳首・肛門・生殖腺・子宮）を描きます。オフにすると人形のマーカーだけが隠れ、部位そのものは残るので負傷・治療・手術はこれまで通り動きます。\n\n判断は年齢ではなく人形です。どのポーンに子供用の人形を使うかはNice Health Tabが決めます（既定では15歳未満）。Nice Health Tabの設定で子供用の人形を切ると子供も大人の人形で描かれ、その場合はこの設定に関係なくマーカーが出ます。</NHTRJW_ShowKidGenitalsDesc>
+
+  <NHTRJW_SizeHediffHeading>サイズのHediff</NHTRJW_SizeHediffHeading>
+  <NHTRJW_HideSizeHediffLabel>単なるサイズのHediffを人形の状態判定から外す</NHTRJW_HideSizeHediffLabel>
+  <NHTRJW_HideSizeHediffDesc>RimJobWorldは部位の大きさを常に存在するHediffとして持っています。そのままだと健康なポーンでもこれらの部位が人形上で点灯したままになります。オンにすると他の臓器と同じく、外傷・出血・疾患・欠損・移植があるときだけマーカーが出ます。サイズは右の一覧にこれまで通り表示され、サイズ別のテクスチャにも使われ続けます。\n\n変更は別のポーンを選び直すと反映されます。</NHTRJW_HideSizeHediffDesc>
+
+  <!-- 連携MODの状態 -->
+  <NHTRJW_Tab_General>一般</NHTRJW_Tab_General>
+  <NHTRJW_Tab_Nipples>胸・乳首</NHTRJW_Tab_Nipples>
+  <NHTRJW_Tab_Gonads>生殖腺</NHTRJW_Tab_Gonads>
+  <NHTRJW_NoPages>表示する設定はありません。</NHTRJW_NoPages>
+  <NHTRJW_DepsDesc>必須MODがなければ、このMODは何もしません。任意MODはあれば機能が増え、なければその機能だけが欠けます。必要なMODがない項目は選べないようロックされ、そのMODでしか意味のないタブはそもそも表示されません。</NHTRJW_DepsDesc>
+  <NHTRJW_GonadsHeading>生殖腺</NHTRJW_GonadsHeading>
+  <NHTRJW_ShowFutaTesticles>ふたなりに睾丸を表示</NHTRJW_ShowFutaTesticles>
+  <NHTRJW_ShowFutaTesticlesDesc>陰茎と膣の両方を持つポーンに睾丸を描きます。オフにすると卵巣だけが残ります（卵巣はこの設定の影響を受けません）。\n\n性別ではなく実際に付いている部位で判断するので、トランスジェンダーのポーンも正しく扱われます。隠れるのはマーカーだけで、部位そのものは残るため負傷・手術はこれまで通りです。</NHTRJW_ShowFutaTesticlesDesc>
+
+  <NHTRJW_ChestHeading>胸</NHTRJW_ChestHeading>
+  <NHTRJW_ShowMaleChest>男性のポーンにも胸を表示</NHTRJW_ShowMaleChest>
+  <NHTRJW_ShowMaleChestDesc>性別が男性のポーンにも胸を描きます。乳首は胸の上に重なる層なので一緒に従います。\n\nRimJobWorldはすべてのポーンに乳房の部位を与えるため、オフにしないと男性の人形にも胸のマーカーが出ます。隠れるのはマーカーだけで、部位そのものは残るため負傷・手術はこれまで通りです。</NHTRJW_ShowMaleChestDesc>
+  <NHTRJW_DepsHeading>連携MOD</NHTRJW_DepsHeading>
+  <NHTRJW_Dep_NHT>Nice Health Tab</NHTRJW_Dep_NHT>
+  <NHTRJW_Dep_RJW>RimJobWorld</NHTRJW_Dep_RJW>
+  <NHTRJW_Dep_Menstruation>RJW Menstruation</NHTRJW_Dep_Menstruation>
+  <NHTRJW_Dep_SizedApparel>Sized Apparel</NHTRJW_Dep_SizedApparel>
+  <NHTRJW_Dep_Balls>RJW Gonadz Reloaded</NHTRJW_Dep_Balls>
+  <NHTRJW_Dep_Fluids>RJW Menstruation - Fluids</NHTRJW_Dep_Fluids>
+
+  <!-- 連携MODのツールチップ — そのMODがこのMODに何を足すか -->
+  <NHTRJW_DepTip_NHT>このMODが描き込む土台です。\n\n・身体表示と臓器表示に性器・胸・肛門・生殖腺のマーカー\n・人形の部位をクリックすると開く手術メニュー\n・手足のボタンの隣にあるRJW部位パネル\n\nこれがなければ、このMODは何もしません。</NHTRJW_DepTip_NHT>
+  <NHTRJW_DepTip_RJW>表示する部位とその大きさを提供します。\n\n・陰茎・膣・外陰部・乳房・乳首・肛門のマーカーとサイズ別の絵\n・子宮と妊娠の段階（着床・胎児）\n\nこれがなければ、このMODは何もしません。</NHTRJW_DepTip_RJW>
+  <NHTRJW_DepTip_Menstruation>子宮の中身と、乳首の個体差を提供します。\n\n・子宮内の液体量（精液・経血）を6段階で表示\n・液体の色 — 経血が混ざると赤くなります\n・乳輪の色素沈着 — ポーンごとに濃さが違い、妊娠・授乳で濃くなります\n\nこれがないと液体の層は描かれず、子宮は空のまま見えます。</NHTRJW_DepTip_Menstruation>
+  <NHTRJW_DepTip_Fluids>子宮の膨張を提供します。\n\n・膣内膨張を、膨らんだ子宮の絵5段階で表示\n\nこれがないと膨張の絵は描かれません。子宮内の液体量はRJW Menstruationが別に扱います。</NHTRJW_DepTip_Fluids>
+  <NHTRJW_DepTip_SizedApparel>乳首の形のバリエーションを提供します。\n\n・陥没乳首のポーンには専用の絵\n\nこれがないと全員が既定の乳首になります。</NHTRJW_DepTip_SizedApparel>
+  <NHTRJW_DepTip_Balls>実際の睾丸と卵巣を提供します。RJW Gonadz Reloadedと旧来のRJW Now with balls!のどちらでも構いません。\n\n・睾丸と卵巣のマーカーを、そのポーンが実際に持つ大きさで表示\n・生殖腺の部位名の翻訳\n・摘出手術を睾丸摘出と卵巣摘出に分けて提供\n・Gonadz Reloadedと併用時 — 生殖腺はそのMODがDefに付けた印で見分けるので、他のMODが追加した生殖腺も描かれ、体内にある睾丸は肌の上に描かれません\n\nこれがなくても人形は空にはなりません — 膣があれば基準となる卵巣の絵を、陰茎があれば陰茎の大きさに合わせた睾丸の絵を描きます。</NHTRJW_DepTip_Balls>
+  <NHTRJW_DepFound>有効</NHTRJW_DepFound>
+  <NHTRJW_DepMissing>未導入</NHTRJW_DepMissing>
+  <NHTRJW_DepRequired>必須</NHTRJW_DepRequired>
+  <NHTRJW_DepOptional>任意</NHTRJW_DepOptional>
+  <NHTRJW_NeedsMod>{0} が必要</NHTRJW_NeedsMod>
+  <NHTRJW_NeedsModDesc>この項目には {0} が必要です。そのMODが有効でないため選択できません。</NHTRJW_NeedsModDesc>
+
+  <!-- 乳首 -->
+  <NHTRJW_NippleHeading>乳首</NHTRJW_NippleHeading>
+  <NHTRJW_NippleDesc>乳首は乳房の上に重なる独立した層として描かれるため、色と形を健康状態とは別に決められます。項目ごとに必要なMODが異なり、持っていないMODに依存する項目は選べません。保存された値はそのまま残るので、後からそのMODを入れれば戻ります。</NHTRJW_NippleDesc>
+
+  <NHTRJW_ShowNipples>乳首を表示</NHTRJW_ShowNipples>
+  <NHTRJW_ShowNipplesDesc>身体表示に乳首を描きます。オフにすると乳房だけになります。\n臓器・骨格表示と防具表示には元から出ません。</NHTRJW_ShowNipplesDesc>
+
+  <NHTRJW_UseSkinColor>肌の色を反映</NHTRJW_UseSkinColor>
+  <NHTRJW_UseSkinColorDesc>ポーンの肌の色と基準色を混ぜて乳首の下地の色を決めます。オフにすると肌の色に関係なく基準色のまま描きます。\n\n基準色はSized Apparelの乳首テクスチャから実測した値です。</NHTRJW_UseSkinColorDesc>
+
+  <NHTRJW_UsePigmentation>乳輪の色素沈着を反映</NHTRJW_UsePigmentation>
+  <NHTRJW_UsePigmentationDesc>下地の色を、ポーンごとの濃さの分だけ濃くします。個体差があり、妊娠・授乳でさらに濃くなります。オフにするとすべてのポーンが下地の色のままです。\n\nこのポーンごとの値はRJW Menstruationが持っているものです。</NHTRJW_UsePigmentationDesc>
+
+  <NHTRJW_UseInvertedNipple>陥没乳首を表示</NHTRJW_UseInvertedNipple>
+  <NHTRJW_UseInvertedNippleDesc>陥没乳首のポーンに専用の絵を使います。オフにすると全員が既定の乳首になります。\n\n陥没かどうかはSized Apparelが決めています。</NHTRJW_UseInvertedNippleDesc>
+
+  <NHTRJW_Monochrome>白黒で表示</NHTRJW_Monochrome>
+  <NHTRJW_MonochromeDesc>決まった色から明度だけを残して描きます。人形はNice Health Tabらしい無彩色のままで、明暗の違いは残ります。</NHTRJW_MonochromeDesc>
+
+  <!--
+    生殖腺MOD（RJW Gonadz Reloaded、または旧来の RJW Now with balls!）が読み込まれている
+    ときだけ、Source/Bootstrap.cs がこの値を BodyPartDef / BodyPartGroupDef のラベルに
+    書き込む。そのMODがなければこのキーはどこにも使われない。
+  -->
+  <NHTRJW_GonadsLabel>生殖腺</NHTRJW_GonadsLabel>
+  <NHTRJW_GonadsGroupLabel>生殖腺</NHTRJW_GonadsGroupLabel>
+
+  <NHTRJW_WombWindowTip>RJW Menstruationの子宮ウィンドウを開きます。\n\nこれはそのMODが健康タブに付けようとするボタンですが、Nice Health Tabでは場所がなく出てきません。そのMODの設定で「健康タブにボタンを追加」が有効なあいだ、ここに代わりに表示されます。</NHTRJW_WombWindowTip>
+  <NHTRJW_PanelTip>RJWの身体部位</NHTRJW_PanelTip>
+  <NHTRJW_PanelHeading>RJW部位パネル</NHTRJW_PanelHeading>
+  <NHTRJW_LendHeading>他のMODが作る人形</NHTRJW_LendHeading>
+  <NHTRJW_LendParts>他のMODが作る人形にもRJWの部位を描く</NHTRJW_LendParts>
+  <NHTRJW_LendPartsDesc>一部のMODはゲーム中に種族ごとの人形を自前で組み立てます — Nice Health Tab - Anatomy Editorが種族プロファイルでそうしています。そうした人形がNice Health Tab自身の人形をもとに作られている場合、このMODがRJWの部位を貸し出し、そちらにも表示されるようにします。\n\nオフにすると、その人形は作ったMODが描くままになります。一度貸し出した人形はゲームを再起動するまでそのままです。</NHTRJW_LendPartsDesc>
+  <NHTRJW_ShowPanel>RJW部位パネルを表示</NHTRJW_ShowPanel>
+  <NHTRJW_ShowPanelDesc>人形の右下、手足のボタンの上にボタンを1つ置きます。押すと手足のパネルと同じように人形の上にパネルが開き、性器を拡大して見せ、肛門と排卵・受精・着床の状態も合わせて表示します。もう一度押すと閉じます。\n\n排卵・受精・着床の表示にはRJW Menstruationが必要です。</NHTRJW_ShowPanelDesc>
+</LanguageData>

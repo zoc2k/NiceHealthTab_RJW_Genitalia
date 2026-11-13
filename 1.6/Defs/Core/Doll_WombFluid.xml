@@ -28,12 +28,13 @@
     </notifyPosition>
     <showArmorCover>false</showArmorCover>
     <visibleByDefault>false</visibleByDefault>
+    <onlyBadHediffs>true</onlyBadHediffs>
     <bondageScale>1.00</bondageScale>
     <width>1.00</width>
     <height>1.00</height>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.758</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <extraLayer>0</extraLayer>
   </NiceHealthTab.DollOrgan>
@@ -54,12 +55,13 @@
     </notifyPosition>
     <showArmorCover>false</showArmorCover>
     <visibleByDefault>false</visibleByDefault>
+    <onlyBadHediffs>true</onlyBadHediffs>
     <bondageScale>1.00</bondageScale>
     <width>0.90</width>
     <height>0.90</height>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.758</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <extraLayer>0</extraLayer>
   </NiceHealthTab.DollOrgan>
@@ -80,12 +82,13 @@
     </notifyPosition>
     <showArmorCover>false</showArmorCover>
     <visibleByDefault>false</visibleByDefault>
+    <onlyBadHediffs>true</onlyBadHediffs>
     <bondageScale>1.00</bondageScale>
     <width>1.00</width>
     <height>1.00</height>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.758</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <extraLayer>0</extraLayer>
   </NiceHealthTab.DollOrgan>
@@ -106,12 +109,13 @@
     </notifyPosition>
     <showArmorCover>false</showArmorCover>
     <visibleByDefault>false</visibleByDefault>
+    <onlyBadHediffs>true</onlyBadHediffs>
     <bondageScale>1.00</bondageScale>
     <width>1.15</width>
     <height>1.15</height>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.758</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <extraLayer>0</extraLayer>
   </NiceHealthTab.DollOrgan>
@@ -132,12 +136,13 @@
     </notifyPosition>
     <showArmorCover>false</showArmorCover>
     <visibleByDefault>false</visibleByDefault>
+    <onlyBadHediffs>true</onlyBadHediffs>
     <bondageScale>1.00</bondageScale>
     <width>0.75</width>
     <height>0.75</height>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.758</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <extraLayer>0</extraLayer>
   </NiceHealthTab.DollOrgan>

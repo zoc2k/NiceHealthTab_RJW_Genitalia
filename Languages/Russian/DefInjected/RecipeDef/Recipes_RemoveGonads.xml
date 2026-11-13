@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- 1.6/Defs/BallsSurgery/Recipes_RemoveGonads.xml -->
+
+  <NHTRJW_RemoveTesticles.label>удалить яички</NHTRJW_RemoveTesticles.label>
+  <NHTRJW_RemoveTesticles.description>Кастрировать пациента, удалив яички. Яичники остаются на месте.</NHTRJW_RemoveTesticles.description>
+  <NHTRJW_RemoveTesticles.jobString>Удаление яичек.</NHTRJW_RemoveTesticles.jobString>
+
+  <NHTRJW_RemoveOvaries.label>удалить яичники</NHTRJW_RemoveOvaries.label>
+  <NHTRJW_RemoveOvaries.description>Стерилизовать пациента, удалив яичники. Яички остаются на месте.</NHTRJW_RemoveOvaries.description>
+  <NHTRJW_RemoveOvaries.jobString>Удаление яичников.</NHTRJW_RemoveOvaries.jobString>
+
+</LanguageData>

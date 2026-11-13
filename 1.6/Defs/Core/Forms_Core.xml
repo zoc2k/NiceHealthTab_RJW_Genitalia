@@ -230,8 +230,8 @@
     </position>
     <scale>1.00</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.848</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.93</x>
@@ -272,8 +272,8 @@
     </position>
     <scale>0.90</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.848</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.95</x>
@@ -314,8 +314,8 @@
     </position>
     <scale>1.00</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.848</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.94</x>
@@ -356,8 +356,8 @@
     </position>
     <scale>1.15</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.848</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.94</x>
@@ -398,8 +398,8 @@
     </position>
     <scale>0.75</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.848</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.97</x>
@@ -440,8 +440,8 @@
     </position>
     <scale>1.00</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.805</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.93</x>
@@ -480,8 +480,8 @@
     </position>
     <scale>0.90</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.805</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.95</x>
@@ -520,8 +520,8 @@
     </position>
     <scale>1.00</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.805</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.94</x>
@@ -560,8 +560,8 @@
     </position>
     <scale>1.15</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.805</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.94</x>
@@ -600,8 +600,8 @@
     </position>
     <scale>0.75</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.805</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.97</x>
@@ -640,8 +640,8 @@
     </position>
     <scale>1.00</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.805</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.93</x>
@@ -676,8 +676,8 @@
     </position>
     <scale>0.90</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.805</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.95</x>
@@ -712,8 +712,8 @@
     </position>
     <scale>1.00</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.805</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.94</x>
@@ -748,8 +748,8 @@
     </position>
     <scale>1.15</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.805</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.94</x>
@@ -784,8 +784,8 @@
     </position>
     <scale>0.75</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.805</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.97</x>
@@ -822,8 +822,8 @@
     </position>
     <scale>1.00</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.848</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.93</x>
@@ -865,8 +865,8 @@
     </position>
     <scale>0.90</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.848</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.95</x>
@@ -908,8 +908,8 @@
     </position>
     <scale>1.00</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.848</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.94</x>
@@ -951,8 +951,8 @@
     </position>
     <scale>1.15</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.848</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.94</x>
@@ -994,8 +994,8 @@
     </position>
     <scale>0.75</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.848</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.97</x>
@@ -1035,8 +1035,8 @@
     </position>
     <scale>1.00</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.758</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.93</x>
@@ -1077,8 +1077,8 @@
     </position>
     <scale>0.90</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.758</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.95</x>
@@ -1119,8 +1119,8 @@
     </position>
     <scale>1.00</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.758</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.94</x>
@@ -1161,8 +1161,8 @@
     </position>
     <scale>1.15</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.758</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.94</x>
@@ -1203,8 +1203,8 @@
     </position>
     <scale>0.75</scale>
     <hitboxScale>
-      <x>0.562</x>
-      <y>0.758</y>
+      <x>0.500</x>
+      <y>0.500</y>
     </hitboxScale>
     <panelPosition>
       <x>-0.97</x>

@@ -65,6 +65,8 @@ namespace NHTRJWGenitalia
             { "Gonadz.AutoOrganAdder", "Ballz.AutoOrganAdder" };
         private static readonly string[] OwnerCompTypeNames =
             { "Gonadz.CompGonadOriginalOwner", "Ballz.CompGonadOriginalOwner" };
+        private static readonly string[] ItemTableTypeNames =
+            { "Gonadz.GonadItems", "Ballz.GonadItems" };
         private const string HarvestRecipeName = "HarvestGonads";
         private const string NeuteredHediffName = "Neutered";
         private const string GonadsGroupName = "GonadsBPG";
@@ -85,6 +87,7 @@ namespace NHTRJWGenitalia
         private static FieldInfo fOvaries;
         private static string[] sizeNames;
         private static MethodInfo removeTesticleGear;
+        private static MethodInfo itemForMethod;
         private static Type ownerCompType;
         private static FieldInfo fOwnerName;
         private static FieldInfo fOwnerGender;
@@ -146,6 +149,17 @@ namespace NHTRJWGenitalia
                 ? null
                 : AccessTools.Method(adder, "RemoveTesticleGear", new[] { typeof(Pawn) });
 
+            // Which item a harvested organ drops. Gonadz Reloaded keeps that in a table of its
+            // own (the item def says which hediff and which size it is) and 1.4.4 renamed the
+            // size names it shows - "Tiny" became "Small", "Ginormous" became "Titanic" - while
+            // the item defNames kept the old ones. Building the name ourselves would now miss,
+            // so we ask their table first and only fall back to the name.
+            Type itemTable = FirstType(ItemTableTypeNames);
+            itemForMethod = (itemTable == null)
+                ? null
+                : AccessTools.Method(itemTable, "ItemFor",
+                                     new[] { typeof(HediffDef), typeof(int) });
+
             ownerCompType = FirstType(OwnerCompTypeNames);
             fOwnerName = Field(ownerCompType, "originalPawnName", typeof(string));
             fOwnerGender = Field(ownerCompType, "originalGender", typeof(Gender));
@@ -187,6 +201,26 @@ namespace NHTRJWGenitalia
         {
             Log.Message(Bootstrap.Prefix + "gonad surgery split not installed - " + why + ".");
             return false;
+        }
+
+        /// <summary>The item a gonad of this def and size drops, asked of the gonad mod's own
+        /// table. Null when it has none to ask or it answers nothing.</summary>
+        private static ThingDef ItemFromTable(HediffDef def, int sizeIndex)
+        {
+            if (itemForMethod == null || def == null)
+            {
+                return null;
+            }
+            try
+            {
+                return itemForMethod.Invoke(null, new object[] { def, sizeIndex }) as ThingDef;
+            }
+            catch (Exception ex)
+            {
+                itemForMethod = null;
+                Log.Warning(Bootstrap.Prefix + "asking for the organ item failed: " + ex);
+                return null;
+            }
         }
 
         /// <summary>The first of these type names that is loaded, or null.</summary>
@@ -409,11 +443,14 @@ namespace NHTRJWGenitalia
             }
 
             string defName = target.def.defName;
-            string size = sizeNames[Mathf.Clamp(target.CurStageIndex, 0, sizeNames.Length - 1)];
+            int sizeIndex = Mathf.Clamp(target.CurStageIndex, 0, sizeNames.Length - 1);
+            string size = sizeNames[sizeIndex];
+            HediffDef targetDef = target.def;
             pawn.health.RemoveHediff(target);
 
-            // The organ item: "<hediff>_<size>" when that exists, otherwise "<hediff>".
-            ThingDef itemDef = DefDatabase<ThingDef>.GetNamedSilentFail(defName + "_" + size)
+            // The organ item: their own table first, then "<hediff>_<size>", then "<hediff>".
+            ThingDef itemDef = ItemFromTable(targetDef, sizeIndex)
+                               ?? DefDatabase<ThingDef>.GetNamedSilentFail(defName + "_" + size)
                                ?? DefDatabase<ThingDef>.GetNamedSilentFail(defName);
             if (itemDef != null && billDoer != null && billDoer.Map != null)
             {

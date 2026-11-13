@@ -154,6 +154,145 @@ namespace NHTRJWGenitalia
         private static bool ovaryWarned;
         private static bool eggWarned;
 
+        // -------------------------------------------------------------------------
+        // The womb window button
+        // -------------------------------------------------------------------------
+        // RJW Menstruation has an option of its own, "Enable button in health tab"
+        // (Configurations.EnableButtonInHT), that puts a small button on the vanilla health card
+        // which opens its womb window. With Nice Health Tab installed that button never appears:
+        // NHT prefixes HealthCardUtility.DrawPawnHealthCard and draws its own UI instead, so the
+        // vanilla DrawOverviewTab their patch hangs on is never reached.
+        //
+        // When the option is on we therefore show the same thing in our panel, in the slot above
+        // the anus window (PanelRenderer.WombIconPx): their womb picture for this pawn, and a
+        // click opens their window. The conditions are theirs, read one by one from their own
+        // patch (Patch/Pawn_Patch.cs: DrawOverviewTab_Patch):
+        //     Configurations.EnableButtonInHT && pawn.ShowStatus() && pawn.ShouldCycle()
+        //     && pawn.GetFirstMenstruationComp() != null
+        //         -> Dialog_WombStatus.ToggleWindow(pawn, comp)
+        private static bool buttonResolved;
+        private static FieldInfo enableButtonField;
+        private static MethodInfo showStatusMethod;
+        private static MethodInfo shouldCycleMethod;
+        private static MethodInfo firstCompMethod;
+        private static MethodInfo wombIconMethod;
+        private static MethodInfo toggleWindowMethod;
+        private static bool buttonWarned;
+
+        private static void ResolveButton()
+        {
+            if (buttonResolved)
+            {
+                return;
+            }
+            buttonResolved = true;
+            Resolve();
+            if (compType == null)
+            {
+                return;
+            }
+            Type config = GenTypes.GetTypeInAnyAssembly("RJW_Menstruation.Configurations");
+            Type util = GenTypes.GetTypeInAnyAssembly("RJW_Menstruation.MenstruationUtility");
+            Type misc = GenTypes.GetTypeInAnyAssembly("RJW_Menstruation.Utility");
+            Type dialog = GenTypes.GetTypeInAnyAssembly("RJW_Menstruation.Dialog_WombStatus");
+            if (config != null)
+            {
+                FieldInfo f = config.GetField("EnableButtonInHT",
+                                              BindingFlags.Public | BindingFlags.Static);
+                enableButtonField = (f != null && f.FieldType == typeof(bool)) ? f : null;
+            }
+            showStatusMethod = Static(misc, "ShowStatus", typeof(bool), typeof(Pawn));
+            shouldCycleMethod = Static(util, "ShouldCycle", typeof(bool), typeof(Pawn));
+            firstCompMethod = Static(util, "GetFirstMenstruationComp", compType, typeof(Pawn));
+            wombIconMethod = Static(util, "GetWombIcon", typeof(UnityEngine.Texture2D), compType);
+            toggleWindowMethod = Static(dialog, "ToggleWindow", typeof(void),
+                                        typeof(Pawn), compType);
+        }
+
+        /// <summary>One public static method of theirs, or null when it is not what we expect.</summary>
+        private static MethodInfo Static(Type owner, string name, Type returns, params Type[] args)
+        {
+            if (owner == null)
+            {
+                return null;
+            }
+            MethodInfo m = owner.GetMethod(name, BindingFlags.Public | BindingFlags.Static,
+                                           null, args, null);
+            return (m != null && m.ReturnType == returns) ? m : null;
+        }
+
+        /// <summary>
+        /// Their womb picture for this pawn, when their health tab button is switched on and this
+        /// pawn qualifies. False leaves the slot empty - the option is off, the mod is absent, the
+        /// pawn has no cycle, or anything of theirs threw.
+        /// </summary>
+        internal static bool TryWombButton(Pawn pawn, out UnityEngine.Texture2D icon,
+                                           out object comp)
+        {
+            icon = null;
+            comp = null;
+            ResolveButton();
+            if (enableButtonField == null || firstCompMethod == null || wombIconMethod == null
+                || toggleWindowMethod == null || pawn == null)
+            {
+                return false;
+            }
+            try
+            {
+                if (!(bool)enableButtonField.GetValue(null))
+                {
+                    return false;       // Their option is off: we show nothing either.
+                }
+                if (showStatusMethod != null
+                    && !(bool)showStatusMethod.Invoke(null, new object[] { pawn }))
+                {
+                    return false;
+                }
+                if (shouldCycleMethod != null
+                    && !(bool)shouldCycleMethod.Invoke(null, new object[] { pawn }))
+                {
+                    return false;
+                }
+                comp = firstCompMethod.Invoke(null, new object[] { pawn });
+                if (comp == null)
+                {
+                    return false;
+                }
+                icon = wombIconMethod.Invoke(null, new[] { comp }) as UnityEngine.Texture2D;
+                return icon != null;
+            }
+            catch (Exception ex)
+            {
+                // One failure is enough: the button is dropped for this session.
+                enableButtonField = null;
+                icon = null;
+                comp = null;
+                if (!buttonWarned)
+                {
+                    buttonWarned = true;
+                    Log.Warning(Bootstrap.Prefix + "the menstruation womb button is left out: " + ex);
+                }
+                return false;
+            }
+        }
+
+        /// <summary>Opens (or closes) their womb window for this pawn. Click time only.</summary>
+        internal static void ToggleWombWindow(Pawn pawn, object comp)
+        {
+            if (toggleWindowMethod == null || pawn == null || comp == null)
+            {
+                return;
+            }
+            try
+            {
+                toggleWindowMethod.Invoke(null, new[] { (object)pawn, comp });
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(Bootstrap.Prefix + "opening the womb window failed: " + ex);
+            }
+        }
+
         /// <summary>
         /// The ovulation / fertilization / implantation picture - **the very picture**
         /// menstruation draws in its own womb window.

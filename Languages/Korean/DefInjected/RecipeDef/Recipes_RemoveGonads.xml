@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+
+  <!-- 1.6/Defs/BallsSurgery/Recipes_RemoveGonads.xml -->
+
+  <NHTRJW_RemoveTesticles.label>고환 적출</NHTRJW_RemoveTesticles.label>
+  <NHTRJW_RemoveTesticles.description>고환을 적출해 거세합니다. 난소는 그대로 둡니다.</NHTRJW_RemoveTesticles.description>
+  <NHTRJW_RemoveTesticles.jobString>고환 적출 중.</NHTRJW_RemoveTesticles.jobString>
+
+  <NHTRJW_RemoveOvaries.label>난소 적출</NHTRJW_RemoveOvaries.label>
+  <NHTRJW_RemoveOvaries.description>난소를 적출해 불임 수술을 합니다. 고환은 그대로 둡니다.</NHTRJW_RemoveOvaries.description>
+  <NHTRJW_RemoveOvaries.jobString>난소 적출 중.</NHTRJW_RemoveOvaries.jobString>
+
+</LanguageData>
