@@ -94,6 +94,9 @@ namespace NHTRJWGenitalia
         /// </summary>
         private static readonly Rect WombIconPx = new Rect(256f, 317f, 56f, 71f);
 
+        /// <summary>The cycle bar along the top of the womb button; theirs is two high.</summary>
+        private const float WombBarHeight = 2f;
+
         /// <summary>Whether the panel is drawing parts. While it is, the main doll's anus window
         /// is not drawn separately.</summary>
         internal static bool Drawing;
@@ -879,17 +882,19 @@ namespace NHTRJWGenitalia
         ///
         /// That mod can put a button on the health card that opens its womb window, but with Nice
         /// Health Tab the vanilla card it hangs on is never drawn, so the option does nothing.
-        /// While the option is on we show their womb picture here instead and open the same
-        /// window on a click. It does not belong to our panel - like the anus window it is there
-        /// whenever the doll is. Nothing is drawn when the option is off, the mod is missing or
-        /// the pawn has no cycle (MenstruationReader.TryWombButton).
+        /// While the option is on we show it here instead and open the same window on a click.
+        /// What is in the button is **their gizmo's own picture**, piece for piece - the womb
+        /// or the fetus, the fluid layer in its mixed colour, the egg mark, the cycle bar, and
+        /// the stage and the fluids as the tooltip (MenstruationReader.TryWombButton, which
+        /// follows their Gizmo_Patch.CreateGizmo_WombStatus). It does not belong to our panel -
+        /// like the anus window it is there whenever the doll is. Nothing is drawn when the
+        /// option is off, the mod is missing or the pawn has no cycle.
         /// </summary>
         private static void DrawWombButton(object ctx, Rect rect)
         {
             Pawn pawn = (pawnField == null) ? null : pawnField.GetValue(ctx) as Pawn;
-            Texture2D icon;
-            object comp;
-            if (!MenstruationReader.TryWombButton(pawn, out icon, out comp))
+            MenstruationReader.WombButton womb;
+            if (!MenstruationReader.TryWombButton(pawn, out womb))
             {
                 return;
             }
@@ -911,13 +916,38 @@ namespace NHTRJWGenitalia
             float side = Mathf.Min(rect.width, rect.height);
             Rect icoRect = new Rect(rect.x + (rect.width - side) * 0.5f,
                                     rect.y + (rect.height - side) * 0.5f, side, side);
-            GUI.DrawTexture(icoRect, icon);
+            GUI.DrawTexture(icoRect, womb.icon);
+            if (womb.fluid != null)
+            {
+                // The fluid layer carries its own colour - it reddens as menstrual blood
+                // joins what is in there.
+                GUI.color = womb.fluidColor;
+                GUI.DrawTexture(icoRect, womb.fluid);
+                GUI.color = Color.white;
+            }
+            if (womb.egg != null)
+            {
+                // The corner their MenstruationUtility.DrawEggOverlay uses: the top right third.
+                float third = icoRect.width / 3f;
+                GUI.DrawTexture(new Rect(icoRect.xMax - third, icoRect.y, third, third),
+                                womb.egg, ScaleMode.ScaleToFit);
+            }
+            if (womb.stageTex != null)
+            {
+                // The cycle bar their gizmo lays along the top edge.
+                Widgets.FillableBar(
+                    new Rect(rect.x + 2f, rect.y + 1f, rect.width - 4f, WombBarHeight),
+                    Mathf.Clamp01(womb.progress), womb.stageTex);
+            }
             DrawFrame(rect, FrameBlack);
             GUI.color = before;
-            TooltipHandler.TipRegion(rect, "NHTRJW_WombWindowTip".Translate());
+            if (!womb.tip.NullOrEmpty())
+            {
+                TooltipHandler.TipRegion(rect, womb.tip);
+            }
             if (Widgets.ButtonInvisible(rect, true))
             {
-                MenstruationReader.ToggleWombWindow(pawn, comp);
+                MenstruationReader.ToggleWombWindow(pawn, womb.comp);
             }
         }
 

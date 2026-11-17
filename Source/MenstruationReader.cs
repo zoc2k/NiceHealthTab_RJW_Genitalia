@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Text;
 using Verse;
 
 namespace NHTRJWGenitalia
@@ -177,7 +178,45 @@ namespace NHTRJWGenitalia
         private static MethodInfo firstCompMethod;
         private static MethodInfo wombIconMethod;
         private static MethodInfo toggleWindowMethod;
+        private static PropertyInfo pregnancyProp;
+        private static MethodInfo showFetusMethod;
+        private static MethodInfo pregIconMethod;
+        private static MethodInfo cumIconMethod;
+        private static PropertyInfo stageProgressProp;
+        private static PropertyInfo stageTexProp;
+        private static PropertyInfo stageLabelProp;
+        private static PropertyInfo cumsInfoProp;
+        private static FieldInfo eggOverlayField;
         private static bool buttonWarned;
+
+        /// <summary>How far into a pregnancy the fluid layer is still drawn over the fetus.</summary>
+        private const float EarlyPregnancy = 0.2f;
+
+        /// <summary>
+        /// What their gizmo shows for this pawn, piece by piece. Every piece is theirs; one we
+        /// could not read is left null or zero and simply is not drawn.
+        /// </summary>
+        internal struct WombButton
+        {
+            /// <summary>The womb itself: the stage picture, a fetus, or insect eggs.</summary>
+            internal UnityEngine.Texture2D icon;
+
+            /// <summary>The fluid layer over it, drawn in <see cref="fluidColor"/>.</summary>
+            internal UnityEngine.Texture2D fluid;
+            internal UnityEngine.Color fluidColor;
+
+            /// <summary>The egg / ovary mark in the top right corner, or null.</summary>
+            internal UnityEngine.Texture2D egg;
+
+            /// <summary>The cycle bar: what fills it, and how far it has come (0..1).</summary>
+            internal UnityEngine.Texture2D stageTex;
+            internal float progress;
+
+            /// <summary>The stage, then a line per fluid in there. Their own words.</summary>
+            internal string tip;
+
+            internal object comp;
+        }
 
         private static void ResolveButton()
         {
@@ -200,6 +239,9 @@ namespace NHTRJWGenitalia
                 FieldInfo f = config.GetField("EnableButtonInHT",
                                               BindingFlags.Public | BindingFlags.Static);
                 enableButtonField = (f != null && f.FieldType == typeof(bool)) ? f : null;
+                FieldInfo e = config.GetField("DrawEggOverlay",
+                                              BindingFlags.Public | BindingFlags.Static);
+                eggOverlayField = (e != null && e.FieldType == typeof(bool)) ? e : null;
             }
             showStatusMethod = Static(misc, "ShowStatus", typeof(bool), typeof(Pawn));
             shouldCycleMethod = Static(util, "ShouldCycle", typeof(bool), typeof(Pawn));
@@ -207,6 +249,18 @@ namespace NHTRJWGenitalia
             wombIconMethod = Static(util, "GetWombIcon", typeof(UnityEngine.Texture2D), compType);
             toggleWindowMethod = Static(dialog, "ToggleWindow", typeof(void),
                                         typeof(Pawn), compType);
+
+            // The rest of what their gizmo puts in the picture. All of it optional: a piece we
+            // cannot read is left out and the button still works.
+            pregIconMethod = Static(util, "GetPregnancyIcon", typeof(UnityEngine.Texture2D),
+                                    compType, typeof(Hediff));
+            cumIconMethod = Static(util, "GetCumIcon", typeof(UnityEngine.Texture2D), compType);
+            showFetusMethod = Static(misc, "ShowFetusImage", typeof(bool), typeof(Hediff));
+            pregnancyProp = Prop("Pregnancy", typeof(Hediff));
+            stageProgressProp = Prop("StageProgress", typeof(float));
+            stageTexProp = Prop("GetStageTexture", typeof(UnityEngine.Texture2D));
+            stageLabelProp = Prop("GetCurStageLabel", typeof(string));
+            cumsInfoProp = Prop("GetCumsInfo", typeof(IEnumerable<string>));
         }
 
         /// <summary>One public static method of theirs, or null when it is not what we expect.</summary>
@@ -221,16 +275,24 @@ namespace NHTRJWGenitalia
             return (m != null && m.ReturnType == returns) ? m : null;
         }
 
-        /// <summary>
-        /// Their womb picture for this pawn, when their health tab button is switched on and this
-        /// pawn qualifies. False leaves the slot empty - the option is off, the mod is absent, the
-        /// pawn has no cycle, or anything of theirs threw.
-        /// </summary>
-        internal static bool TryWombButton(Pawn pawn, out UnityEngine.Texture2D icon,
-                                           out object comp)
+        /// <summary>One public property of their comp, or null when it is not what we expect.</summary>
+        private static PropertyInfo Prop(string name, Type returns)
         {
-            icon = null;
-            comp = null;
+            PropertyInfo p = (compType == null)
+                ? null
+                : compType.GetProperty(name, BindingFlags.Public | BindingFlags.Instance);
+            return (p != null && p.PropertyType == returns) ? p : null;
+        }
+
+        /// <summary>
+        /// Their womb button for this pawn, when their health tab button is switched on and the
+        /// pawn qualifies. False leaves the slot empty - the option is off, the mod is absent,
+        /// the pawn has no cycle, or anything of theirs threw.
+        /// </summary>
+        internal static bool TryWombButton(Pawn pawn, out WombButton button)
+        {
+            button = new WombButton();
+            button.fluidColor = UnityEngine.Color.white;
             ResolveButton();
             if (enableButtonField == null || firstCompMethod == null || wombIconMethod == null
                 || toggleWindowMethod == null || pawn == null)
@@ -253,20 +315,20 @@ namespace NHTRJWGenitalia
                 {
                     return false;
                 }
-                comp = firstCompMethod.Invoke(null, new object[] { pawn });
+                object comp = firstCompMethod.Invoke(null, new object[] { pawn });
                 if (comp == null)
                 {
                     return false;
                 }
-                icon = wombIconMethod.Invoke(null, new[] { comp }) as UnityEngine.Texture2D;
-                return icon != null;
+                button.comp = comp;
+                Fill(ref button, comp);
+                return button.icon != null;
             }
             catch (Exception ex)
             {
                 // One failure is enough: the button is dropped for this session.
                 enableButtonField = null;
-                icon = null;
-                comp = null;
+                button = new WombButton();
                 if (!buttonWarned)
                 {
                     buttonWarned = true;
@@ -274,6 +336,128 @@ namespace NHTRJWGenitalia
                 }
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Lays the picture out the way their gizmo does
+        /// (<c>Patch/Gizmo_Patch.cs</c>, <c>CreateGizmo_WombStatus</c>):
+        ///
+        ///   * a fetus once the pregnancy may be shown, with the fluid over it only in the
+        ///     first fifth of a pregnancy of theirs or of RJW's;
+        ///   * otherwise the womb picture of the moment - their <c>GetWombIcon</c> answers
+        ///     insect eggs by itself - with the fluid over it;
+        ///   * the egg / ovary mark in the corner while their own option for it is on;
+        ///   * the cycle bar, and the stage and the fluids in there as the tooltip.
+        /// </summary>
+        private static void Fill(ref WombButton b, object comp)
+        {
+            Hediff pregnancy = (pregnancyProp == null)
+                ? null
+                : pregnancyProp.GetValue(comp, null) as Hediff;
+            bool showFetus = pregnancy != null && showFetusMethod != null
+                             && (bool)showFetusMethod.Invoke(null, new object[] { pregnancy });
+            if (showFetus && pregIconMethod != null)
+            {
+                b.icon = pregIconMethod.Invoke(null, new object[] { comp, pregnancy })
+                         as UnityEngine.Texture2D;
+                if (b.icon != null && TheirPregnancy(pregnancy) && Progress(comp) < EarlyPregnancy)
+                {
+                    b.fluid = CumIcon(comp);
+                }
+            }
+            if (b.icon == null)
+            {
+                b.icon = wombIconMethod.Invoke(null, new[] { comp }) as UnityEngine.Texture2D;
+                b.fluid = CumIcon(comp);
+            }
+            if (b.fluid != null && cumColorProp != null)
+            {
+                b.fluidColor = (UnityEngine.Color)cumColorProp.GetValue(comp, null);
+            }
+            if (eggOverlayField != null && (bool)eggOverlayField.GetValue(null))
+            {
+                ResolveEgg();
+                UnityEngine.Texture2D egg;
+                // Without the ovary branch, as their gizmo asks for it: no sex job is read,
+                // so the throw TryEggIcon guards against cannot happen here.
+                if (eggIconMethod != null && TryIcon(comp, false, out egg))
+                {
+                    b.egg = egg;
+                }
+            }
+            b.progress = Progress(comp);
+            if (stageTexProp != null)
+            {
+                b.stageTex = stageTexProp.GetValue(comp, null) as UnityEngine.Texture2D;
+            }
+            b.tip = Tip(comp);
+        }
+
+        /// <summary>The fluid picture for what is in the womb right now, or null.</summary>
+        private static UnityEngine.Texture2D CumIcon(object comp)
+        {
+            return (cumIconMethod == null)
+                ? null
+                : cumIconMethod.Invoke(null, new[] { comp }) as UnityEngine.Texture2D;
+        }
+
+        /// <summary>How far the current stage has come, 0..1.</summary>
+        private static float Progress(object comp)
+        {
+            return (stageProgressProp == null)
+                ? 0f
+                : (float)stageProgressProp.GetValue(comp, null);
+        }
+
+        /// <summary>
+        /// The stage, then a line per fluid in the womb - the text their gizmo carries. Empty
+        /// when we can read neither.
+        /// </summary>
+        private static string Tip(object comp)
+        {
+            StringBuilder text = new StringBuilder();
+            if (stageLabelProp != null)
+            {
+                string stage = stageLabelProp.GetValue(comp, null) as string;
+                if (!stage.NullOrEmpty())
+                {
+                    text.AppendLine(stage);
+                }
+            }
+            if (cumsInfoProp != null)
+            {
+                IEnumerable<string> lines = cumsInfoProp.GetValue(comp, null)
+                                            as IEnumerable<string>;
+                if (lines != null)
+                {
+                    foreach (string line in lines)
+                    {
+                        if (!line.NullOrEmpty())
+                        {
+                            text.AppendLine(line);
+                        }
+                    }
+                }
+            }
+            return text.ToString().TrimEnd();
+        }
+
+        /// <summary>
+        /// Is this a pregnancy of theirs or of RJW's? Their gizmo lays the fluid over an early
+        /// fetus only for those (<c>Hediff_BasePregnancy</c> / <c>HediffWithParents</c>) and
+        /// leaves a vanilla Biotech pregnancy bare. Matched by type name up the chain, so no
+        /// other mod's assembly has to be referenced.
+        /// </summary>
+        private static bool TheirPregnancy(Hediff pregnancy)
+        {
+            for (Type t = pregnancy.GetType(); t != null; t = t.BaseType)
+            {
+                if (t.Name == "Hediff_BasePregnancy" || t.Name == "HediffWithParents")
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>Opens (or closes) their womb window for this pawn. Click time only.</summary>
@@ -312,24 +496,32 @@ namespace NHTRJWGenitalia
         /// <c>includeOvary: false</c> for the moment (every other stage, implantation included,
         /// still draws) and try the ovary branch again a few seconds later.
         /// </summary>
+        /// <summary>Finds their <c>GetEggIcon</c> once. The button and the panel both use it.</summary>
+        private static void ResolveEgg()
+        {
+            if (eggResolved)
+            {
+                return;
+            }
+            eggResolved = true;
+            Resolve();
+            Type util = GenTypes.GetTypeInAnyAssembly("RJW_Menstruation.MenstruationUtility");
+            if (util == null || compType == null)
+            {
+                return;
+            }
+            eggIconMethod = util.GetMethod("GetEggIcon", BindingFlags.Public | BindingFlags.Static,
+                                           null, new[] { compType, typeof(bool) }, null);
+            if (eggIconMethod != null && eggIconMethod.ReturnType != typeof(UnityEngine.Texture2D))
+            {
+                eggIconMethod = null;
+            }
+        }
+
         internal static bool TryEggIcon(Pawn pawn, out UnityEngine.Texture2D icon)
         {
             icon = null;
-            if (!eggResolved)
-            {
-                eggResolved = true;
-                Resolve();
-                Type util = GenTypes.GetTypeInAnyAssembly("RJW_Menstruation.MenstruationUtility");
-                if (util != null && compType != null)
-                {
-                    eggIconMethod = util.GetMethod("GetEggIcon", BindingFlags.Public | BindingFlags.Static,
-                                                   null, new[] { compType, typeof(bool) }, null);
-                    if (eggIconMethod != null && eggIconMethod.ReturnType != typeof(UnityEngine.Texture2D))
-                    {
-                        eggIconMethod = null;
-                    }
-                }
-            }
+            ResolveEgg();
             if (eggIconMethod == null || pawn == null || pawn.health == null
                 || pawn.health.hediffSet == null)
             {

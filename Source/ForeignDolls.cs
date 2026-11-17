@@ -37,7 +37,9 @@ namespace NHTRJWGenitalia
     /// The framework may keep its own draw order for its parts (the Anatomy Editor does, in a
     /// dictionary keyed by part) and read it for every part in the list, so parts of ours it has
     /// never seen would throw there. We therefore extend that table as well, by reflection, and
-    /// lend nothing when we cannot.
+    /// lend nothing when we cannot - but only for the dolls that framework built itself. It never
+    /// sorts a doll someone else put in the context, so a doll of another mod's is lent to whether
+    /// the framework is installed or not.
     ///
     /// Everything here is reflection: no other mod's assembly is referenced.
     /// </summary>
@@ -684,23 +686,35 @@ namespace NHTRJWGenitalia
             }
             // A framework that keeps its own draw order reads it for **every** part in the list
             // and throws on one it has not seen, so we either extend that table or lend nothing at
-            // all. If the framework is here, not being able to reach its table is reason enough to
-            // stand back.
+            // all. That is only true of the dolls **it** built: the Anatomy Editor sorts the body,
+            // hands and feet of its own profile and never looks at a doll another mod put in the
+            // context (CompiledProfile.SortVariants, reached from its ResolveImplants postfix and
+            // its DrawDoll prefix, both of which do nothing at all when the pawn has no profile).
+            // So the table is extended only when this very doll is that profile's body; a doll of
+            // some other mod's is lent to without touching the table. Mind the fallback: without
+            // the field that tells us whose doll this is, every foreign doll is treated as the
+            // framework's, which is the careful answer.
             IDictionary order = null;
             if (registryFor != null)
             {
                 object profile = (pawn == null)
                     ? null
                     : registryFor.Invoke(null, new object[] { pawn });
-                order = (profile == null || drawOrderField == null)
-                    ? null
-                    : drawOrderField.GetValue(profile) as IDictionary;
-                if (order == null)
+                bool sortedByIt = (profile != null)
+                                  && (profileBodyField == null
+                                      || ReferenceEquals(profileBodyField.GetValue(profile), doll));
+                if (sortedByIt)
                 {
-                    Log.Message(Bootstrap.Prefix + "doll '" + def.defName + "' belongs to a "
-                                + "framework whose draw order we cannot extend, so the RJW parts "
-                                + "are left off it.");
-                    return;
+                    order = (drawOrderField == null)
+                        ? null
+                        : drawOrderField.GetValue(profile) as IDictionary;
+                    if (order == null)
+                    {
+                        Log.Message(Bootstrap.Prefix + "doll '" + def.defName + "' belongs to a "
+                                    + "framework whose draw order we cannot extend, so the RJW "
+                                    + "parts are left off it.");
+                        return;
+                    }
                 }
             }
 
